@@ -232,7 +232,7 @@ You should see `partition-spec` remove the banners on the BA's confirmation. The
 
 ### 07.c — The feature asks before it invents
 
-You should see the plan of the refund reach AR-3 and find no source for "under review": it **asks** you rather than inventing a table or an API, here or already at 07.a. With the PO's answer, each bounded context applies AR-3 itself, as an area rule asks: a port `FraudReview` in `payment` and one in `refund`, each with an adapter reading `commerce.fraud-review.customers` from `application.yaml`. `refund` reads `payment` only through `PaymentRefunds`.
+You should see the plan of the refund reach AR-3 and find no source for "under review": it **asks** you rather than inventing a table or an API, here or already at 07.a. With the PO's answer, each bounded context applies AR-3 itself, as an area rule asks: a port `FraudReview` in `payment` and one in `refund`, each with an adapter reading `commerce.fraud-review.customers` from `application.yaml`. `refund` reads `payment` only through `PaymentRefunds`. The `[TL]`'s answers on what a log may name are project rules, not rules of a spec: they go to `.apm/instructions/backend-security.instructions.md`, deployed, through `partition-rules`.
 
 ```text
 + src/main/java/com/commerce/refund/…           domain, application, inbound, outbound
@@ -309,6 +309,7 @@ flowchart LR
 - [x] 07.c — `refund` imports nothing of `payment` but `PaymentRefunds`, from its outbound adapter; `payment` nothing of `refund`
 - [x] 07.c — The tree shown: `refund` code, a V6 migration, `refundInvoice` of contract 1.3.0 implemented, not edited, `PaymentRefunds` and its implementation in `payment`
 - [x] 07.c — `payment` holds a test refusing a customer under review
+- [ ] 07.c — The `[TL]`'s answers on logs go to `backend-security.instructions.md`, deployed, not to a spec
 - [x] 07.c — `Contracts with neighbours` written for `refund` (`payment`, consumed, `PaymentRefunds`) and `payment`
 - [x] 07.c — `docs/partition.yml` declares `refund` with its hexagon; the C4 model gains `refund`, regenerated
 - [x] 07.c — Closing: the gate reads AR-3 as an oracle; zero entries for the register

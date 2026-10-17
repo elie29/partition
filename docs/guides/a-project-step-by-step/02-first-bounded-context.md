@@ -18,6 +18,8 @@ Your `partition-commerce` project should be at the commit of step 01: `docs/part
 
 `[architect]` gives you the way to decide the boundary, when the assistant asks: _a proposal_. The decision stays the architect's; the assistant proposes.
 
+`[PO]`, the owner of the PRD, gives you the answer when the assistant reports requirements that contradict each other: _REQ-3 against REQ-5 and REQ-2 against REQ-5 stay as written in 1.0, knowingly. REQ-1 against REQ-2 stays open: a later version of the PRD settles it._
+
 `[BA]` gives you the validation of the copied rules (there is no other rule), and the language of `invoice`:
 
 | Term      | Meaning                                                                 |
@@ -56,6 +58,12 @@ Validate the writing plan by name: _"Create the bounded context `invoice`."_ Giv
 **02.c** — give the business analyst's validation, as in **Provided**:
 
 > I confirm BR-1 to BR-6 as written; there is no other rule. Here is the language of `invoice`: (the table above).
+
+Then commit the specs:
+
+```bash
+git add docs && git commit -m "docs(specs): shape billing 1.0 into invoice"
+```
 
 ## Expected
 
@@ -116,7 +124,7 @@ No `area.md`: no rule is stated for units of several bounded contexts. Nothing i
 
 ### What is written
 
-You should get `docs/specs/billing/bounded-contexts.md`: the header lines (source, version 1.0, provenance with the sha, `whole source`, `5 / 5`, `Decided` with the date, your name and `proposal: option 1`); `Bounded contexts retained`: `invoice`, REQ-1 to REQ-5; `Decisions not to split`: REQ-4 and REQ-5 kept with REQ-1 to REQ-3, C2 failing; `Kept against the criteria`: "None"; `Coverage`: five lines; `History`: empty.
+You should get `docs/specs/billing/bounded-contexts.md`: the header lines (source, version 1.0, provenance with the sha, `whole source`, `5 / 5`, `Decided` with the date, your name and `proposal: option 1`); `Bounded contexts retained`: `invoice`, REQ-1 to REQ-5; `Decisions not to split`: REQ-4 and REQ-5 kept with REQ-1 to REQ-3, C2 failing; `Kept against the criteria`: "None"; `Coverage`: five lines; `History`: empty; `Gaps detected`: the requirements that contradict each other — REQ-1 and REQ-2 (once per order, a correction issues a new one), REQ-3 and REQ-5 (cancelled before any payment, a paid invoice cancelled), REQ-2 and REQ-5 (never modified, unpaid again) — each reported to the PO, asked which requirement holds, no wording proposed, no rule rewritten: the first two kept as written in 1.0, knowingly; REQ-1 and REQ-2 left asking, until 1.0.1 settles it at step 05.
 
 `docs/specs/billing/invoice/spec.md`:
 
@@ -205,6 +213,7 @@ flowchart LR
 - [x] 02.a — The hard stop shows the block above: `Provenance` is the sha of `docs(sources): billing 1.0`, the writing plan has its three files, the six rules and DEC-1 are copied word for word
 - [x] 02.a — No `area.md`, and nothing is written before you validate `invoice` by name
 - [x] 02.a — `bounded-contexts.md`: the header lines with the sha, `5 / 5` and `Decided` (`proposal: option 1`), `Kept against the criteria` "None", `invoice` retained with REQ-1 to REQ-5, the decision not to split, five `Coverage` lines, an empty `History`
+- [ ] 02.a — `Gaps detected` lists the three contradictions; the PO, asked which holds, keeps two as written, knowingly, and leaves REQ-1 against REQ-2 open; no rule rewritten
 - [x] 02.a — `invoice/spec.md`: the five header lines kept, `Language` empty, `Source parts owned` REQ-1 to REQ-5 as links, the glossary pointed to, no requirement text copied
 - [x] 02.a — `invoice/spec.md`: BR-1 to BR-6 word for word, under the "TO VALIDATE" banner
 - [x] 02.a — `invoice/spec.md`: DEC-1 with its reason and anchor, `Persistence` "No schema documents are declared for this project", CardPay as external dependency, `Contracts with neighbours` empty, area rules "None"

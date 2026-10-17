@@ -32,9 +32,21 @@ Your `partition-commerce` project should be at the commit of step 12. Area `bill
 
 > Carry out the merge: `payment` absorbs `refund`. I validate the merge by name.
 
+Once the plan is `done`, commit: the frozen spec of `refund` and its folder are in this commit, as the merge leaves them.
+
+```bash
+git add -A && git commit -m "refactor(payment): payment absorbs refund"
+```
+
 **13.c** — when the closing lists the carry-over, have the business analyst carry the hand-written sections of `refund/spec.md` into `payment/spec.md`, delete `docs/specs/billing/refund/`, then type:
 
 > The carry-over is done and the folder of `refund` is deleted.
+
+Then commit:
+
+```bash
+git add -A && git commit -m "docs(payment): the carry-over of refund; its folder deleted"
+```
 
 ## Expected
 
@@ -56,11 +68,11 @@ Preconditions of a merge: every caller of either half reaches it through its con
 > **Status:** absorbed `refund` on YYYY-MM-DD. The hand-written sections of `../refund/spec.md` (objective, scope, language, business rules, dependencies, contracts with neighbours, invariants, questions) are to be carried over here by a human.
 ```
 
-**Rule B comes down.** AR-3 bound only `payment` and `refund`; merged, a single bounded context needs it. It becomes a business rule of `payment`, at the next free number of the area's rules, carried by a person, with its source anchor, and **leaves the area file**:
+**Rule B comes down.** AR-3 bound only `payment` and `refund`; merged, a single bounded context needs it. It becomes a business rule of `payment`, at the next free number of `payment`'s rules, carried by a person, with its source anchor, and **leaves the area file**:
 
-| #     | Rule                                                           | Source                    |
-| ----- | -------------------------------------------------------------- | ------------------------- |
-| BR-35 | A customer under fraud review can neither pay nor be refunded. | from source: REQ-4, REQ-6 |
+| # | Rule | Source |
+| --- | --- | --- |
+| BR-_n_, the next free number of `payment`'s rules | A customer under fraud review can neither pay nor be refunded. | from source: REQ-4, REQ-6 |
 
 **`refund/spec.md`** — kept and frozen, its banner:
 
@@ -103,7 +115,7 @@ flowchart LR
   subgraph app_commerce["commerce-app"]
     subgraph area_billing["billing"]
       invoice["invoice · rich<br/>Rule A · Rule D: voided<br/>≈ — tok"]
-      payment["payment · rich<br/>Rule B: BR-35 · Rule D: reversed<br/>≈ — tok"]:::new
+      payment["payment · rich<br/>Rule B: a business rule · Rule D: reversed<br/>≈ — tok"]:::new
       refund["refund · rich<br/>≈ — tok"]:::gone
       file_billing[("area.md<br/>AR-1")]
     end
@@ -111,6 +123,7 @@ flowchart LR
       product["product · rich<br/>≈ — tok"]
       price_list["price-list · rich<br/>≈ — tok"]
       discount["discount · thin<br/>≈ — tok"]
+      file_catalog[("area.md<br/>AR-1")]
     end
     yaml["application.yaml<br/>fraud-review list"]
   end
@@ -131,7 +144,7 @@ flowchart LR
   discount -- "SQL" --> db
 ```
 
-**New:** `refund` merges into `payment`; Rule B comes down from the area file to BR-35 of `payment`; one `FraudReview` port; `PaymentRefunds` gone. `billing/area.md` keeps AR-1 only.
+**New:** `refund` merges into `payment`; Rule B comes down from the area file to a business rule of `payment`; one `FraudReview` port; `PaymentRefunds` gone. `billing/area.md` keeps AR-1 only.
 
 **Cost:** `payment`'s spec carries what was `refund`'s: its gauge grows as `refund`'s disappears.
 
@@ -152,7 +165,7 @@ flowchart LR
 - [ ] 13.b — `payment/spec.md`: `Persistence` receives the lines of `refund` it does not carry, addition only
 - [ ] 13.b — `payment/spec.md`: hand-written sections unchanged, no business rule of `refund` transferred
 - [ ] 13.b — `payment/spec.md` opens with the "absorbed `refund`" banner as written above
-- [ ] 13.b — AR-3 becomes a business rule of `payment` (BR-35), source `from source: REQ-4, REQ-6`, and leaves `billing/area.md`
+- [ ] 13.b — AR-3 becomes a business rule of `payment`, at the next free number of its rules, source `from source: REQ-4, REQ-6`, and leaves `billing/area.md`
 - [ ] 13.b — `refund/spec.md` is kept and frozen, with the "merged into `payment`" banner as written above
 - [ ] 13.b — The folder `docs/specs/billing/refund/` is kept
 - [ ] 13.b — `bounded-contexts.md`: `refund` leaves `Bounded contexts retained`, enters `Decisions not to split` ("merge of YYYY-MM-DD into `payment`", R4); `Kept against the criteria` untouched

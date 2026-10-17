@@ -134,6 +134,7 @@ The attack and the plan raise questions the feature leaves open. The answers, ea
 | --- | --- | --- |
 | Is reading an invoice a requirement? Who reads? | yes: anyone holding its identifier, as `getInvoice` shows it; who may read stays open | `[PO]` |
 | Does the accountant replace the issue on confirmation? | his action is how REQ-1's issue happens for now; an automatic issue waits for an order context | `[PO]` |
+| "Issued" means "sent to the customer"; the contract sends nothing | Issued: recorded by the issue, with an identifier of its own; nothing is sent to the customer in this version, and there is no state before it; from then on never modified | `[BA]` |
 | Who owns the order, its customer, its items? | no bounded context yet: the request carries `orderId`, `customerId` and the lines | `[architect]` |
 | What does a line hold? | what the contract says: a label and a price; no quantity, no tax | `[PO]` |
 | A second issue for the same order | refused: 409, its description only, no body (BR-1) | `[PO]` |
@@ -189,7 +190,12 @@ git add . && git commit -m "feat(invoice): domain and migration"
 
 > Resume.
 
-**04.e** — let the assistant carry the plan to its end. When it shows the closing, validate what it proposes for the spec.
+**04.e** — let the assistant carry the plan to its end. When it shows the closing, validate what it proposes for the spec. Once the plan is `done`, deploy the rule its answers added and commit:
+
+```bash
+apm install
+git add -A && git commit -m "feat(invoice): issue and read back"
+```
 
 ## Expected
 

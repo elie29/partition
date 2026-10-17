@@ -60,6 +60,12 @@ If the closing proposes an entry for the invariant register from the layer map o
 
 **03.d** — when the plan reaches the status of an invoice, let the assistant set out the candidates, then rule. If it holds the ruling on the open gaps, give the architect's answer of **Provided**.
 
+Once the plan is `done`, commit:
+
+```bash
+git add -A && git commit -m "docs(architecture): C4 model, invoice hexagon, P-1"
+```
+
 ## Expected
 
 ### 03.a — The plan
@@ -124,7 +130,7 @@ The project has no dependency check: it **proposes one** with the tool of the ec
 
 ### Closing the plan
 
-In the same turn as the last tick: `partition-gate` on the plan's changes (no Java yet: it says what it could not run); nothing established for the spec, the area file or the register; the README realigned by `partition-readme`: the one of step 01 lists the Partition files, so it gains `docs/architecture/` and the two C4 commands; the C4 model was updated and generated in the plan itself. `Status: done`.
+In the same turn as the last tick: `partition-gate` on the plan's changes (no Java yet: it says what it could not run); nothing established for the spec, the area file or the register; the README realigned by `partition-readme`: the one of step 01 holds the build command; it gains `docs/architecture/` and the two C4 commands, which users now run; the C4 model was updated and generated in the plan itself. `Status: done`.
 
 ### The shape after
 

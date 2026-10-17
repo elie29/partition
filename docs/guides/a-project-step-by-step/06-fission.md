@@ -71,10 +71,10 @@ The attack of the spec, at 06.a, finds what those answers leave open:
 | CardPay returns a charge reference out of bounds | `[architect]` A defect, `500`: under the open question on CardPay errors |
 | "Refused" names our refusals and CardPay's | `[PO]` CardPay declines a card; a refusal is ours |
 | What is a payment? | `[PO]` A charge recorded on the invoice; a declined charge is no payment |
-| "Non-blank, at most 255 characters" is written several times | `[architect]` Once, in BR-14; the others point to it |
+| "Non-blank, at most 255 characters" is written several times | `[architect]` Once, in the rule that bounds a label (step 04); the others point to it |
 | May the card token appear in a log, an error or a trace? | `[TL]` Never |
 | What CardPay sends back? | `[TL]` A charge reference, non-blank text of at most 255 characters; the `402` carries no body |
-| The wording written into the spec from these answers | `[PO]` Confirmed. BR-21 points to the form BR-14 already gives, rather than repeating it |
+| The wording written into the spec from these answers | `[PO]` Confirmed. The rule on the card token points to the bound the label's rule already gives, rather than repeating it |
 
 `[architect, PO, BA]` give you the result of the workshop, once the material is in hand. You paste it in the chat as it is, once you have written the names in `Decided by`: the assistant asks for them otherwise. It saves the result as `docs/sources/workshop-invoice-fission.md`:
 
@@ -86,7 +86,7 @@ The attack of the spec, at 06.a, finds what those answers leave open:
 | Integration | `payment` calls `invoice` in process, through `InvoicePayments`: read an invoice as `getInvoice` shows it; record a payment, refused when the invoice is no longer issued; record a payment cancelled |
 | API | `payment` serves `payInvoice`, the tag `Payment` of the contract |
 | Contract | `InvoicePayments`, an interface of `invoice`'s application layer, frozen for the move |
-| Rules | The rules copied from REQ-4 and REQ-5 (BR-5, BR-6), the rules written for paying and DEC-1, CardPay, go to `payment`; the others stay in `invoice`. Paying refuses before calling CardPay (`payment`); `invoice` records a payment only on an invoice still issued, so of a pay and a cancel at the same moment the first to commit holds (`invoice`). Needed by both, so in the area file: the `Persistence` line "every amount is stored in minor units, with its currency" (Rule C), the bound "non-blank, at most 255 characters" (BR-14), and the shared words (amount, minor units, currency, refused). The time and the charge reference of a payment go to `payment` |
+| Rules | The rules copied from REQ-4 and REQ-5 (BR-5, BR-6), the rules written for paying and DEC-1, CardPay, go to `payment`; the others stay in `invoice`. Paying refuses before calling CardPay (`payment`); `invoice` records a payment only on an invoice still issued, so of a pay and a cancel at the same moment the first to commit holds (`invoice`). Needed by both, so in the area file: the `Persistence` line "every amount is stored in minor units, with its currency" (Rule C), the bound "non-blank, at most 255 characters" (the label's rule, step 04), and the shared words (amount, minor units, currency, refused). The time and the charge reference of a payment go to `payment` |
 | Code of `payment` | `src/main/java/com/commerce/payment/**`, rich: a payment moves from made to cancelled within 24 hours |
 | Decided by | <the names of the architect, the product owner and the business analyst> |
 

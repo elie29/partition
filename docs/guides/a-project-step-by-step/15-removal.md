@@ -41,13 +41,31 @@ When the assistant asks how to rewrite the scope, answer `tag:Product; tag:Price
 
 > A proposal.
 
-Validate the removal of `discount` by name.
+Validate the removal of `discount` by name. Then commit the specs:
+
+```bash
+git add docs && git commit -m "docs(catalog): catalog 2.0.0 in the specs; the removal of discount validated"
+```
 
 **15.b** — type:
 
 > Carry out the removal of `discount`.
 
-When the assistant asks whether to delete the code, give the PO's ruling.
+When the assistant asks whether to delete the code, give the PO's ruling. Once the plan is `done`, commit: the frozen spec of `discount`, its folder and `catalog/area.md` are in this commit, as the removal leaves them.
+
+```bash
+git add -A && git commit -m "refactor(catalog): discount removed"
+```
+
+**15.c** — when the closing lists what is left to a person, have the business analyst bring AR-1 and the words only `product` uses down to `product/spec.md`, delete `catalog/area.md`, left empty, and delete `docs/specs/catalog/discount/`, then type:
+
+> AR-1 and the words are in `product`, `catalog/area.md` is deleted, and the folder of `discount` is deleted.
+
+Then commit:
+
+```bash
+git add -A && git commit -m "docs(catalog): discount's folder deleted; AR-1 down into product"
+```
 
 ## Expected
 
@@ -67,10 +85,14 @@ You should see `partition-reshape` check the preconditions of a removal: **nothi
 - Its folder is **kept**: deleting it is a person's decision.
 - `bounded-contexts.md`: `discount` leaves `Bounded contexts retained`; it does **not** enter `Decisions not to split`, which speaks only of units kept together; the trace is the `History` line, nature `removal`.
 - The code is deleted **only after you rule on it, in a step of its own**: it asks, you give the PO's answer "delete it", and that task deletes `com.commerce.discount`, its tests and its generated interface. A new migration drops its table; `V9__discount.sql` is never edited.
-- The C4 model loses the component; the budget is measured again; `discount` leaves `docs/partition.yml` once its spec folder is gone.
-- AR-1 now binds `product` alone: it comes down to `product/spec.md`, carried by a person, and leaves `catalog/area.md`.
+- The C4 model loses the component; the budget is measured again; `discount` stays in `docs/partition.yml` while its spec folder exists.
+- What `catalog/area.md` holds now binds `product` alone (`references/specs.md`, _The area file_): AR-1 and the words only `product` uses are to come down, by a person; nothing moves yet.
 
-The closing lists the removal carried out: the hand-written sections to archive or reassign, AR-1 to bring down, then the folder to delete by hand.
+The closing lists the removal carried out: the hand-written sections to archive or reassign, then the folder to delete by hand; AR-1 and the words to bring down to `product`, then `catalog/area.md`, left empty, to delete by hand.
+
+### 15.c — After the person
+
+The business analyst has brought AR-1 down to `product/spec.md`'s `Business rules` and the words only `product` uses to its `Language`, deleted `catalog/area.md`, left empty, and deleted the folder of `discount`. You should see the assistant take `discount` out of `docs/partition.yml` now that its folder is gone, check that `product/spec.md` no longer lists AR-1 under `Applicable area rules and invariants` but holds it as a business rule, and measure the budget again: `product` loads no area file. It moves nothing a person had to move.
 
 ### Watch
 
@@ -92,12 +114,12 @@ flowchart LR
   subgraph app_commerce["commerce-app"]
     subgraph area_billing["billing"]
       invoice["invoice · rich<br/>Rule A · Rule D: voided<br/>≈ — tok"]
-      payment["payment · rich<br/>Rule B: BR-35 · Rule D: reversed<br/>≈ — tok"]
+      payment["payment · rich<br/>Rule B: a business rule · Rule D: reversed<br/>≈ — tok"]
     end
     subgraph area_catalog["catalog"]
       product["product · rich<br/>≈ — tok"]
       discount["discount · thin<br/>≈ — tok"]:::gone
-      file_catalog[("area.md<br/>AR-1")]
+      file_catalog[("area.md<br/>AR-1")]:::gone
     end
     yaml["application.yaml<br/>fraud-review list"]
   end
@@ -117,7 +139,7 @@ flowchart LR
   product -- "SQL" --> db
 ```
 
-**New:** `discount` is removed: its spec frozen, its code deleted once `[PO]` rules.
+**New:** `discount` is removed: its spec frozen, its code deleted once `[PO]` rules; AR-1 comes down to `product`, and `catalog/area.md`, left empty, is deleted by a person.
 
 **Cost:** none inside the project; what discounts do is now another system's.
 
@@ -140,6 +162,10 @@ flowchart LR
 - [ ] 15.b — That task deletes `com.commerce.discount`, its tests and its generated interface
 - [ ] 15.b — A new migration drops its table; `V9__discount.sql` is not edited
 - [ ] 15.b — The C4 model loses the component; the budget is measured again
-- [ ] 15.b — `discount` leaves `docs/partition.yml` once its spec folder is gone
-- [ ] 15.b — The closing lists the hand-written sections to archive or reassign, AR-1 to bring down to `product`, then the folder to delete by hand
+- [ ] 15.b — `discount` stays in `docs/partition.yml` while its spec folder exists
+- [ ] 15.b — The closing lists the hand-written sections to archive or reassign, then the folder to delete by hand
+- [ ] 15.b — The closing lists AR-1 and the words left to `product` to bring down to its spec, then `catalog/area.md`, left empty, to delete by hand
+- [ ] 15.c — `discount` leaves `docs/partition.yml` once its folder is gone
+- [ ] 15.c — `product/spec.md` holds AR-1 as a business rule and the words in `Language`, carried by a person; no `catalog/area.md`
+- [ ] 15.c — The budget measured again: `product` loads no area file
 - [ ] Watch — Which procedure writes the new `Scope` line, and whether the old one is kept in `History`, is recorded

@@ -18,6 +18,22 @@ Your `partition-commerce` project should be at the commit of step 08 (step 09 ch
 
 `[architect]` gives you the form, thin: its only rule checks an input, and a discount has no state that changes.
 
+`[architect]` gives you the reason to retain `discount`, should the proposal recommend otherwise: _a discount is its own aggregate, created and read by its own operations; no price list holds it._
+
+`[architect]` gives you the answer on AR-1 of `catalog/area.md`: _it binds `discount` too: its errors carry the same envelope._
+
+The answers to the plan's questions on the discounts, when the assistant asks:
+
+| Question | Answer |
+| --- | --- |
+| A percent of 1 or 90; a percent outside | `[BA]` Both bounds accepted; outside, `400`, nothing created |
+| `period`: kept? An end before its start | `[BA]` Accepted, not kept: it governs nothing in this version, as the validity of a price list |
+| `minimumOrder`: its currency, a negative amount, zero | `[BA]` A known ISO 4217 code, as in `price-list`; a negative amount refused, `400`; zero allowed; kept and returned |
+| Two discounts that overlap | `[BA]` Allowed: `createDiscount` never answers `409` in this version |
+| What `discount` needs of an order | `[architect]` Nothing: it stores and returns discounts |
+| Anyone creates a discount | `[PO]` Accepted for this version: the demo runs without a login |
+| A member the contract does not mark nullable, without a value | `[TL]` Left out, never `null`: a line added to `backend-api-contract.instructions.md`, deployed |
+
 ## Prompt
 
 **10.a** — 📌 in a fresh session, type:
@@ -28,11 +44,26 @@ Your `partition-commerce` project should be at the commit of step 08 (step 09 ch
 
 > Extend the recorded scope with `tag:Discount`.
 
-Validate the extension and the new bounded context `discount`, each by name.
+When it asks the way for `discount`, answer:
+
+> A proposal.
+
+Validate the extension and the new bounded context `discount`, each by name. Then commit:
+
+```bash
+git add docs && git commit -m "docs(catalog): the scope extends to tag:Discount; discount retained"
+```
 
 **10.c** — type:
 
 > Plan and build the discounts of the catalog API.
+
+Once the plan is `done`, deploy the rule its answers changed and commit:
+
+```bash
+apm install
+git add -A && git commit -m "feat(catalog): discounts"
+```
 
 ## Expected
 
@@ -60,9 +91,9 @@ Writing plan:
   = all the other files                         (intact)
 ```
 
-`createDiscount` and `getDiscount` act on `discounts`, a root aggregate of their own (C2), with their own words (C3): R1 holds against `product` and `price-list`. The coupling through `Money`, reported at step 08 as outside the scope, is now inside it: the gap is marked resolved. You validate the extension and the new bounded context **by name**; a general "go ahead" does not carry them.
+`createDiscount` and `getDiscount` act on `discounts`, a root aggregate of their own (C2), with their own words (C3): R1 holds against `product` and `price-list`. The coupling through `Money`, reported at step 08 as outside the scope, is now inside it: the gap is marked resolved. `discount` is a new bounded context, so a boundary moves: before it shows the proposal, the assistant asks you the way (`references/boundary-decision.md`, BR-33). With _a proposal_, two or three options, numbered, each with the criteria it satisfies, what it costs and what it brings, one recommended with why: `discount` on its own, or attached to `price-list` (C2 and R3 fail: `price-list` would hold two root aggregates, `price-lists` and `discounts`). The decision is the architect's: you choose `discount`, with the reason of **Provided**; the option not chosen goes to `Alternatives rejected`, with that reason. You validate the extension and the new bounded context **by name**; a general "go ahead" does not carry them.
 
-After writing: the `Scope` line reads `tag:Product; tag:PriceList; tag:Discount`, `9 / 9`; `discount/spec.md` with `Business rules` under "TO FILL"; `Applicable area rules and invariants`: INV-DATA-001 — a discount holds a minimum order amount, so the invariant binds it, and it is named there, not repeated.
+After writing: the `Scope` line reads `tag:Product; tag:PriceList; tag:Discount`, `9 / 9`; `discount/spec.md` with `Business rules` under "TO FILL"; `Applicable area rules and invariants`: INV-DATA-001 — a discount holds a minimum order amount, so the invariant binds it, and it is named there, not repeated. AR-1 of `catalog/area.md` binding `discount` too is proposed to you, as at step 07, and its `Bounded contexts` gains `discount` once the `[architect]` agrees: the area file stays paid by its own area only.
 
 ### 10.c — A thin hexagon, still with its ports
 
@@ -84,12 +115,13 @@ flowchart LR
       invoice["invoice · rich<br/>Rule A · Rule D: voided<br/>≈ — tok"]
       payment["payment · rich<br/>Rule D: reversed<br/>≈ — tok"]
       refund["refund · rich<br/>≈ — tok"]
-      file_billing[("area.md<br/>AR-2 · Rule B")]
+      file_billing[("area.md<br/>AR-1 · AR-3 · Rule B")]
     end
     subgraph area_catalog["catalog"]
       product["product · thin<br/>≈ — tok"]
       price_list["price-list · rich<br/>≈ — tok"]
       discount["discount · thin<br/>≈ — tok"]:::new
+      file_catalog[("area.md<br/>AR-1")]
     end
     yaml["application.yaml<br/>fraud-review list"]
   end
@@ -127,9 +159,12 @@ flowchart LR
 - [ ] 10.b — The plan matches the block shown: `1.0.0 -> 1.0.0`, 2 brought by extension, new bounded context `discount`, the three files to write
 - [ ] 10.b — `discounts` is a root aggregate of its own (C2), with its own words (C3); R1 holds against `product` and `price-list`
 - [ ] 10.b — The `Money` coupling reported at step 08 is marked resolved
+- [ ] 10.b — It asks the way for `discount`; with a proposal, two or three options, numbered, one recommended with why
+- [ ] 10.b — `discount` is retained on your choice; the option not chosen goes to `Alternatives rejected` with your reason
 - [ ] 10.b — The extension and `discount` are each validated by name; a general "go ahead" does not carry them
 - [ ] 10.b — The `Scope` line reads `tag:Product; tag:PriceList; tag:Discount`, `9 / 9`
 - [ ] 10.b — `discount/spec.md`: `Business rules` under "TO FILL"; INV-DATA-001 named under `Applicable area rules and invariants`, not repeated
+- [ ] 10.b — AR-1 binding `discount` is proposed; `catalog/area.md`'s `Bounded contexts` gains `discount` once the `[architect]` agrees
 - [ ] 10.c — The BA's rule written, the banner removed
 - [ ] 10.c — `discount` thin with its reason: inbound, application and outbound layers, no domain layer
 - [ ] 10.c — The use case calls the database through a port, never directly

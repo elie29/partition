@@ -32,9 +32,21 @@ Your `partition-commerce` project should be at the commit of step 13. Area `cata
 
 > Carry out the merge: `product` absorbs `price-list`. I validate the merge by name.
 
+Once the plan is `done`, commit: the frozen spec of `price-list` and its folder are in this commit, as the merge leaves them.
+
+```bash
+git add -A && git commit -m "refactor(product): product absorbs price-list"
+```
+
 **14.c** — have the business analyst carry the hand-written sections over and delete `docs/specs/catalog/price-list/`, then type:
 
 > The carry-over is done and the folder of `price-list` is deleted.
+
+Then commit:
+
+```bash
+git add -A && git commit -m "docs(product): the carry-over of price-list; its folder deleted"
+```
 
 ## Expected
 
@@ -42,7 +54,7 @@ You should see the same procedure as step 13, with one difference that is the po
 
 **What is the same** — the way not asked, your request naming a workshop; the material (no contract between the two since the move of `getProductPrice`, nothing shared); the result saved, shown and validated before the challenge; the record; the preconditions; `product/spec.md` with its derived sections regenerated on the union of the operations and the "absorbed" banner; `price-list/spec.md` frozen with the "merged into" banner and its folder kept; `bounded-contexts.md` updated (retained, `Coverage`, `History`); the code of `pricelist` behind the interfaces of `product`; the proof of the move; the C4 model; the budget; `price-list` declared in `docs/partition.yml` until its folder is gone.
 
-**What differs: the merge goes against the criteria.** At step 13 the result argued R4, a sharing that prevails. Here there is none to argue: `product` and `price-list` still satisfy R1 against each other on the contract alone (C2: two root aggregates; C3: their own vocabulary; C4), and the result reverses option 3. The challenge says so: **a finding on R1**, with the criteria and the units, and the earlier decision it reverses. The assistant offers to take the result as it is; you keep the merge. It goes to `Kept against the criteria` (C2, C3, C4, who decided, the date, the workshop's reason), and option 3 leaves `Alternatives rejected` for `History`. Other findings may come (the workshop's Why against "a price is set whether `product` holds it or not", a word with two meanings): you answer them as the roles would. `Challenge` in the record lists each finding with its outcome.
+**What differs: the merge goes against the criteria.** At step 13 the result argued R4, a sharing that prevails. Here there is none to argue: `product` and `price-list` still satisfy R1 against each other on the contract alone (C2: two root aggregates; C3: their own vocabulary; C4), and the result reverses option 3. The challenge says so: **a finding on R1**, with the criteria and the units, and the earlier decision it reverses. The assistant offers to take the result as it is; you keep the merge. It goes to `Kept against the criteria` (C2, C3, C4, who decided, the date, the workshop's reason) and, as every merge, to `Decisions not to split` ("merge of YYYY-MM-DD into `product`"), and option 3 leaves `Alternatives rejected` for `History`. Other findings may come (the workshop's Why against "a price is set whether `product` holds it or not", a word with two meanings): you answer them as the roles would. `Challenge` in the record lists each finding with its outcome.
 
 **What differs: no area rule comes down.** The only area rule of `catalog`, AR-1, binds `discount` too: it stays in `catalog/area.md`. The record's `Rules` table says so rather than staying empty. The business rules of `price-list` (one price per product, never negative, and the others) are carried by the BA, as hand-written sections always are. An area word only `product` uses now comes down with them; a word `discount` uses stays. INV-DATA-001 is untouched: it lives above the area and binds `product` now as it bound `price-list`; `product/spec.md` names it.
 
@@ -64,7 +76,7 @@ flowchart LR
   subgraph app_commerce["commerce-app"]
     subgraph area_billing["billing"]
       invoice["invoice · rich<br/>Rule A · Rule D: voided<br/>≈ — tok"]
-      payment["payment · rich<br/>Rule B: BR-35 · Rule D: reversed<br/>≈ — tok"]
+      payment["payment · rich<br/>Rule B: a business rule · Rule D: reversed<br/>≈ — tok"]
     end
     subgraph area_catalog["catalog"]
       product["product · rich<br/>≈ — tok"]:::new
@@ -100,7 +112,7 @@ flowchart LR
 - [ ] The way is not asked; the material: no contract between `product` and `price-list`, nothing shared
 - [ ] The result is saved as `docs/sources/workshop-price-list-into-product.md` and validated before the challenge
 - [ ] The challenge reports a finding on R1 (C2, C3, C4 from the contract alone) and the reversal of option 3; it offers to take the result as it is
-- [ ] The merge kept: `Kept against the criteria` holds it with the criteria, who decided, the date and the reason; option 3 leaves `Alternatives rejected`; the record's `Challenge` lists each finding with its outcome
+- [ ] The merge kept: `Kept against the criteria` holds it with the criteria, who decided, the date and the reason; `Decisions not to split` holds `price-list`, "merge of YYYY-MM-DD into `product`"; option 3 leaves `Alternatives rejected`; the record's `Challenge` lists each finding with its outcome
 - [ ] The record, and the preconditions of a merge
 - [ ] `product/spec.md`: derived sections regenerated on the union of the operations, the "absorbed" banner
 - [ ] `price-list/spec.md` frozen with the "merged into" banner; its folder kept
