@@ -28,9 +28,21 @@ Your `partition-commerce` project should be at the commit of step 17: two deploy
 
 > Hold the quarterly budget assessment.
 
+Then commit the record:
+
+```bash
+git add docs/budget && git commit -m "docs(budget): the quarterly assessment"
+```
+
 **18.b** — 📌 in a fresh session, type:
 
 > Audit the code against the pattern grid.
+
+Then commit the audit:
+
+```bash
+git add docs/architecture && git commit -m "docs(architecture): the pattern audit"
+```
 
 **18.c** — 📌 in a fresh session, type:
 
@@ -39,6 +51,8 @@ Your `partition-commerce` project should be at the commit of step 17: two deploy
 **18.d** — 📌 in a fresh session, type:
 
 > Audit `payment` against its spec.
+
+18.c and 18.d change no file: nothing to commit.
 
 ## Expected
 

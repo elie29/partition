@@ -804,6 +804,31 @@ test('the layer map partition-hexagon shows is a valid docs/partition.yml', () =
   assert.deepEqual(validate(parseYaml(yaml, 'partition-hexagon'), schema), []);
 });
 
+test('the README lists every paths key of docs/partition.yml, with its default, its kind linked to the glossary', () => {
+  const paths = JSON.parse(read(`${skillsDir}/partition-budget/assets/partition.schema.json`)).properties.paths
+    .properties;
+  const owns = read('README.md').split('## What your project owns')[1].split('\n## ')[0];
+  const rows = [...owns.matchAll(/^\| `(\w+)` \| (.+?) \| (.+?) \| (.+?) \|$/gm)];
+  assert.deepEqual(
+    rows.map((r) => r[1]),
+    Object.keys(paths),
+  );
+  const documents = read(`${skillsDir}/partition-spec/references/glossary.md`)
+    .split('## Documents')[1]
+    .split('\n## ')[0];
+  for (const [, key, folder, , kind] of rows) {
+    const stated = paths[key].description.match(/Default (\S+)\.$/);
+    if (stated) assert.ok(folder.includes(`\`${stated[1]}\``), `${key}: the schema's default`);
+    const link = kind.match(/^\[([^\]]+)\]\(\.apm\/skills\/partition-spec\/references\/glossary\.md#documents\)$/);
+    if (key === 'schemas') {
+      assert.equal(link, null, 'the glossary has no entry for schema documents');
+      continue;
+    }
+    assert.ok(link, `${key}: its kind links to the glossary`);
+    assert.ok(documents.includes(`**${link[1]}** —`), `${key}: ${link[1]} is an entry of the glossary`);
+  }
+});
+
 test('no form is read from rules that still carry their banner (BR-21)', () => {
   const br21 = read('docs/specs/partition/spec.md')
     .split(/\| BR-21 +\|/)[1]

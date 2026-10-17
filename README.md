@@ -242,6 +242,16 @@ docs/
 
 The folders under `paths:` in `docs/partition.yml` are yours to change: specs, the invariant register, contracts, sources, designs, plans and, if you document it, your persistence schema. The file follows `partition.schema.json`, shipped with `partition-budget`: its first line points your editor at the schema, and the budget stops on a key it does not know, naming each key to fix.
 
+| Key | Default | What it holds | Kind |
+| --- | --- | --- | --- |
+| `specs` | `docs/specs` | one durable spec per bounded context, by area | [Durable spec](.apm/skills/partition-spec/references/glossary.md#documents) |
+| `invariants` | `<specs>/invariants.md` | what spans areas or layers | [Invariant register](.apm/skills/partition-spec/references/glossary.md#documents) |
+| `designs` | none | one per feature: what it builds | [Design](.apm/skills/partition-spec/references/glossary.md#documents) |
+| `plans` | `docs/plans` | one per feature: its state and its decisions | [Plan](.apm/skills/partition-spec/references/glossary.md#documents) |
+| `contracts` | `docs/contracts` | API contracts, under stable names | [Contract](.apm/skills/partition-spec/references/glossary.md#documents) |
+| `sources` | `docs/sources` | PRDs and described contexts, under stable names | [Source](.apm/skills/partition-spec/references/glossary.md#documents) |
+| `schemas` | none: declare it only if you document your persistence | the schema documents of your persistence | schema documents |
+
 ## It keeps its own budget
 
 A package about budget that ignored its own would not be believed. Every session of a project that installs Partition pays for the instruction and for the name and description of each skill, whether they are used or not: about **1 700 tokens**. The tests fail above 2 000, and above 3 000 for any single skill file.
@@ -276,4 +286,4 @@ npm test
 
 ## License
 
-[MIT](LICENSE) © Elie Nehmé
+[MIT](LICENSE) © Elie Nehmé · [elienehme.fr](https://elienehme.fr)

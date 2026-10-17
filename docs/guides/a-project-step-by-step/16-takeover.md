@@ -8,7 +8,7 @@
 
 ## Before
 
-Your `partition-commerce` project should be at the commit of step 15. `payment` holds BR-35 (Rule B) since step 13, copied from REQ-4 and REQ-6 of `docs/sources/billing.md`, and learns who is under review from `commerce.fraud-review.customers` in `application.yaml`. No area `customer`.
+Your `partition-commerce` project should be at the commit of step 15. `payment` holds Rule B as a business rule since step 13, copied from REQ-4 and REQ-6 of `docs/sources/billing.md`, and learns who is under review from `commerce.fraud-review.customers` in `application.yaml`. No area `customer`.
 
 ## Provided
 
@@ -21,9 +21,13 @@ Your `partition-commerce` project should be at the commit of step 15. `payment` 
 - 2024-09-02 — Reviews older than one year are archived, not deleted. (risk committee)
 ```
 
-Copy [`16-provided/`](16-provided/) into `partition-commerce`, at its root.
+Copy [`16-provided/`](16-provided/) into `partition-commerce`, at its root, and commit it alone: the takeover reads it.
 
-`[BA]` gives you the answers the takeover asks for: area `customer`, two bounded contexts, `customer` (sections 1, 2) and `fraud` (sections 1, 3); code path of `fraud`: `src/main/java/com/commerce/fraud/**`, rich (a review moves from open to lifted, and only the risk team lifts it); `customer` has no code in this project yet.
+```bash
+git add docs/legacy && git commit -m "docs(legacy): the risk team's customer spec"
+```
+
+`[BA]` gives you the answers the takeover asks for: area `customer`, two bounded contexts, `customer` (sections 1, 2) and `fraud` (sections 1, 3); code path of `fraud`: `src/main/java/com/commerce/fraud/**`, rich (a review moves from open to lifted, and only the risk team lifts it); `customer` has no code in this project yet; no word and no rule goes to an area file: each spec keeps its own words, as the legacy file uses them.
 
 `[architect]` gives you the contract `fraud` exposes: `CustomerStatus`, an interface of its application layer: _is this customer blocked: yes or no._ No API contract exists for the risk team in this version: placing, lifting and reading a review are use cases with no entry point, called by their tests only, as the retirement of a product at step 12; the HTTP operations come with a later contract.
 
@@ -41,9 +45,23 @@ Answer the assistant's questions with **Provided**; validate its plan.
 
 > `fraud` owns it. `payment` consumes `CustomerStatus`.
 
+Once the takeover's plan is `done`, deploy the rule it wrote and commit:
+
+```bash
+apm install
+git add -A && git commit -m "docs(customer): the customer spec taken over; fraud owns Rule B"
+```
+
 **16.c** — type:
 
 > Plan and build: `fraud` places and lifts reviews, and `payment` asks `fraud` whether a customer is blocked.
+
+One commit per plan: once the plan of `fraud` is `done`, then once the plan of `payment` is:
+
+```bash
+git add -A && git commit -m "feat(fraud): fraud places and lifts reviews"
+git add -A && git commit -m "feat(payment): payment asks CustomerStatus"
+```
 
 ## Expected
 
@@ -59,15 +77,16 @@ You should see `partition-spec` follow `references/takeover.md`:
    - The rulings that state a durable truth are candidates, each run through the levels: the archive of old reviews belongs to `fraud`; the first ruling is Rule B — see 16.b. None is written without validation.
    - The legacy file stays in place, with one line at its top pointing to the two new specs. Removing it is your decision.
    - `docs/partition.yml` declares `customer` and `fraud`, area `customer`.
+   - No `customer/area.md`: an area file is created when its first entry is validated, and the BA sends no word and no rule to one.
    - Section 5 becomes one line of a backend rule, scoped, through `partition-rules`.
 
 ### 16.b — One owner for Rule B, one copy from the source
 
-The same rule is now in two places: BR-35 of `payment`, and a ruling of the legacy file. It is **reported, not moved** by the assistant. You rule: `fraud` owns it (_Where a statement belongs_: owned by one bounded context and needed by others). Then:
+The same rule is now in two places: the business rule of `payment`, and a ruling of the legacy file. It is **reported, not moved** by the assistant. You rule: `fraud` owns it (_Where a statement belongs_: owned by one bounded context and needed by others). Then:
 
 - `fraud/spec.md`, `Business rules`: "A customer under fraud review can neither pay nor be refunded." with its source (the risk committee ruling of 2024-03-12, and the validation that named `fraud` its owner);
 - `fraud/spec.md`, `Contracts with neighbours`: `payment`, exposed, `CustomerStatus`;
-- `payment/spec.md`: BR-35 **stays**. It is copied from REQ-4 and REQ-6 of the billing source, and a rule copied from a source changes only through its source: the assistant reports it and asks the PO, who keeps the source as it is. `Contracts with neighbours` gains `fraud`, consumed, `CustomerStatus` — the answer "blocked: yes or no", and nothing else — and the list of `application.yaml` leaves its `Language` and its contracts.
+- `payment/spec.md`: its Rule B **stays**. It is copied from REQ-4 and REQ-6 of the billing source, and a rule copied from a source changes only through its source: the assistant reports it and asks the PO, who keeps the source as it is. `Contracts with neighbours` gains `fraud`, consumed, `CustomerStatus` — the answer "blocked: yes or no", and nothing else — and the list of `application.yaml` leaves its `Language` and its contracts.
 
 This is the case [where a rule lives](../where-a-rule-lives.md#step-2--rule-b-shared-within-one-area-no-owner) announced: _"If later a `fraud` bounded context exposes 'customer blocked: yes or no', the rule moves to its spec."_ There, Rule B came from a workshop and moves whole. Here it is also a sentence of the billing source, so `fraud` owns it and `payment` keeps its copy, each from its own source, neither rewritten. The rule spans two areas, `customer` and `billing`, yet it does not go to the register: it has an owner, and a rule with an owner lives in the owner's spec.
 
@@ -92,7 +111,7 @@ flowchart LR
   subgraph app_commerce["commerce-app"]
     subgraph area_billing["billing"]
       invoice["invoice · rich<br/>Rule A · Rule D: voided<br/>≈ — tok"]
-      payment["payment · rich<br/>Rule B: BR-35, from the source · Rule D: reversed<br/>≈ — tok"]:::new
+      payment["payment · rich<br/>Rule B: from the source · Rule D: reversed<br/>≈ — tok"]:::new
     end
     subgraph area_catalog["catalog"]
       product["product · rich<br/>≈ — tok"]
@@ -139,11 +158,12 @@ flowchart LR
 - [ ] 16.a — Each ruling that states a durable truth is run through the levels: the archive of old reviews to `fraud`, the first ruling is Rule B; none is written without validation
 - [ ] 16.a — The legacy file stays in place, with one line at its top pointing to the two new specs
 - [ ] 16.a — `docs/partition.yml` declares `customer` and `fraud`, area `customer`
+- [ ] 16.a — No `customer/area.md`: no entry shared by the two was validated
 - [ ] 16.a — Section 5 becomes one scoped line of a backend rule, through `partition-rules`
-- [ ] 16.b — Rule B, in BR-35 of `payment` and in the legacy rulings, is reported, not moved by the assistant
+- [ ] 16.b — Rule B, in the business rule of `payment` and in the legacy rulings, is reported, not moved by the assistant
 - [ ] 16.b — `fraud/spec.md`, `Business rules`: "A customer under fraud review can neither pay nor be refunded.", sourced to the ruling of 2024-03-12 and the validation that named its owner
 - [ ] 16.b — `fraud/spec.md`, `Contracts with neighbours`: `payment`, exposed, `CustomerStatus`
-- [ ] 16.b — BR-35 stays in `payment/spec.md`, reported as changing only through its source; the PO keeps the source; its `Contracts with neighbours` gains `fraud`, consumed, `CustomerStatus`, "blocked: yes or no" and nothing else
+- [ ] 16.b — `payment`'s Rule B stays in `payment/spec.md`, reported as changing only through its source; the PO keeps the source; its `Contracts with neighbours` gains `fraud`, consumed, `CustomerStatus`, "blocked: yes or no" and nothing else
 - [ ] 16.b — Rule B does not go to the register: it lives in the spec of its owner
 - [ ] 16.c — No plan while the rules of `fraud` carry their banner
 - [ ] 16.c — `com.commerce.fraud` has its domain (a review opened and lifted), its use cases without entry point, its migration and the implementation of `CustomerStatus`
