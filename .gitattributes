@@ -1,0 +1,24 @@
+# Every text file is LF in the repository and in every working copy, whatever core.autocrlf says:
+# Bash fails on a script with CRLF, and a consumer installs the package from a Git clone.
+* text=auto eol=lf
+*.png binary
+
+# The archive of a release (git archive, GitHub's "Source code") holds the package, its front page, its content
+# page and its images: .apm/, apm.yml, LICENSE, README.md, CONTENT.md, assets/, CHANGELOG.md, SECURITY.md. The
+# repository and its tags keep the rest. apm install needs only .apm/ and apm.yml, both kept.
+# tests/package.test.mjs checks this list.
+/.claude export-ignore
+/.githooks export-ignore
+/.github export-ignore
+/docs export-ignore
+/scripts export-ignore
+/tests export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/.markdownlint.json export-ignore
+/.nvmrc export-ignore
+/.prettierignore export-ignore
+/CONTRIBUTING.md export-ignore
+/RELEASING.md export-ignore
+/package.json export-ignore
+/package-lock.json export-ignore

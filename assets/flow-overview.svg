@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 750" role="img" aria-labelledby="t d">
+  <title id="t">Where to start with Partition: five journeys</title>
+  <desc id="d">Five journeys. 1, initialize the project, once: declare the bounded contexts, measure the budget, scope the rules. 2, create a bounded context from a source or from what you describe; you validate the split and write the business rules. 3, deliver through a plan: one task, one verification, closed by the gate, the spec and the README. 4, change a bounded context: the spec moves first, then the code, delivered again through a plan. 5, split a context that grew: measured, people draw the boundary, the extracted context is created as in journey 2. At any time: the gate, the attack, the C4 views, the pattern grid, the hexagon check and the spec auditor.</desc>
+  <defs>
+    <style>
+      .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
+      .mono { font-family: 'IBM Plex Mono','Cascadia Mono',Consolas,Menlo,monospace; }
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#7a8291"/>
+    </marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#4cc9f0"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="750" rx="16" fill="#0f1218"/>
+  <rect x="1" y="1" width="1278" height="748" rx="15" fill="none" stroke="#5b6472" stroke-width="2"/>
+  <text x="40" y="66" class="sans" font-size="30" font-weight="600" fill="#eceef2">Where to start</text>
+  <text x="40" y="104" class="sans" font-size="18" fill="#aab0ba">Start at 1, once per project. Each bounded context is then created (2) and delivered through a plan (3);</text>
+  <text x="40" y="130" class="sans" font-size="18" fill="#aab0ba">every later change moves its spec first (4); a context that grew too big is split (5).</text>
+  <rect x="40" y="160" width="360" height="230" rx="10" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="74" cy="196" r="17" fill="#0b78a0"/>
+  <text x="74" y="202.46" class="sans" font-size="19" font-weight="700" fill="#eceef2" text-anchor="middle">1</text>
+  <text x="104" y="203" class="sans" font-size="21" font-weight="600" fill="#eceef2">Initialize the project</text>
+  <text x="60" y="240" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Set up Partition for this project.”</text>
+  <text x="60" y="269" class="sans" font-size="16" fill="#aab0ba">Declare the bounded contexts, measure</text>
+  <text x="60" y="291" class="sans" font-size="16" fill="#aab0ba">the budget, scope the rules. Once.</text>
+  <path d="M60 344H380" stroke="#5b6472" stroke-width="1.5"/>
+  <text x="60" y="370" class="mono" font-size="14.5" fill="#9ae3f8">partition-budget · partition-rules</text>
+  <rect x="460" y="160" width="360" height="230" rx="10" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="494" cy="196" r="17" fill="#0b78a0"/>
+  <text x="494" y="202.46" class="sans" font-size="19" font-weight="700" fill="#eceef2" text-anchor="middle">2</text>
+  <text x="524" y="203" class="sans" font-size="21" font-weight="600" fill="#eceef2">Create a bounded context</text>
+  <text x="480" y="240" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Decompose this PRD, area billing.”</text>
+  <text x="480" y="269" class="sans" font-size="16" fill="#aab0ba">From a contract, a PRD or a spec, or from</text>
+  <text x="480" y="291" class="sans" font-size="16" fill="#aab0ba">what you describe. You validate the split</text>
+  <text x="480" y="313" class="sans" font-size="16" fill="#aab0ba">by name; you write the business rules.</text>
+  <path d="M480 344H800" stroke="#5b6472" stroke-width="1.5"/>
+  <text x="480" y="370" class="mono" font-size="14.5" fill="#9ae3f8">partition-shape · partition-spec</text>
+  <rect x="880" y="160" width="360" height="230" rx="10" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="914" cy="196" r="17" fill="#0b78a0"/>
+  <text x="914" y="202.46" class="sans" font-size="19" font-weight="700" fill="#eceef2" text-anchor="middle">3</text>
+  <text x="944" y="203" class="sans" font-size="21" font-weight="600" fill="#eceef2">Deliver through a plan</text>
+  <text x="900" y="240" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Resume.” · “Close the plan.”</text>
+  <text x="900" y="269" class="sans" font-size="16" fill="#aab0ba">One task, one verification. The plan holds</text>
+  <text x="900" y="291" class="sans" font-size="16" fill="#aab0ba">the state; the gate, the spec and the</text>
+  <text x="900" y="313" class="sans" font-size="16" fill="#aab0ba">README close it.</text>
+  <path d="M900 344H1220" stroke="#5b6472" stroke-width="1.5"/>
+  <text x="900" y="370" class="mono" font-size="14.5" fill="#9ae3f8">partition-plan · partition-gate</text>
+  <rect x="880" y="470" width="360" height="230" rx="10" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="914" cy="506" r="17" fill="#0b78a0"/>
+  <text x="914" y="512.46" class="sans" font-size="19" font-weight="700" fill="#eceef2" text-anchor="middle">4</text>
+  <text x="944" y="513" class="sans" font-size="21" font-weight="600" fill="#eceef2">Change a bounded context</text>
+  <text x="900" y="550" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“This behaviour has to change.”</text>
+  <text x="900" y="573" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“The contract moved to 1.5.0.”</text>
+  <text x="900" y="602" class="sans" font-size="16" fill="#aab0ba">The spec moves first, you validate it,</text>
+  <text x="900" y="624" class="sans" font-size="16" fill="#aab0ba">then the code follows.</text>
+  <path d="M900 654H1220" stroke="#5b6472" stroke-width="1.5"/>
+  <text x="900" y="680" class="mono" font-size="14.5" fill="#9ae3f8">partition-spec · partition-shape</text>
+  <rect x="460" y="470" width="360" height="230" rx="10" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="494" cy="506" r="17" fill="#0b78a0"/>
+  <text x="494" y="512.46" class="sans" font-size="19" font-weight="700" fill="#eceef2" text-anchor="middle">5</text>
+  <text x="524" y="513" class="sans" font-size="21" font-weight="600" fill="#eceef2">Split a context that grew</text>
+  <text x="480" y="550" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Time for the quarterly budget review.”</text>
+  <text x="480" y="579" class="sans" font-size="16" fill="#aab0ba">Measured, not guessed. People draw the</text>
+  <text x="480" y="601" class="sans" font-size="16" fill="#aab0ba">boundary; the assistant prepares, moves</text>
+  <text x="480" y="623" class="sans" font-size="16" fill="#aab0ba">the code and records.</text>
+  <path d="M480 654H800" stroke="#5b6472" stroke-width="1.5"/>
+  <text x="480" y="680" class="mono" font-size="13" fill="#9ae3f8">partition-budget · partition-reshape</text>
+  <rect x="40" y="470" width="360" height="230" rx="10" fill="none" stroke="#5b6472" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="60" y="513" class="sans" font-size="21" font-weight="600" fill="#eceef2">At any time</text>
+  <text x="60" y="548" class="sans" font-size="15" font-style="italic" fill="#aab0ba">“Is this safe to ship?”</text>
+  <text x="380" y="548" class="mono" font-size="14" fill="#9ae3f8" text-anchor="end">partition-gate</text>
+  <text x="60" y="573" class="sans" font-size="15" font-style="italic" fill="#aab0ba">“Attack this spec.”</text>
+  <text x="380" y="573" class="mono" font-size="14" fill="#9ae3f8" text-anchor="end">partition-attack</text>
+  <text x="60" y="598" class="sans" font-size="15" font-style="italic" fill="#aab0ba">“Draw the checkout sequence.”</text>
+  <text x="380" y="598" class="mono" font-size="14" fill="#9ae3f8" text-anchor="end">partition-c4</text>
+  <text x="60" y="623" class="sans" font-size="15" font-style="italic" fill="#aab0ba">“A Strategy here?”</text>
+  <text x="380" y="623" class="mono" font-size="14" fill="#9ae3f8" text-anchor="end">partition-patterns</text>
+  <text x="60" y="648" class="sans" font-size="15" font-style="italic" fill="#aab0ba">“Check the architecture.”</text>
+  <text x="380" y="648" class="mono" font-size="14" fill="#9ae3f8" text-anchor="end">partition-hexagon</text>
+  <text x="60" y="673" class="sans" font-size="15" font-style="italic" fill="#aab0ba">“Audit orders against its spec.”</text>
+  <text x="380" y="673" class="mono" font-size="14" fill="#9ae3f8" text-anchor="end">spec-auditor</text>
+  <path d="M404 275L454 275" fill="none" stroke="#4cc9f0" stroke-width="2.5" marker-end="url(#b)"/>
+  <path d="M824 275L874 275" fill="none" stroke="#4cc9f0" stroke-width="2.5" marker-end="url(#b)"/>
+  <path d="M1000 394L1000 464" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="988" y="436" class="sans" font-size="15" fill="#9aa2ae" text-anchor="end">the next change</text>
+  <path d="M1120 466L1120 396" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="1132" y="436" class="sans" font-size="15" fill="#9aa2ae" text-anchor="start">code realigned</text>
+  <path d="M640 466L640 396" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="652" y="436" class="sans" font-size="15" fill="#9aa2ae" text-anchor="start">the extracted context</text>
+
+</svg>

@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=../.apm/skills/partition-budget/assets/partition.schema.json
+# Partition - configuration of the package's own repository.
+version: 1
+target: claude
+bridge: none
+
+paths:
+  specs: docs/specs
+  invariants: docs/specs/invariants.md
+  designs: docs/designs
+  plans: docs/plans
+  contracts: docs/contracts
+  sources: docs/sources # PRDs and described contexts, decomposed by partition-shape
+
+budget:
+  always: 32000
+  chars_per_token: 4
+  review: at each release
+
+# We have only one bounded context for now, the package itself.
+contexts:
+  - id: partition
+    code:
+      - .apm/**
+      - tests/**
+      - apm.yml
+      - package.json
+      - scripts/**

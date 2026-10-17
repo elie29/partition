@@ -1,0 +1,15 @@
+# Markdown is formatted, .apm/ included. proseWrap "never" (package.json, 2026-10-17) writes a table wider than the
+# print width compact instead of padding it, and keeps a paragraph on one line: each header line is its own paragraph.
+
+# What the package ships keeps its YAML as written: the YAML subset parser of budget.mjs and c4-drawio.mjs reads
+# the templates.
+.apm/**/*.yml
+.apm/**/*.yaml
+
+# Budget records hold a script's output pasted unedited, and a record is never rewritten.
+docs/budget/
+
+# A guide's provided files are what a role hands over, kept as written.
+docs/guides/*/*-provided/
+
+package-lock.json

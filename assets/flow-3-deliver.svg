@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1169" role="img" aria-labelledby="t d">
+  <title id="t">Journey 3: deliver through a plan</title>
+  <desc id="d">You design the feature with your own process tool. The assistant opens the plan, with a header, a task index and a verification per task. Each task ends with its command run and its real output shown, and the plan is written before every reply; you commit, then the next task. Resume reads the header, the index and the task named in Resume at, nothing more. To close: the gate gives SHIP, SHIP WITH CONDITIONS or HOLD, and a HOLD sends back to the tasks; what lasts goes to the durable spec, the area file or the invariant register; the README is realigned when users see the change, and the plan is marked done. An optional Claude Code hook recalls the closing steps.</desc>
+  <defs>
+    <style>
+      .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
+      .mono { font-family: 'IBM Plex Mono','Cascadia Mono',Consolas,Menlo,monospace; }
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#7a8291"/>
+    </marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#4cc9f0"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="1169" rx="16" fill="#0f1218"/>
+  <rect x="1" y="1" width="1278" height="1167" rx="15" fill="none" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="58" cy="56" r="18" fill="#0b78a0"/>
+  <text x="58" y="62.84" class="sans" font-size="20" font-weight="700" fill="#eceef2" text-anchor="middle">3</text>
+  <text x="90" y="66" class="sans" font-size="30" font-weight="600" fill="#eceef2">Deliver through a plan</text>
+  <text x="40" y="104" class="sans" font-size="18" fill="#aab0ba">The plan is the state of the work; the chat is not. A session can be cleared at any moment and resume where it was.</text>
+  <rect x="110" y="140" width="820" height="77" rx="8" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <circle cx="140" cy="168" r="14" fill="#e8a93a"/>
+  <text x="140" y="173.32" class="sans" font-size="15" font-weight="700" fill="#0f1218" text-anchor="middle">A</text>
+  <text x="166" y="174" class="sans" font-size="19" font-weight="600" fill="#f5cd7a">You design the feature with your process tool</text>
+  <text x="166" y="197" class="sans" font-size="16" fill="#aab0ba">Brainstorm, design, sprint, TDD loop: Partition does not replace them. It bounds and records the work.</text>
+  <path d="M140 217L140 241" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="110" y="243" width="820" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="140" cy="271" r="14" fill="#0b78a0"/>
+  <text x="140" y="276.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">B</text>
+  <text x="166" y="277" class="sans" font-size="19" font-weight="600" fill="#eceef2">Open the plan</text>
+  <text x="908" y="277" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-plan</text>
+  <text x="166" y="300" class="sans" font-size="16" fill="#aab0ba">A header (Status, Resume at, Last updated), a task index, and each task with its</text>
+  <text x="166" y="323" class="sans" font-size="16" fill="#aab0ba">verification command and its expected result.</text>
+  <text x="908" y="300" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">docs/plans/</text>
+  <path d="M140 343L140 367" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="110" y="369" width="820" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="140" cy="397" r="14" fill="#0b78a0"/>
+  <text x="140" y="402.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">C</text>
+  <text x="166" y="403" class="sans" font-size="19" font-weight="600" fill="#eceef2">One task, one verification</text>
+  <text x="166" y="426" class="sans" font-size="16" fill="#aab0ba">The expected result is written before the command runs; the real output is shown.</text>
+  <text x="166" y="449" class="sans" font-size="16" fill="#aab0ba">Never a prediction.</text>
+  <path d="M140 469L140 493" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="110" y="495" width="820" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="140" cy="523" r="14" fill="#0b78a0"/>
+  <text x="140" y="528.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">D</text>
+  <text x="166" y="529" class="sans" font-size="19" font-weight="600" fill="#eceef2">The plan is written before every reply</text>
+  <text x="908" y="529" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-plan</text>
+  <text x="166" y="552" class="sans" font-size="16" fill="#aab0ba">Done ticked with its date and commit, Resume at moved, every decision dated, every</text>
+  <text x="166" y="575" class="sans" font-size="16" fill="#aab0ba">blocker named. What lives only in the chat is lost.</text>
+  <path d="M140 595L140 619" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="110" y="621" width="820" height="77" rx="8" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <circle cx="140" cy="649" r="14" fill="#e8a93a"/>
+  <text x="140" y="654.32" class="sans" font-size="15" font-weight="700" fill="#0f1218" text-anchor="middle">E</text>
+  <text x="166" y="655" class="sans" font-size="19" font-weight="600" fill="#f5cd7a">You commit</text>
+  <text x="166" y="678" class="sans" font-size="16" fill="#aab0ba">The assistant never commits.</text>
+  <path d="M140 698L140 722" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="110" y="724" width="820" height="123" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="140" cy="752" r="14" fill="#0b78a0"/>
+  <text x="140" y="757.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">F</text>
+  <text x="166" y="758" class="sans" font-size="19" font-weight="600" fill="#eceef2">Close: the gate</text>
+  <text x="908" y="758" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-gate</text>
+  <text x="166" y="781" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“We are done, close the plan.”</text>
+  <text x="166" y="804" class="sans" font-size="16" fill="#aab0ba">A regression audit of the plan's changes, earned by execution: SHIP, SHIP WITH</text>
+  <text x="166" y="827" class="sans" font-size="16" fill="#aab0ba">CONDITIONS or HOLD. A HOLD's reasons become tasks, or blockers for a person.</text>
+  <path d="M140 847L140 871" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="110" y="873" width="820" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="140" cy="901" r="14" fill="#0b78a0"/>
+  <text x="140" y="906.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">G</text>
+  <text x="166" y="907" class="sans" font-size="19" font-weight="600" fill="#eceef2">What lasts goes to the spec</text>
+  <text x="908" y="907" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-spec</text>
+  <text x="166" y="930" class="sans" font-size="16" fill="#aab0ba">True for one context: its durable spec. Shared by the contexts of one area: its area file.</text>
+  <text x="166" y="953" class="sans" font-size="16" fill="#aab0ba">Spanning areas or layers: the invariant register, after its admission test. You validate each entry.</text>
+  <path d="M140 973L140 997" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="110" y="999" width="820" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="140" cy="1027" r="14" fill="#0b78a0"/>
+  <text x="140" y="1032.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">H</text>
+  <text x="166" y="1033" class="sans" font-size="19" font-weight="600" fill="#eceef2">The README, when users see the change</text>
+  <text x="908" y="1033" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-readme</text>
+  <text x="166" y="1056" class="sans" font-size="16" fill="#aab0ba">Realigned when what users install, run or configure changed. The C4 model too.</text>
+  <text x="166" y="1079" class="sans" font-size="16" fill="#aab0ba">Then Status: done. The plan stays, the dated record of why.</text>
+  <path d="M108 659.5L80 659.5L80 409L104 409" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="72" y="569.25" class="sans" font-size="14" fill="#9aa2ae" text-anchor="middle" transform="rotate(-90 72 569.25)">next task</text>
+  <path d="M108 785.5L50 785.5L50 433L104 433" fill="none" stroke="#7a8291" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#a)"/>
+  <text x="42" y="662.25" class="sans" font-size="14" fill="#9aa2ae" text-anchor="middle" transform="rotate(-90 42 662.25)">HOLD</text>
+  <rect x="970" y="359" width="270" height="170" rx="10" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="988" y="393" class="sans" font-size="18" font-weight="600" font-style="italic" fill="#4cc9f0">“Resume.”</text>
+  <text x="988" y="423" class="sans" font-size="16" fill="#aab0ba">After a break or a cleared</text>
+  <text x="988" y="445" class="sans" font-size="16" fill="#aab0ba">session: the header, the task</text>
+  <text x="988" y="467" class="sans" font-size="16" fill="#aab0ba">index and the task named in</text>
+  <text x="988" y="489" class="sans" font-size="16" fill="#aab0ba">Resume at. Nothing more.</text>
+  <text x="988" y="517" class="mono" font-size="14" fill="#9ae3f8">partition-plan</text>
+  <path d="M968 409L936 409" fill="none" stroke="#4cc9f0" stroke-width="2.5" marker-end="url(#b)"/>
+  <rect x="970" y="993" width="270" height="126" rx="10" fill="none" stroke="#5b6472" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="988" y="1023" class="sans" font-size="16" font-weight="600" fill="#eceef2">Optional reminder hook</text>
+  <text x="988" y="1049" class="sans" font-size="16" fill="#aab0ba">Claude Code: a plan marked</text>
+  <text x="988" y="1071" class="sans" font-size="16" fill="#aab0ba">done, or a commit, recalls</text>
+  <text x="988" y="1093" class="sans" font-size="16" fill="#aab0ba">these closing steps.</text>
+  <rect x="40" y="1128" width="34" height="20" rx="5" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <text x="86" y="1143" class="sans" font-size="15" fill="#aab0ba" text-anchor="start">the assistant, with the skill it uses</text>
+  <rect x="400" y="1128" width="34" height="20" rx="5" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <text x="446" y="1143" class="sans" font-size="15" fill="#aab0ba" text-anchor="start">you: a decision or an action only you take</text>
+  <text x="1240" y="1143" class="sans" font-size="15" fill="#aab0ba" text-anchor="end">a change of behaviour later → cf. journey 4</text>
+
+</svg>

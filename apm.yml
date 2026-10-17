@@ -1,0 +1,12 @@
+name: partition
+version: 0.1.0
+description: 'The living specification and the Context Budget as agent skills: one durable spec per bounded context, a measured budget, rules with a scope, the C4 as text.'
+author: Elie Nehmé
+license: MIT
+targets:
+  - claude
+  - copilot
+dependencies:
+  apm: []
+  mcp: []
+includes: auto

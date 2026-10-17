@@ -1,0 +1,148 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Billing API", "version": "1.3.0" },
+  "paths": {
+    "/invoices": {
+      "post": {
+        "operationId": "issueInvoice",
+        "tags": ["Invoice"],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/IssueInvoice" } } }
+        },
+        "responses": {
+          "201": {
+            "description": "The issued invoice",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } }
+          },
+          "409": { "description": "This order already has an invoice that is not cancelled" }
+        }
+      }
+    },
+    "/invoices/{invoiceId}": {
+      "get": {
+        "operationId": "getInvoice",
+        "tags": ["Invoice"],
+        "parameters": [{ "name": "invoiceId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "The invoice",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } }
+          },
+          "404": { "description": "No such invoice" }
+        }
+      }
+    },
+    "/invoices/{invoiceId}/cancel": {
+      "post": {
+        "operationId": "cancelInvoice",
+        "tags": ["Invoice"],
+        "parameters": [{ "name": "invoiceId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "The cancelled invoice",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } }
+          },
+          "404": { "description": "No such invoice" },
+          "409": { "description": "The invoice is paid or already cancelled" }
+        }
+      }
+    },
+    "/invoices/{invoiceId}/pay": {
+      "post": {
+        "operationId": "payInvoice",
+        "tags": ["Payment"],
+        "parameters": [{ "name": "invoiceId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PayInvoice" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "The paid invoice",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } }
+          },
+          "402": { "description": "CardPay refused the charge; the invoice stays issued" },
+          "403": { "description": "The customer of the invoice is under fraud review" },
+          "404": { "description": "No such invoice" },
+          "409": { "description": "The invoice is not issued: already paid or cancelled" }
+        }
+      }
+    },
+    "/invoices/{invoiceId}/refunds": {
+      "post": {
+        "operationId": "refundInvoice",
+        "tags": ["Refund"],
+        "parameters": [{ "name": "invoiceId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RefundInvoice" } } }
+        },
+        "responses": {
+          "201": {
+            "description": "The refund, sent to the card",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Refund" } } }
+          },
+          "403": { "description": "The customer of the invoice is under fraud review" },
+          "404": { "description": "No such invoice" },
+          "409": { "description": "The invoice is not paid, or the refund exceeds what remains of the amount paid" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Money": {
+        "type": "object",
+        "required": ["amountMinor", "currency"],
+        "properties": {
+          "amountMinor": { "type": "integer", "format": "int64" },
+          "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+        }
+      },
+      "Line": {
+        "type": "object",
+        "required": ["label", "price"],
+        "properties": { "label": { "type": "string" }, "price": { "$ref": "#/components/schemas/Money" } }
+      },
+      "IssueInvoice": {
+        "type": "object",
+        "required": ["orderId", "customerId", "lines"],
+        "properties": {
+          "orderId": { "type": "string" },
+          "customerId": { "type": "string" },
+          "lines": { "type": "array", "minItems": 1, "items": { "$ref": "#/components/schemas/Line" } }
+        }
+      },
+      "PayInvoice": {
+        "type": "object",
+        "required": ["cardToken"],
+        "properties": { "cardToken": { "type": "string" } }
+      },
+      "RefundInvoice": {
+        "type": "object",
+        "required": ["amount"],
+        "properties": { "amount": { "$ref": "#/components/schemas/Money" } }
+      },
+      "Refund": {
+        "type": "object",
+        "properties": {
+          "refundId": { "type": "string" },
+          "invoiceId": { "type": "string" },
+          "amount": { "$ref": "#/components/schemas/Money" },
+          "status": { "type": "string", "enum": ["REQUESTED", "SENT", "SETTLED"] }
+        }
+      },
+      "Invoice": {
+        "type": "object",
+        "properties": {
+          "invoiceId": { "type": "string" },
+          "orderId": { "type": "string" },
+          "status": { "type": "string", "enum": ["ISSUED", "PAID", "CANCELLED"] },
+          "amount": { "$ref": "#/components/schemas/Money" },
+          "lines": { "type": "array", "items": { "$ref": "#/components/schemas/Line" } }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,108 @@
+name: Skill or behaviour proposal
+description: Add a skill, an agent or a script, or change what one tells the assistant to do
+labels: [proposal]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A skill costs every session of every project that installs Partition, used or not. So a skill
+        enters by replacing another one, or by a decision recorded in the plan and reflected in the spec.
+        Read "A new skill" in CONTRIBUTING.md, and wait for an answer here before opening a pull request.
+  - type: checkboxes
+    id: searched
+    attributes:
+      label: Before you open it
+      options:
+        - label: I searched the open and closed issues, and this proposal is not there.
+          required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What you propose
+      options:
+        - a new skill
+        - a change to what a skill tells the assistant
+        - a new agent or script
+        - a change to an agent or a script
+    validations:
+      required: true
+  - type: textarea
+    id: words
+    attributes:
+      label: What an engineer types when they need it
+      description: Their own words, two or three ways of saying it. For a skill, its description must trigger on them; for an agent or a script, say what they ask the assistant to run.
+    validations:
+      required: true
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What the assistant does wrong today
+      description: A real case. What was asked, what the assistant did, and why that is wrong.
+    validations:
+      required: true
+  - type: dropdown
+    id: closest
+    attributes:
+      label: The closest existing skill
+      description: The skill that does the nearest thing today, or the one that would run the agent or the script.
+      options:
+        - partition-attack
+        - partition-budget
+        - partition-c4
+        - partition-shape
+        - partition-gate
+        - partition-hexagon
+        - partition-patterns
+        - partition-plan
+        - partition-readme
+        - partition-rules
+        - partition-spec
+        - partition-reshape
+        - no skill comes close
+    validations:
+      required: true
+  - type: textarea
+    id: not-enough
+    attributes:
+      label: Why that skill is not enough
+      description: Or, when no skill comes close, why none of them could carry it.
+    validations:
+      required: true
+  - type: textarea
+    id: replaces
+    attributes:
+      label: What it replaces
+      description: For a new skill, the skill it replaces, or why it deserves a recorded decision instead. For a change, the rule it replaces.
+    validations:
+      required: true
+  - type: textarea
+    id: cost
+    attributes:
+      label: What it costs
+      description: Tokens added to the always-loaded surface and to the SKILL.md (`npm run budget` measures them), and what goes to references/, loaded on demand.
+    validations:
+      required: true
+  - type: textarea
+    id: person
+    attributes:
+      label: What a person still decides
+    validations:
+      required: true
+  - type: textarea
+    id: spec
+    attributes:
+      label: What changes in the spec
+      description: The rules of `docs/specs/partition/spec.md` (BR-1, BR-2...) it adds or changes. The spec moves first.
+    validations:
+      required: true
+  - type: checkboxes
+    id: rules
+    attributes:
+      label: The rules of the package
+      options:
+        - label: No SKILL.md names a language, a framework or a vendor; per-ecosystem material goes to references/.
+          required: true
+        - label: Nothing runs unasked and nothing needs installing. A script is one file for Node 22 or later, the Python standard library or Bash.
+          required: true
+        - label: It is written in English and names no client and no employer.
+          required: true

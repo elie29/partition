@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 465" role="img" aria-labelledby="t d">
+  <title id="t">The Partition loop</title>
+  <desc id="d">Bring what you have: a source, what you describe, or a behaviour to change. Each one enters through the spec, where you write the business rules. Then the plan holds the state, the work is built and verified one task at a time, and the gate, the spec and the README close it. When the code and the spec disagree, the spec moves first. The budget is measured, and a context that grew is split. One spec per bounded context, sized to what the assistant can hold.</desc>
+  <defs>
+    <style>
+      .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
+      .mono { font-family: 'IBM Plex Mono','Cascadia Mono',Consolas,Menlo,monospace; }
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#7a8291"/>
+    </marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#4cc9f0"/>
+    </marker>
+  </defs>
+  <rect width="1120" height="465" rx="16" fill="#0f1218"/>
+  <rect x="1" y="1" width="1118" height="463" rx="15" fill="none" stroke="#5b6472" stroke-width="2"/>
+
+  <text x="45" y="29" class="sans" font-size="14" font-weight="600" letter-spacing="2.5" fill="#4cc9f0">BRING WHAT YOU HAVE</text>
+  <path d="M45 36H1075M45 38.5H1075M45 41H1075M45 43.5H1075M45 46H1075" stroke="#2a303a" stroke-width="0.8"/>
+
+  <!-- A source: a document -->
+  <path d="M141 62H161L171 72V108H141Z" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M161 62V72H171" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M147 80H165M147 88H165M147 96H159" stroke="#4cc9f0" stroke-width="1.6" stroke-linecap="round"/>
+  <text x="155" y="134" class="sans" font-size="17" font-weight="600" fill="#eceef2" text-anchor="middle">A source</text>
+  <text x="155" y="154" class="sans" font-size="14" fill="#aab0ba" text-anchor="middle">a PRD, a contract, a spec</text>
+
+  <!-- What you describe: a speech bubble -->
+  <path d="M407 66H443Q451 66 451 74V94Q451 102 443 102H425L414 111V102H407Q399 102 399 94V74Q399 66 407 66Z" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="414" cy="84" r="2.6" fill="#4cc9f0"/>
+  <circle cx="425" cy="84" r="2.6" fill="#4cc9f0"/>
+  <circle cx="436" cy="84" r="2.6" fill="#4cc9f0"/>
+  <text x="425" y="134" class="sans" font-size="17" font-weight="600" fill="#eceef2" text-anchor="middle">What you describe</text>
+  <text x="425" y="154" class="sans" font-size="14" fill="#aab0ba" text-anchor="middle">no source yet</text>
+
+  <!-- A behaviour to change: opposite arrows -->
+  <circle cx="695" cy="86" r="22" fill="none" stroke="#4cc9f0" stroke-width="2"/>
+  <path d="M683 79H707M701 73L707 79L701 85" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M707 93H683M689 87L683 93L689 99" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="695" y="134" class="sans" font-size="17" font-weight="600" fill="#eceef2" text-anchor="middle">A behaviour to change</text>
+  <text x="695" y="154" class="sans" font-size="14" fill="#aab0ba" text-anchor="middle">or code that disagrees with the spec</text>
+
+  <!-- every entry goes through the spec -->
+  <path d="M155 164V206" fill="none" stroke="#4cc9f0" stroke-width="2" marker-end="url(#b)"/>
+  <path d="M425 164V168Q425 176 417 176H203Q195 176 195 184V206" fill="none" stroke="#4cc9f0" stroke-width="2" marker-end="url(#b)"/>
+  <path d="M695 164V182Q695 190 687 190H243Q235 190 235 198V206" fill="none" stroke="#4cc9f0" stroke-width="2" marker-end="url(#b)"/>
+
+  <!-- the loop -->
+  <rect x="45" y="210" width="220" height="96" rx="10" fill="#161a22" stroke="#4cc9f0" stroke-width="2"/>
+  <text x="65" y="245" class="sans" font-size="19" font-weight="600" fill="#eceef2">Spec</text>
+  <text x="65" y="271" class="sans" font-size="14.5" fill="#aab0ba">you write the business</text>
+  <text x="65" y="291" class="sans" font-size="14.5" fill="#aab0ba">rules; it says what is true</text>
+
+  <path d="M265 258H313" stroke="#7a8291" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="315" y="210" width="220" height="96" rx="10" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <text x="335" y="245" class="sans" font-size="19" font-weight="600" fill="#eceef2">Plan</text>
+  <text x="335" y="271" class="sans" font-size="14.5" fill="#aab0ba">the state is on disk,</text>
+  <text x="335" y="291" class="sans" font-size="14.5" fill="#aab0ba">not in the chat</text>
+
+  <path d="M535 258H583" stroke="#7a8291" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="585" y="210" width="220" height="96" rx="10" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <text x="605" y="245" class="sans" font-size="19" font-weight="600" fill="#eceef2">Build and verify</text>
+  <text x="605" y="271" class="sans" font-size="14.5" fill="#aab0ba">one task, one verification</text>
+  <text x="605" y="291" class="sans" font-size="14.5" fill="#aab0ba">at a time</text>
+
+  <path d="M805 258H853" stroke="#7a8291" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="855" y="210" width="220" height="96" rx="10" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <text x="875" y="245" class="sans" font-size="19" font-weight="600" fill="#eceef2">Close</text>
+  <text x="875" y="271" class="sans" font-size="14.5" fill="#aab0ba">the gate, the spec and</text>
+  <text x="875" y="291" class="sans" font-size="14.5" fill="#aab0ba">the README</text>
+
+  <!-- the spec moves first -->
+  <path d="M695 306V330Q695 340 685 340H210Q200 340 200 330V310" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#b)"/>
+  <text x="447" y="331" class="sans" font-size="14.5" font-style="italic" fill="#4cc9f0" text-anchor="middle">code and spec disagree: the spec moves first</text>
+
+  <!-- measure the budget, split -->
+  <path d="M965 306V380Q965 390 955 390H140Q130 390 130 380V310" fill="none" stroke="#7a8291" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#a)"/>
+  <text x="547" y="381" class="sans" font-size="14.5" font-style="italic" fill="#aab0ba" text-anchor="middle">the budget is measured: a context that grew is split</text>
+
+  <path d="M45 419H1075M45 421.5H1075M45 424H1075M45 426.5H1075M45 429H1075" stroke="#2a303a" stroke-width="0.8"/>
+  <text x="560" y="449" class="sans" font-size="13" font-weight="600" letter-spacing="2.5" fill="#7a8291" text-anchor="middle">ONE SPEC PER BOUNDED CONTEXT, SIZED TO WHAT THE ASSISTANT CAN HOLD</text>
+</svg>

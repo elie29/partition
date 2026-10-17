@@ -1,0 +1,40 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.8 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.8">
+  <diagram id="960YYdGTK8dHBxhlOjpQ" name="Commerce">
+    <mxGraphModel dx="1674" dy="836" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="BwxdzoE4p0skcNc3Kfrh-1" value="Customer" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="340" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BwxdzoE4p0skcNc3Kfrh-2" value="Accountant" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
+          <mxGeometry x="170" y="450" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BwxdzoE4p0skcNc3Kfrh-3" value="Commerce app (Spring Boot)" style="rounded=1;verticalAlign=top;spacingTop=8;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="350" width="200" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="BwxdzoE4p0skcNc3Kfrh-4" value="Invoicing" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="BwxdzoE4p0skcNc3Kfrh-3">
+          <mxGeometry x="40" y="60" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BwxdzoE4p0skcNc3Kfrh-5" value="H2" style="shape=cylinder;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="640" y="340" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="BwxdzoE4p0skcNc3Kfrh-6" value="CardPay" style="rounded=1;dashed=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="450" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="BwxdzoE4p0skcNc3Kfrh-7" value="pays" style="html=1;" edge="1" parent="1" source="BwxdzoE4p0skcNc3Kfrh-1" target="BwxdzoE4p0skcNc3Kfrh-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BwxdzoE4p0skcNc3Kfrh-8" value="issues, cancels" style="html=1;" edge="1" parent="1" source="BwxdzoE4p0skcNc3Kfrh-2" target="BwxdzoE4p0skcNc3Kfrh-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BwxdzoE4p0skcNc3Kfrh-9" value="SQL" style="html=1;" edge="1" parent="1" source="BwxdzoE4p0skcNc3Kfrh-4" target="BwxdzoE4p0skcNc3Kfrh-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BwxdzoE4p0skcNc3Kfrh-10" value="charges, reverses" style="html=1;" edge="1" parent="1" source="BwxdzoE4p0skcNc3Kfrh-4" target="BwxdzoE4p0skcNc3Kfrh-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

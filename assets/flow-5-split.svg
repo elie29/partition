@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1146" role="img" aria-labelledby="t d">
+  <title id="t">Journey 5: split a context that grew</title>
+  <desc id="d">The assistant measures the budget on its schedule or on a warning sign, says why a gauge is over and shows the options without choosing; you decide. It prepares the workshop material without proposing a boundary; you draw the boundary in Event Storming with the architect, and the decision is recorded. Four preconditions must hold: callers behind an interface, one adapter, a frozen contract, and a spec and language of its own for the new context, with each rule in one home. The move goes through a plan and is proved to be a move. Afterwards the C4 model, the configuration and the budget record are updated.</desc>
+  <defs>
+    <style>
+      .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
+      .mono { font-family: 'IBM Plex Mono','Cascadia Mono',Consolas,Menlo,monospace; }
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#7a8291"/>
+    </marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#4cc9f0"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="1146" rx="16" fill="#0f1218"/>
+  <rect x="1" y="1" width="1278" height="1144" rx="15" fill="none" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="58" cy="56" r="18" fill="#0b78a0"/>
+  <text x="58" y="62.84" class="sans" font-size="20" font-weight="700" fill="#eceef2" text-anchor="middle">5</text>
+  <text x="90" y="66" class="sans" font-size="30" font-weight="600" fill="#eceef2">Split a context that grew</text>
+  <text x="40" y="104" class="sans" font-size="18" fill="#aab0ba">A split is a move, not a rewrite. People decide where the boundary goes; the assistant prepares, moves and records.</text>
+  <rect x="40" y="140" width="1200" height="123" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="168" r="14" fill="#0b78a0"/>
+  <text x="70" y="173.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">A</text>
+  <text x="96" y="174" class="sans" font-size="19" font-weight="600" fill="#eceef2">Measure</text>
+  <text x="1218" y="174" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-budget</text>
+  <text x="96" y="197" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Time for the quarterly budget review.”</text>
+  <text x="96" y="220" class="sans" font-size="16" fill="#aab0ba">On its schedule, or sooner on a warning sign: more files per change, the same context explained again,</text>
+  <text x="96" y="243" class="sans" font-size="16" fill="#aab0ba">regressions outside the scope, a rule reinvented.</text>
+  <text x="1218" y="197" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">docs/budget/YYYY-MM-DD.md</text>
+  <path d="M70 263L70 287" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="289" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="317" r="14" fill="#0b78a0"/>
+  <text x="70" y="322.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">B</text>
+  <text x="96" y="323" class="sans" font-size="19" font-weight="600" fill="#eceef2">Why a gauge is over, and the options</text>
+  <text x="1218" y="323" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-budget</text>
+  <text x="96" y="346" class="sans" font-size="16" fill="#aab0ba">A rule without a scope, a spec that describes two things, code that grew, a plan read whole. Options shown, never</text>
+  <text x="96" y="369" class="sans" font-size="16" fill="#aab0ba">chosen: scope a rule (partition-rules), trim the spec (partition-spec), hold a boundary workshop, or nothing.</text>
+  <path d="M70 389L70 413" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="415" width="1200" height="54" rx="8" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <circle cx="70" cy="443" r="14" fill="#e8a93a"/>
+  <text x="70" y="448.32" class="sans" font-size="15" font-weight="700" fill="#0f1218" text-anchor="middle">C</text>
+  <text x="96" y="449" class="sans" font-size="19" font-weight="600" fill="#f5cd7a">You decide, with names and the date of the next review</text>
+  <path d="M70 469L70 493" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="495" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="523" r="14" fill="#0b78a0"/>
+  <text x="70" y="528.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">D</text>
+  <text x="96" y="529" class="sans" font-size="19" font-weight="600" fill="#eceef2">Prepare the workshop</text>
+  <text x="1218" y="529" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-reshape</text>
+  <text x="96" y="552" class="sans" font-size="16" fill="#aab0ba">Domain events, words with two meanings, what each coming feature loads, dependencies not behind an interface</text>
+  <text x="96" y="575" class="sans" font-size="16" fill="#aab0ba">(file:line). The material, as it is: no boundary proposed.</text>
+  <path d="M70 595L70 619" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="621" width="1200" height="77" rx="8" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <circle cx="70" cy="649" r="14" fill="#e8a93a"/>
+  <text x="70" y="654.32" class="sans" font-size="15" font-weight="700" fill="#0f1218" text-anchor="middle">E</text>
+  <text x="96" y="655" class="sans" font-size="19" font-weight="600" fill="#f5cd7a">You draw the boundary, in Event Storming with the architect</text>
+  <text x="96" y="678" class="sans" font-size="16" fill="#aab0ba">The decision and who took it are recorded; what the workshop left open comes back to you as questions.</text>
+  <text x="1218" y="678" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">docs/architecture/reshapes/</text>
+  <path d="M70 698L70 722" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="724" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="752" r="14" fill="#0b78a0"/>
+  <text x="70" y="757.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">F</text>
+  <text x="96" y="758" class="sans" font-size="19" font-weight="600" fill="#eceef2">Four preconditions, or stop</text>
+  <text x="1218" y="758" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-reshape</text>
+  <text x="96" y="781" class="sans" font-size="16" fill="#aab0ba">Callers go through an interface, one adapter implements it, the contract is frozen, and the new context has its own</text>
+  <text x="96" y="804" class="sans" font-size="16" fill="#aab0ba">spec and language (cf. journey 2) with each rule in one home, never in both specs. A missing one is its own plan, first.</text>
+  <path d="M70 824L70 848" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="850" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="878" r="14" fill="#0b78a0"/>
+  <text x="70" y="883.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">G</text>
+  <text x="96" y="884" class="sans" font-size="19" font-weight="600" fill="#eceef2">The move, through a plan</text>
+  <text x="1218" y="884" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-reshape · partition-plan</text>
+  <text x="96" y="907" class="sans" font-size="16" fill="#aab0ba">The code moves behind the interface, the adapter is replaced. Proof that it was a move: outside the moved code,</text>
+  <text x="96" y="930" class="sans" font-size="16" fill="#aab0ba">only the wiring changed. A caller that had to change stops it.</text>
+  <path d="M70 950L70 974" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="976" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="1004" r="14" fill="#0b78a0"/>
+  <text x="70" y="1009.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">H</text>
+  <text x="96" y="1010" class="sans" font-size="19" font-weight="600" fill="#eceef2">Afterwards</text>
+  <text x="1218" y="1010" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-c4 · partition-budget</text>
+  <text x="96" y="1033" class="sans" font-size="16" fill="#aab0ba">The C4 model and its views updated, the new context declared, the budget measured again: the split was made</text>
+  <text x="96" y="1056" class="sans" font-size="16" fill="#aab0ba">to bring a gauge down, the new record shows it did.</text>
+  <rect x="40" y="1105" width="34" height="20" rx="5" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <text x="86" y="1120" class="sans" font-size="15" fill="#aab0ba" text-anchor="start">the assistant, with the skill it uses</text>
+  <rect x="400" y="1105" width="34" height="20" rx="5" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <text x="446" y="1120" class="sans" font-size="15" fill="#aab0ba" text-anchor="start">you: a decision or an action only you take</text>
+  <text x="1240" y="1120" class="sans" font-size="15" fill="#aab0ba" text-anchor="end">the new context lives → cf. journeys 2, 3 and 4</text>
+
+</svg>

@@ -1,0 +1,8 @@
+apm_modules/
+node_modules/
+.DS_Store
+*.log
+_to_delete
+tmp
+.local
+.superpowers/

@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit *)",
+            "command": "<python> \"${CLAUDE_PROJECT_DIR}/.claude/hooks/partition-reminder.py\" PreToolUse || true",
+            "statusMessage": "Checking the plan closing..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "<python> \"${CLAUDE_PROJECT_DIR}/.claude/hooks/partition-reminder.py\" PostToolUse || true",
+            "statusMessage": "Checking the plan closing..."
+          }
+        ]
+      }
+    ]
+  }
+}

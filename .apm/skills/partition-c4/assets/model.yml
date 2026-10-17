@@ -1,0 +1,23 @@
+# C4 model of <system>. The source of the architecture views: change it here, then regenerate.
+# Strict YAML subset: one value per line, quotes around a value holding ": " or starting with * & !
+
+title: <System>
+
+elements:
+  - id: user
+    kind: person
+    name: <Who uses it>
+    description: <what they come for>
+  - id: system
+    kind: system
+    name: <System>
+    description: <what it does, in one line>
+
+relations:
+  - user -> system: <does what>
+
+views:
+  - id: context
+    kind: context
+    of: system
+    title: C4 1 - Context

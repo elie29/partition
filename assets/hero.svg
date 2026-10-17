@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" role="img" aria-labelledby="t d">
+  <title id="t">Partition: the living specification and the Context Budget as agent skills</title>
+  <desc id="d">A musical staff runs across the picture, cut by bar lines into five measures named after bounded contexts: Orders, Catalogue, Billing, Shipping and Stock. The Billing measure is filled: it is the one context the assistant holds in full, at 21 000 of its 32 000 tokens. The others are known only through their contracts. Behind the staff, faintly, runs the opening melody of Erik Satie’s Gymnopédie No. 1.</desc>
+  <defs>
+    <style>
+      .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
+      .mono { font-family: 'IBM Plex Mono','Cascadia Mono',Consolas,Menlo,monospace; }
+    </style>
+  </defs>
+  <rect width="1280" height="640" fill="#0f1218"/>
+  <rect x="1" y="1" width="1278" height="638" fill="none" stroke="#5b6472" stroke-width="2"/>
+
+  <!-- behind the staff: Erik Satie, Gymnopédie No. 1 (1888), bars 5 to 8 -->
+  <g class="sans" fill="#7a8291" stroke="#7a8291" opacity="0.28" aria-hidden="true" transform="translate(640 436) scale(1.14) translate(-640 -174)">
+    <path d="M80 96H1200M80 108H1200M80 120H1200M80 132H1200M80 144H1200M80 204H1200M80 216H1200M80 228H1200M80 240H1200M80 252H1200" stroke-width="1.5"/>
+    <path d="M80 96V252M1200 96V252" stroke-width="2"/>
+    <path transform="translate(104 132)" d="M2 6C-6 4-6-8 3-9C14-10 16 8 2 12C-14 16-16-10 0-20C14-30 16-46 8-53C2-57-2-44 0-36L8 28C9 36 0 38-4 32" fill="none" stroke-width="3"/>
+    <g transform="translate(96 216)" ><circle r="4.5" stroke="none"/><path d="M0 0C0-14 22-14 22 4C22 22 6 34-6 40" fill="none" stroke-width="3"/><circle cx="31" cy="-6" r="2.5" stroke="none"/><circle cx="31" cy="6" r="2.5" stroke="none"/></g>
+    <path d="M137 84V108M143 82V106" stroke-width="1.5"/><path d="M133 93L147 89M133 102L147 98" stroke-width="3.5"/>
+    <path d="M153 102V126M159 100V124" stroke-width="1.5"/><path d="M149 111L163 107M149 120L163 116" stroke-width="3.5"/>
+    <path d="M137 204V228M143 202V226" stroke-width="1.5"/><path d="M133 213L147 209M133 222L147 218" stroke-width="3.5"/>
+    <path d="M153 222V246M159 220V244" stroke-width="1.5"/><path d="M149 231L163 227M149 240L163 236" stroke-width="3.5"/>
+    <text x="182" y="117" text-anchor="middle" font-size="31" font-weight="700" stroke="none">3</text>
+    <text x="182" y="141" text-anchor="middle" font-size="31" font-weight="700" stroke="none">4</text>
+    <text x="182" y="225" text-anchor="middle" font-size="31" font-weight="700" stroke="none">3</text>
+    <text x="182" y="249" text-anchor="middle" font-size="31" font-weight="700" stroke="none">4</text>
+    <path d="M237 104L244 113L237 121L244 129C235 125 235 135 241 139" fill="none" stroke-width="3"/>
+    <ellipse cx="315" cy="96" rx="7.5" ry="5.2" transform="rotate(-20 315 96)" stroke="none"/>
+    <path d="M308.2 98V138" stroke-width="1.6"/>
+    <path d="M378 84H402" stroke-width="1.5"/>
+    <ellipse cx="390" cy="84" rx="7.5" ry="5.2" transform="rotate(-20 390 84)" stroke="none"/>
+    <path d="M383.2 86V126" stroke-width="1.6"/>
+    <ellipse cx="490" cy="90" rx="7.5" ry="5.2" transform="rotate(-20 490 90)" stroke="none"/>
+    <path d="M483.2 92V132" stroke-width="1.6"/>
+    <ellipse cx="565" cy="96" rx="7.5" ry="5.2" transform="rotate(-20 565 96)" stroke="none"/>
+    <path d="M558.2 98V138" stroke-width="1.6"/>
+    <ellipse cx="640" cy="114" rx="7.5" ry="5.2" transform="rotate(-20 640 114)" stroke="none"/>
+    <path d="M633.2 116V156" stroke-width="1.6"/>
+    <ellipse cx="740" cy="120" rx="7.5" ry="5.2" transform="rotate(-20 740 120)" stroke="none"/>
+    <path d="M733.2 122V162" stroke-width="1.6"/>
+    <ellipse cx="815" cy="114" rx="7.5" ry="5.2" transform="rotate(-20 815 114)" stroke="none"/>
+    <path d="M808.2 116V156" stroke-width="1.6"/>
+    <ellipse cx="890" cy="108" rx="7.5" ry="5.2" transform="rotate(-20 890 108)" stroke="none"/>
+    <path d="M883.2 110V150" stroke-width="1.6"/>
+    <ellipse cx="990" cy="126" rx="7.5" ry="5.2" transform="rotate(-20 990 126)" fill="none" stroke-width="2.2"/>
+    <path d="M996.8 124V84" stroke-width="1.6"/>
+    <circle cx="1004" cy="126" r="2.2" stroke="none"/>
+    <ellipse cx="240" cy="252" rx="7.5" ry="5.2" transform="rotate(-20 240 252)" fill="none" stroke-width="2.2"/>
+    <path d="M233.2 254V294" stroke-width="1.6"/>
+    <circle cx="254" cy="246" r="2.2" stroke="none"/>
+    <path d="M303 192H327M303 180H327" stroke-width="1.5"/>
+    <ellipse cx="315" cy="198" rx="7.5" ry="5.2" transform="rotate(-20 315 198)" fill="none" stroke-width="2.2"/>
+    <ellipse cx="315" cy="186" rx="7.5" ry="5.2" transform="rotate(-20 315 186)" fill="none" stroke-width="2.2"/>
+    <ellipse cx="315" cy="174" rx="7.5" ry="5.2" transform="rotate(-20 315 174)" fill="none" stroke-width="2.2"/>
+    <path d="M321.8 196V148" stroke-width="1.6"/>
+    <path d="M478 264H502" stroke-width="1.5"/>
+    <ellipse cx="490" cy="270" rx="7.5" ry="5.2" transform="rotate(-20 490 270)" fill="none" stroke-width="2.2"/>
+    <path d="M483.2 272V312" stroke-width="1.6"/>
+    <circle cx="504" cy="270" r="2.2" stroke="none"/>
+    <path d="M553 192H577M553 180H577" stroke-width="1.5"/>
+    <ellipse cx="565" cy="204" rx="7.5" ry="5.2" transform="rotate(-20 565 204)" fill="none" stroke-width="2.2"/>
+    <ellipse cx="565" cy="192" rx="7.5" ry="5.2" transform="rotate(-20 565 192)" fill="none" stroke-width="2.2"/>
+    <ellipse cx="565" cy="174" rx="7.5" ry="5.2" transform="rotate(-20 565 174)" fill="none" stroke-width="2.2"/>
+    <path d="M571.8 202V148" stroke-width="1.6"/>
+    <ellipse cx="740" cy="252" rx="7.5" ry="5.2" transform="rotate(-20 740 252)" fill="none" stroke-width="2.2"/>
+    <path d="M733.2 254V294" stroke-width="1.6"/>
+    <circle cx="754" cy="246" r="2.2" stroke="none"/>
+    <path d="M803 192H827M803 180H827" stroke-width="1.5"/>
+    <ellipse cx="815" cy="198" rx="7.5" ry="5.2" transform="rotate(-20 815 198)" fill="none" stroke-width="2.2"/>
+    <ellipse cx="815" cy="186" rx="7.5" ry="5.2" transform="rotate(-20 815 186)" fill="none" stroke-width="2.2"/>
+    <ellipse cx="815" cy="174" rx="7.5" ry="5.2" transform="rotate(-20 815 174)" fill="none" stroke-width="2.2"/>
+    <path d="M821.8 196V148" stroke-width="1.6"/>
+    <path d="M978 264H1002" stroke-width="1.5"/>
+    <ellipse cx="990" cy="270" rx="7.5" ry="5.2" transform="rotate(-20 990 270)" fill="none" stroke-width="2.2"/>
+    <path d="M983.2 272V312" stroke-width="1.6"/>
+    <circle cx="1004" cy="270" r="2.2" stroke="none"/>
+    <path d="M1053 192H1077M1053 180H1077" stroke-width="1.5"/>
+    <ellipse cx="1065" cy="204" rx="7.5" ry="5.2" transform="rotate(-20 1065 204)" fill="none" stroke-width="2.2"/>
+    <ellipse cx="1065" cy="192" rx="7.5" ry="5.2" transform="rotate(-20 1065 192)" fill="none" stroke-width="2.2"/>
+    <ellipse cx="1065" cy="174" rx="7.5" ry="5.2" transform="rotate(-20 1065 174)" fill="none" stroke-width="2.2"/>
+    <path d="M1071.8 202V148" stroke-width="1.6"/>
+    <path d="M450 96V144M450 204V252M700 96V144M700 204V252M950 96V144M950 204V252" stroke-width="2"/>
+  </g>
+
+  <!-- mark -->
+  <g transform="translate(80 72) scale(0.375)">
+    <rect width="256" height="256" rx="52" fill="#161a22" stroke="#5b6472" stroke-width="4"/>
+    <rect x="100" y="72" width="56" height="112" fill="#0b78a0"/>
+    <path d="M40 76H216M40 102H216M40 128H216M40 154H216M40 180H216" stroke="#8a919c" stroke-width="5"/>
+    <path d="M100 76H156M100 102H156M100 128H156M100 154H156M100 180H156" stroke="#9ae3f8" stroke-width="5"/>
+    <path d="M40 72.5V183.5M100 72.5V183.5M156 72.5V183.5M216 72.5V183.5" stroke="#eceef2" stroke-width="7"/>
+  </g>
+  <text x="200" y="146" class="sans" font-size="72" font-weight="600" letter-spacing="-1.5" fill="#eceef2">Partition</text>
+  <text x="82" y="232" class="sans" font-size="34" font-weight="500" fill="#eceef2">The score the code performs</text>
+  <text x="82" y="278" class="sans" font-size="34" font-weight="500" fill="#4cc9f0">The split the assistant can hold</text>
+
+  <!-- the staff, cut into bounded contexts -->
+  <rect x="560" y="372" width="240" height="128" fill="#0b78a0"/>
+  <path d="M80 376H1200M80 406H1200M80 436H1200M80 466H1200M80 496H1200" stroke="#7a8291" stroke-width="3"/>
+  <path d="M560 376H800M560 406H800M560 436H800M560 466H800M560 496H800" stroke="#e0f6fd" stroke-width="3"/>
+  <path d="M80 372V500M320 372V500M560 372V500M800 372V500M1040 372V500M1200 372V500" stroke="#aab0ba" stroke-width="4"/>
+  <g class="mono" font-size="20" fill="#aab0ba" text-anchor="middle">
+    <text x="200" y="352">orders</text>
+    <text x="440" y="352">catalogue</text>
+    <text x="680" y="352" fill="#eceef2" font-weight="600">billing</text>
+    <text x="920" y="352">shipping</text>
+    <text x="1120" y="352">stock</text>
+  </g>
+  <g class="mono" font-size="16" fill="#9aa2ae" text-anchor="middle">
+    <text x="200" y="532">contract</text>
+    <text x="440" y="532">contract</text>
+    <text x="920" y="532">contract</text>
+    <text x="1120" y="532">contract</text>
+  </g>
+
+  <!-- the gauge of the context in hand -->
+  <rect x="560" y="520" width="240" height="8" rx="4" fill="#2c323d"/>
+  <rect x="560" y="520" width="158" height="8" rx="4" fill="#4cc9f0"/>
+  <text x="680" y="556" class="mono" font-size="16" fill="#4cc9f0" text-anchor="middle">21 000 / 32 000 tokens</text>
+
+  <text x="80" y="600" class="sans" font-size="20" fill="#aab0ba">One durable spec per bounded context · a measured Context Budget · rules with a scope · the C4 as text</text>
+</svg>

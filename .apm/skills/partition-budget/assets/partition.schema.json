@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Partition configuration",
+  "description": "docs/partition.yml of a project that uses the Partition package. budget.mjs checks the file against this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": { "description": "The version of this file's format.", "enum": [1] },
+    "target": { "description": "Whose loading rules the gauges follow.", "enum": ["claude", "copilot"] },
+    "bridge": {
+      "description": "none, or superpowers: the plans are then under docs/superpowers/plans.",
+      "enum": ["none", "superpowers"]
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "specs": { "type": "string", "description": "The folder of the durable specs. Default docs/specs." },
+        "invariants": { "type": "string", "description": "The invariant register. Default <specs>/invariants.md." },
+        "designs": { "type": "string", "description": "The folder of the designs." },
+        "plans": { "type": "string", "description": "The folder of the plans. Default docs/plans." },
+        "contracts": { "type": "string", "description": "The folder of the contracts." },
+        "sources": {
+          "type": "string",
+          "description": "PRDs and described contexts, decomposed by partition-shape. Default docs/sources."
+        },
+        "schemas": {
+          "type": "string",
+          "description": "The schema documents of the project's persistence. Declare it only if the project documents its persistence."
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "always": {
+          "type": "integer",
+          "description": "The limit, set by the owner: the most tokens a bounded context may load before any of its code is read. budget.mjs measures each bounded context (every-session files + its spec + its area file + its scoped rules) and compares each one to this limit on its own, not their maximum or mean: over it, the report says OVER and --check fails. The script never changes this value; the owner adjusts it after an assessment. A plan larger than it is flagged 'never read whole'. Default 32000."
+        },
+        "chars_per_token": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Characters per estimated token, above 0. Default 4."
+        },
+        "review": {
+          "type": "string",
+          "description": "When the assessment is held, e.g. quarterly, every six sprints."
+        }
+      }
+    },
+    "contexts": {
+      "type": "array",
+      "description": "One entry per bounded context.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string", "description": "The name of the bounded context." },
+          "area": { "type": "string", "description": "Its area; leave it out for a bounded context in no area." },
+          "spec": {
+            "type": "string",
+            "description": "The folder that holds spec.md. Leave it out for the default <specs>/<area>/<id>, or <specs>/<id> in no area; set it only to point elsewhere, outside this repository for example."
+          },
+          "code": {
+            "type": "array",
+            "description": "Globs of its code. They decide which scoped rules apply; the code is not counted.",
+            "items": { "type": "string" }
+          },
+          "hexagons": {
+            "type": "array",
+            "description": "The hexagons of the bounded context, each with its form and its layer map.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": { "type": "string", "description": "The name of the hexagon." },
+                "form": { "description": "thin: no domain layer. rich: a domain layer.", "enum": ["thin", "rich"] },
+                "reason": {
+                  "type": "string",
+                  "description": "Why this form. A form with no reason is not a decision."
+                },
+                "layers": {
+                  "type": "object",
+                  "description": "Each layer of the hexagon and the glob of its files. The names are the project's.",
+                  "additionalProperties": { "type": "string" }
+                },
+                "allowed": {
+                  "type": "array",
+                  "description": "The dependencies allowed between layers, as \"from -> to\". Whatever is not here is forbidden.",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

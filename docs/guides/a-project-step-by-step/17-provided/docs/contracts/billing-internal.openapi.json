@@ -1,0 +1,118 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Billing internal API",
+    "version": "1.0.0",
+    "description": "The calls of payment-app to commerce-app: the interfaces InvoicePayments of invoice and CustomerStatus of fraud, over HTTP. It says what the two interfaces say, and nothing more. Frozen for the promotion of payment: the how may be discussed, not what this contract says."
+  },
+  "paths": {
+    "/internal/invoices/{invoiceId}": {
+      "get": {
+        "operationId": "getInvoiceForPayment",
+        "tags": ["InvoicePayments"],
+        "parameters": [{ "$ref": "#/components/parameters/InvoiceId" }],
+        "responses": {
+          "200": {
+            "description": "The invoice as getInvoice shows it, without its customer",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } }
+          },
+          "404": { "description": "The identifier is not a UUID, or names no invoice" }
+        }
+      }
+    },
+    "/internal/invoices/{invoiceId}/customer": {
+      "get": {
+        "operationId": "getInvoiceCustomer",
+        "tags": ["InvoicePayments"],
+        "parameters": [{ "$ref": "#/components/parameters/InvoiceId" }],
+        "responses": {
+          "200": {
+            "description": "The customer of the invoice. Asked only after the invoice is read: an identifier that names none is a defect",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/InvoiceCustomer" } } }
+          }
+        }
+      }
+    },
+    "/internal/invoices/{invoiceId}/payment": {
+      "post": {
+        "operationId": "recordPayment",
+        "tags": ["InvoicePayments"],
+        "parameters": [{ "$ref": "#/components/parameters/InvoiceId" }],
+        "responses": {
+          "200": {
+            "description": "The payment is recorded: the invoice is paid; never its lines, its amount or its order",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } }
+          },
+          "409": { "description": "The invoice is no longer issued: nothing is recorded" }
+        }
+      }
+    },
+    "/internal/invoices/{invoiceId}/payment-cancellation": {
+      "post": {
+        "operationId": "recordPaymentCancelled",
+        "tags": ["InvoicePayments"],
+        "parameters": [{ "$ref": "#/components/parameters/InvoiceId" }],
+        "responses": {
+          "200": {
+            "description": "The cancelled payment is recorded: the invoice is issued again. Built with REQ-5, which decides its refusal when the invoice is not paid",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } }
+          }
+        }
+      }
+    },
+    "/internal/customers/{customerId}/status": {
+      "get": {
+        "operationId": "getCustomerStatus",
+        "tags": ["CustomerStatus"],
+        "parameters": [{ "name": "customerId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "Whether the customer, matched exactly, is blocked",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CustomerStatus" } } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "InvoiceId": { "name": "invoiceId", "in": "path", "required": true, "schema": { "type": "string" } }
+    },
+    "schemas": {
+      "Money": {
+        "type": "object",
+        "required": ["amountMinor", "currency"],
+        "properties": {
+          "amountMinor": { "type": "integer", "format": "int64" },
+          "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+        }
+      },
+      "Line": {
+        "type": "object",
+        "required": ["label", "price"],
+        "properties": { "label": { "type": "string" }, "price": { "$ref": "#/components/schemas/Money" } }
+      },
+      "Invoice": {
+        "type": "object",
+        "required": ["invoiceId", "orderId", "status", "amount", "lines"],
+        "properties": {
+          "invoiceId": { "type": "string" },
+          "orderId": { "type": "string" },
+          "status": { "type": "string", "enum": ["ISSUED", "PAID", "CANCELLED"] },
+          "amount": { "$ref": "#/components/schemas/Money" },
+          "lines": { "type": "array", "items": { "$ref": "#/components/schemas/Line" } }
+        }
+      },
+      "InvoiceCustomer": {
+        "type": "object",
+        "required": ["customerId"],
+        "properties": { "customerId": { "type": "string" } }
+      },
+      "CustomerStatus": {
+        "type": "object",
+        "required": ["blocked"],
+        "properties": { "blocked": { "type": "boolean" } }
+      }
+    }
+  }
+}

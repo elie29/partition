@@ -1,0 +1,30 @@
+{
+  "name": "partition",
+  "private": true,
+  "author": {
+    "email": "contact@elienehme.fr",
+    "name": "Elie NEHME",
+    "url": "https://elienehme.fr"
+  },
+  "description": "The living specification and the Context Budget, as agent skills. Repository commands only; npm ci installs the formatter and the pre-commit hook.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.mjs\"",
+    "budget": "node .apm/skills/partition-budget/scripts/budget.mjs --package .",
+    "update-version": "node scripts/update-version.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "git config core.hooksPath .githooks || exit 0"
+  },
+  "devDependencies": {
+    "prettier": "3.9.9"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120,
+    "proseWrap": "never"
+  }
+}

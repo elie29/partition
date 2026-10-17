@@ -1,0 +1,1786 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Catalog API",
+    "version": "1.0.0",
+    "description": "Every amount is stored in minor units, with its currency.",
+    "license": { "name": "MIT", "identifier": "MIT" }
+  },
+  "servers": [{ "url": "/commerce/v1/catalog", "description": "Catalog base path" }],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [
+    { "name": "Product", "description": "What the shop sells." },
+    { "name": "PriceList", "description": "Prices, grouped by list." },
+    { "name": "Discount", "description": "Reductions on an order." }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "operationId": "listProducts",
+        "tags": ["Product"],
+        "summary": "List the products",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "description": "Language of the labels in the response.",
+            "schema": { "type": "string", "example": "en-GB" }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": true,
+            "description": "Identifies the request from end to end, in every log.",
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "references",
+            "in": "query",
+            "required": false,
+            "description": "Only the products with these references.",
+            "style": "form",
+            "explode": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "localized",
+            "in": "query",
+            "required": false,
+            "description": "Labels in the language of Accept-Language, when the product has one.",
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "minimum": 0, "default": 0 }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One page of products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["items", "page"],
+                  "properties": {
+                    "items": { "type": "array", "items": { "$ref": "#/components/schemas/Product" } },
+                    "page": {
+                      "type": "object",
+                      "required": ["number", "size", "totalElements", "totalPages"],
+                      "properties": {
+                        "number": { "type": "integer" },
+                        "size": { "type": "integer" },
+                        "totalElements": { "type": "integer", "format": "int64" },
+                        "totalPages": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "VALIDATION_FAILED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "UNAUTHENTICATED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The token does not allow this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "FORBIDDEN" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "INTERNAL_ERROR" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createProduct",
+        "tags": ["Product"],
+        "summary": "Create a product",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "description": "Language of the labels in the response.",
+            "schema": { "type": "string", "example": "en-GB" }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": true,
+            "description": "Identifies the request from end to end, in every log.",
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["reference", "label"],
+                "properties": {
+                  "reference": { "type": "string", "pattern": "^[A-Z]{3}-[0-9]{6}$", "example": "BOK-000123" },
+                  "label": { "type": "string", "minLength": 1, "maxLength": 120 },
+                  "description": { "type": "string" },
+                  "ean": { "type": "string", "deprecated": true, "description": "Use attributes.gtin." },
+                  "attributes": {
+                    "type": "object",
+                    "properties": {
+                      "brand": { "type": "string" },
+                      "gtin": { "type": "string", "pattern": "^[0-9]{8,14}$" },
+                      "dimensions": {
+                        "type": "object",
+                        "properties": {
+                          "widthMm": { "type": "integer" },
+                          "heightMm": { "type": "integer" },
+                          "depthMm": { "type": "integer" },
+                          "weightG": { "type": "integer" }
+                        }
+                      },
+                      "translations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": ["language", "label"],
+                          "properties": {
+                            "language": { "type": "string", "pattern": "^[a-z]{2}(-[A-Z]{2})?$", "example": "fr-FR" },
+                            "label": { "type": "string" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The product created",
+            "headers": { "Location": { "description": "The URL of the product", "schema": { "type": "string" } } },
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Product" } } }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "VALIDATION_FAILED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "UNAUTHENTICATED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The token does not allow this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "FORBIDDEN" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The request conflicts with the current state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "CONFLICT" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "INTERNAL_ERROR" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}": {
+      "get": {
+        "operationId": "getProduct",
+        "tags": ["Product"],
+        "summary": "Read a product",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "description": "Language of the labels in the response.",
+            "schema": { "type": "string", "example": "en-GB" }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": true,
+            "description": "Identifies the request from end to end, in every log.",
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "The product.",
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The product",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Product" } } }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "VALIDATION_FAILED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "UNAUTHENTICATED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The token does not allow this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "FORBIDDEN" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "PRODUCT_NOT_FOUND" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "INTERNAL_ERROR" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products/{productId}/price": {
+      "get": {
+        "operationId": "getProductPrice",
+        "tags": ["Product"],
+        "summary": "Read the price of a product",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "description": "Language of the labels in the response.",
+            "schema": { "type": "string", "example": "en-GB" }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": true,
+            "description": "Identifies the request from end to end, in every log.",
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "The product.",
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "priceListId",
+            "in": "query",
+            "required": true,
+            "description": "The price list the price is read from.",
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "at",
+            "in": "query",
+            "required": false,
+            "description": "The day the price applies; today when absent.",
+            "schema": { "type": "string", "format": "date" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The price of the product",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Price" } } }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "VALIDATION_FAILED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "UNAUTHENTICATED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The token does not allow this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "FORBIDDEN" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such product, or no price for it in that price list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "PRICE_NOT_FOUND" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "INTERNAL_ERROR" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/price-lists": {
+      "post": {
+        "operationId": "createPriceList",
+        "tags": ["PriceList"],
+        "summary": "Create a price list",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "description": "Language of the labels in the response.",
+            "schema": { "type": "string", "example": "en-GB" }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": true,
+            "description": "Identifies the request from end to end, in every log.",
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "currency", "channel"],
+                "properties": {
+                  "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+                  "currency": { "type": "string", "pattern": "^[A-Z]{3}$", "description": "ISO 4217." },
+                  "channel": { "type": "string", "enum": ["SHOP", "MARKETPLACE", "B2B"] },
+                  "validity": {
+                    "type": "object",
+                    "required": ["from"],
+                    "properties": {
+                      "from": { "type": "string", "format": "date" },
+                      "to": { "type": "string", "format": "date", "description": "Open-ended when absent." }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The price list created",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PriceList" } } }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "VALIDATION_FAILED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "UNAUTHENTICATED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The token does not allow this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "FORBIDDEN" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The request conflicts with the current state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "CONFLICT" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "INTERNAL_ERROR" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/price-lists/{priceListId}": {
+      "get": {
+        "operationId": "getPriceList",
+        "tags": ["PriceList"],
+        "summary": "Read a price list",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "description": "Language of the labels in the response.",
+            "schema": { "type": "string", "example": "en-GB" }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": true,
+            "description": "Identifies the request from end to end, in every log.",
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "priceListId",
+            "in": "path",
+            "required": true,
+            "description": "The price list.",
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The price list",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PriceList" } } }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "VALIDATION_FAILED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "UNAUTHENTICATED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The token does not allow this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "FORBIDDEN" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such price list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "PRICE_LIST_NOT_FOUND" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "INTERNAL_ERROR" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/price-lists/{priceListId}/prices/{productId}": {
+      "put": {
+        "operationId": "setPrice",
+        "tags": ["PriceList"],
+        "summary": "Set the price of a product in a price list",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "description": "Language of the labels in the response.",
+            "schema": { "type": "string", "example": "en-GB" }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": true,
+            "description": "Identifies the request from end to end, in every log.",
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "priceListId",
+            "in": "path",
+            "required": true,
+            "description": "The price list.",
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "The product.",
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["price"],
+                "properties": {
+                  "price": { "$ref": "#/components/schemas/Money" },
+                  "effectiveFrom": { "type": "string", "format": "date-time", "description": "Now when absent." }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The price set",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Price" } } }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "VALIDATION_FAILED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "UNAUTHENTICATED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The token does not allow this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "FORBIDDEN" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such price list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "PRICE_LIST_NOT_FOUND" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "INTERNAL_ERROR" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/discounts": {
+      "post": {
+        "operationId": "createDiscount",
+        "tags": ["Discount"],
+        "summary": "Create a discount",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "description": "Language of the labels in the response.",
+            "schema": { "type": "string", "example": "en-GB" }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": true,
+            "description": "Identifies the request from end to end, in every log.",
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["percent"],
+                "properties": {
+                  "percent": { "type": "integer" },
+                  "minimumOrder": { "$ref": "#/components/schemas/Money" },
+                  "period": {
+                    "type": "object",
+                    "required": ["start"],
+                    "properties": {
+                      "start": { "type": "string", "format": "date-time" },
+                      "end": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The discount created",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Discount" } } }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "VALIDATION_FAILED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "UNAUTHENTICATED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The token does not allow this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "FORBIDDEN" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "INTERNAL_ERROR" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/discounts/{discountId}": {
+      "get": {
+        "operationId": "getDiscount",
+        "tags": ["Discount"],
+        "summary": "Read a discount",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "description": "Language of the labels in the response.",
+            "schema": { "type": "string", "example": "en-GB" }
+          },
+          {
+            "name": "X-Request-Id",
+            "in": "header",
+            "required": true,
+            "description": "Identifies the request from end to end, in every log.",
+            "schema": { "type": "string", "format": "uuid" }
+          },
+          {
+            "name": "discountId",
+            "in": "path",
+            "required": true,
+            "description": "The discount.",
+            "schema": { "type": "string", "format": "uuid" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The discount",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Discount" } } }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "VALIDATION_FAILED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No valid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "UNAUTHENTICATED" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The token does not allow this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "FORBIDDEN" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such discount",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "DISCOUNT_NOT_FOUND" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["errorId", "path", "timestamp", "detail"],
+                  "properties": {
+                    "errorId": { "type": "string", "format": "uuid", "description": "Quote it to the support team." },
+                    "path": { "type": "string", "example": "/commerce/v1/catalog/products" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "detail": { "type": "string" },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["code", "message"],
+                        "properties": {
+                          "code": { "type": "string", "example": "INTERNAL_ERROR" },
+                          "message": { "type": "string" },
+                          "field": { "type": "string", "description": "The field at fault, as a JSON pointer." }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": { "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" } },
+    "schemas": {
+      "Money": {
+        "type": "object",
+        "required": ["amountMinor", "currency"],
+        "properties": {
+          "amountMinor": { "type": "integer", "format": "int64", "example": 1999 },
+          "currency": { "type": "string", "pattern": "^[A-Z]{3}$", "example": "EUR" }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "required": ["productId", "reference", "label"],
+        "properties": {
+          "productId": { "type": "string", "format": "uuid" },
+          "reference": { "type": "string", "example": "BOK-000123" },
+          "label": { "type": "string" },
+          "createdAt": { "type": "string", "format": "date-time", "readOnly": true }
+        }
+      },
+      "PriceList": {
+        "type": "object",
+        "required": ["priceListId", "name"],
+        "properties": {
+          "priceListId": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+          "channel": { "type": "string", "enum": ["SHOP", "MARKETPLACE", "B2B"] }
+        }
+      },
+      "Price": {
+        "type": "object",
+        "required": ["productId", "price"],
+        "properties": {
+          "productId": { "type": "string", "format": "uuid" },
+          "price": { "$ref": "#/components/schemas/Money" },
+          "effectiveFrom": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Discount": {
+        "type": "object",
+        "required": ["discountId", "percent"],
+        "properties": {
+          "discountId": { "type": "string", "format": "uuid" },
+          "percent": { "type": "integer" },
+          "minimumOrder": { "$ref": "#/components/schemas/Money" }
+        }
+      }
+    }
+  }
+}

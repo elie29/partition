@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1060" role="img" aria-labelledby="t d">
+  <title id="t">Journey 4: change a bounded context</title>
+  <desc id="d">Two ways in. When a behaviour has to change, or the code and the spec disagree, the assistant says which side is wrong and why, corrects the spec and shows it, stopping first on a contradicted rule or invariant; you validate the new spec. When the source moves to a new version, you commit it alone under the same name; the assistant reports what moved and what breaks, checks whether the split still holds, stops for you to validate each move by name, then updates the specs surgically. In both cases the code follows through a plan, delivered as in journey 3.</desc>
+  <defs>
+    <style>
+      .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
+      .mono { font-family: 'IBM Plex Mono','Cascadia Mono',Consolas,Menlo,monospace; }
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#7a8291"/>
+    </marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#4cc9f0"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="1060" rx="16" fill="#0f1218"/>
+  <rect x="1" y="1" width="1278" height="1058" rx="15" fill="none" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="58" cy="56" r="18" fill="#0b78a0"/>
+  <text x="58" y="62.84" class="sans" font-size="20" font-weight="700" fill="#eceef2" text-anchor="middle">4</text>
+  <text x="90" y="66" class="sans" font-size="30" font-weight="600" fill="#eceef2">Change a bounded context</text>
+  <text x="40" y="104" class="sans" font-size="18" fill="#aab0ba">The spec moves first, then the code. Never the spec edited to match the code because the code is what runs.</text>
+  <text x="40" y="150" class="sans" font-size="17" font-weight="600" fill="#eceef2">A behaviour has to change</text>
+  <text x="40" y="172" class="sans" font-size="15" fill="#9aa2ae">“This behaviour has to change.” · “The code and the spec disagree.”</text>
+  <path d="M40 184H610" stroke="#5b6472" stroke-width="2"/>
+  <text x="670" y="150" class="sans" font-size="17" font-weight="600" fill="#eceef2">The source moved to a new version</text>
+  <text x="670" y="172" class="sans" font-size="15" fill="#9aa2ae">“The contract moved to 1.5.0.” · “What does this change break?”</text>
+  <path d="M670 184H1240" stroke="#5b6472" stroke-width="2"/>
+  <rect x="40" y="206" width="570" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="234" r="14" fill="#0b78a0"/>
+  <text x="70" y="239.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">A</text>
+  <text x="96" y="240" class="sans" font-size="19" font-weight="600" fill="#eceef2">Which side is wrong, and why</text>
+  <text x="588" y="240" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-spec</text>
+  <text x="96" y="263" class="sans" font-size="16" fill="#aab0ba">The spec incomplete, outdated or ambiguous, or the</text>
+  <text x="96" y="286" class="sans" font-size="16" fill="#aab0ba">code a bug. When it cannot tell, it asks.</text>
+  <path d="M70 306L70 330" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="332" width="570" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="360" r="14" fill="#0b78a0"/>
+  <text x="70" y="365.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">B</text>
+  <text x="96" y="366" class="sans" font-size="19" font-weight="600" fill="#eceef2">The spec is corrected and shown</text>
+  <text x="588" y="366" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-spec</text>
+  <text x="96" y="389" class="sans" font-size="16" fill="#aab0ba">A business rule, an area rule or an invariant contradicted:</text>
+  <text x="96" y="412" class="sans" font-size="16" fill="#aab0ba">it stops and flags it before any code.</text>
+  <path d="M70 432L70 456" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="458" width="570" height="100" rx="8" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <circle cx="70" cy="486" r="14" fill="#e8a93a"/>
+  <text x="70" y="491.32" class="sans" font-size="15" font-weight="700" fill="#0f1218" text-anchor="middle">C</text>
+  <text x="96" y="492" class="sans" font-size="19" font-weight="600" fill="#f5cd7a">You validate the new spec</text>
+  <text x="96" y="515" class="sans" font-size="16" fill="#aab0ba">The code is wrong instead? The spec stays,</text>
+  <text x="96" y="538" class="sans" font-size="16" fill="#aab0ba">and the code is fixed through a plan.</text>
+  <rect x="670" y="206" width="570" height="100" rx="8" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <circle cx="700" cy="234" r="14" fill="#e8a93a"/>
+  <text x="700" y="239.32" class="sans" font-size="15" font-weight="700" fill="#0f1218" text-anchor="middle">A</text>
+  <text x="726" y="240" class="sans" font-size="19" font-weight="600" fill="#f5cd7a">You commit the new version alone</text>
+  <text x="726" y="263" class="sans" font-size="16" fill="#aab0ba">Same file name, overwritten:</text>
+  <text x="726" y="286" class="sans" font-size="16" fill="#aab0ba">docs(contracts): billing 1.4.0 -&gt; 1.5.0</text>
+  <path d="M700 306L700 330" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="670" y="332" width="570" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="700" cy="360" r="14" fill="#0b78a0"/>
+  <text x="700" y="365.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">B</text>
+  <text x="726" y="366" class="sans" font-size="19" font-weight="600" fill="#eceef2">What moved, what breaks</text>
+  <text x="1218" y="366" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-shape</text>
+  <text x="726" y="389" class="sans" font-size="16" fill="#aab0ba">A diff of meaning from the recorded commit: breaking,</text>
+  <text x="726" y="412" class="sans" font-size="16" fill="#aab0ba">additive, neutral; breaks set against the code.</text>
+  <path d="M700 432L700 456" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="670" y="458" width="570" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="700" cy="486" r="14" fill="#0b78a0"/>
+  <text x="700" y="491.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">C</text>
+  <text x="726" y="492" class="sans" font-size="19" font-weight="600" fill="#eceef2">Does the split still hold?</text>
+  <text x="1218" y="492" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-shape</text>
+  <text x="726" y="515" class="sans" font-size="16" fill="#aab0ba">A unit joins a context; or a new context, a move,</text>
+  <text x="726" y="538" class="sans" font-size="16" fill="#aab0ba">a merge or a removal is proposed, never made.</text>
+  <path d="M700 558L700 582" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="670" y="584" width="570" height="77" rx="8" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <circle cx="700" cy="612" r="14" fill="#e8a93a"/>
+  <text x="700" y="617.32" class="sans" font-size="15" font-weight="700" fill="#0f1218" text-anchor="middle">D</text>
+  <text x="726" y="618" class="sans" font-size="19" font-weight="600" fill="#f5cd7a">Hard stop: you validate each move</text>
+  <text x="726" y="641" class="sans" font-size="16" fill="#aab0ba">By name. No answer, no writing.</text>
+  <path d="M700 661L700 685" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="670" y="687" width="570" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="700" cy="715" r="14" fill="#0b78a0"/>
+  <text x="700" y="720.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">E</text>
+  <text x="726" y="721" class="sans" font-size="19" font-weight="600" fill="#eceef2">The specs are updated, surgically</text>
+  <text x="1218" y="721" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-shape</text>
+  <text x="726" y="744" class="sans" font-size="16" fill="#aab0ba">Derived sections regenerated, hand-written ones kept,</text>
+  <text x="726" y="767" class="sans" font-size="16" fill="#aab0ba">the new version and its commit recorded.</text>
+  <path d="M70 558L70 835" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <path d="M700 787L700 835" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="837" width="1200" height="77" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="865" r="14" fill="#0b78a0"/>
+  <text x="70" y="870.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">F</text>
+  <text x="96" y="871" class="sans" font-size="19" font-weight="600" fill="#eceef2">The code follows, through a plan</text>
+  <text x="1218" y="871" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-plan</text>
+  <text x="96" y="894" class="sans" font-size="16" fill="#aab0ba">The dated reason goes to the Decisions of the plan; the spec keeps only the result.</text>
+  <path d="M70 914L70 944" fill="none" stroke="#4cc9f0" stroke-width="2.5" marker-end="url(#b)"/>
+  <rect x="40" y="948" width="420" height="52" rx="26" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="250" y="981" class="sans" font-size="18" font-weight="600" fill="#4cc9f0" text-anchor="middle">Delivered → cf. journey 3</text>
+  <rect x="40" y="1019" width="34" height="20" rx="5" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <text x="86" y="1034" class="sans" font-size="15" fill="#aab0ba" text-anchor="start">the assistant, with the skill it uses</text>
+  <rect x="400" y="1019" width="34" height="20" rx="5" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <text x="446" y="1034" class="sans" font-size="15" fill="#aab0ba" text-anchor="start">you: a decision or an action only you take</text>
+
+</svg>

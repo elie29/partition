@@ -1,0 +1,73 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Billing API", "version": "1.0.0" },
+  "paths": {
+    "/invoices": {
+      "post": {
+        "operationId": "issueInvoice",
+        "tags": ["Invoice"],
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/IssueInvoice" } } }
+        },
+        "responses": {
+          "201": {
+            "description": "The issued invoice",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } }
+          },
+          "409": { "description": "An invoice was already issued for this order" }
+        }
+      }
+    },
+    "/invoices/{invoiceId}": {
+      "get": {
+        "operationId": "getInvoice",
+        "tags": ["Invoice"],
+        "parameters": [{ "name": "invoiceId", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "The invoice",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } }
+          },
+          "404": { "description": "No such invoice" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Money": {
+        "type": "object",
+        "required": ["amountMinor", "currency"],
+        "properties": {
+          "amountMinor": { "type": "integer", "format": "int64" },
+          "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+        }
+      },
+      "Line": {
+        "type": "object",
+        "required": ["label", "price"],
+        "properties": { "label": { "type": "string" }, "price": { "$ref": "#/components/schemas/Money" } }
+      },
+      "IssueInvoice": {
+        "type": "object",
+        "required": ["orderId", "customerId", "lines"],
+        "properties": {
+          "orderId": { "type": "string" },
+          "customerId": { "type": "string" },
+          "lines": { "type": "array", "minItems": 1, "items": { "$ref": "#/components/schemas/Line" } }
+        }
+      },
+      "Invoice": {
+        "type": "object",
+        "properties": {
+          "invoiceId": { "type": "string" },
+          "orderId": { "type": "string" },
+          "status": { "type": "string", "enum": ["ISSUED", "PAID", "CANCELLED"] },
+          "amount": { "$ref": "#/components/schemas/Money" },
+          "lines": { "type": "array", "items": { "$ref": "#/components/schemas/Line" } }
+        }
+      }
+    }
+  }
+}

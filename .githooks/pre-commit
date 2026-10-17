@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Before each commit: format the staged files with Prettier, then run the tests. Either failure stops the commit.
+# Enabled by `npm ci`: its `prepare` script sets core.hooksPath to .githooks.
+set -euo pipefail
+
+# Paths are read NUL-separated with read loops, which Bash 3.2, stock on macOS, runs.
+staged=()
+while IFS= read -r -d '' f; do staged+=("$f"); done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+
+if ((${#staged[@]})); then
+  unstaged=()
+  while IFS= read -r -d '' f; do unstaged+=("$f"); done < <(git diff --name-only -z -- "${staged[@]}")
+  if ((${#unstaged[@]})); then
+    echo "pre-commit: Prettier formats whole files, and these also have unstaged changes:" >&2
+    printf '  %s\n' "${unstaged[@]}" >&2
+    echo "Stage them whole (git add) or stash the rest, then commit again." >&2
+    exit 1
+  fi
+  if [ ! -x node_modules/.bin/prettier ]; then
+    echo "pre-commit: Prettier is not installed. Run npm ci, then commit again." >&2
+    exit 1
+  fi
+  node_modules/.bin/prettier --write --ignore-unknown --log-level warn -- "${staged[@]}"
+  git add -- "${staged[@]}"
+fi
+
+# In a worktree git hands the hook absolute GIT_DIR and GIT_INDEX_FILE: a test that makes its own repository would
+# inherit them and write into this one.
+unset GIT_DIR GIT_INDEX_FILE GIT_WORK_TREE
+npm test --silent
