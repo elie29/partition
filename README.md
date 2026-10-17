@@ -286,4 +286,4 @@ npm test
 
 ## License
 
-[MIT](LICENSE) © Elie Nehmé
+[MIT](LICENSE) © Elie Nehmé · [elienehme.fr](https://elienehme.fr)

@@ -63,6 +63,12 @@ When your answers alone carry it to the next task, you do not need this prompt.
 
 > Enable the Partition reminder hook.
 
+Once the plan is `done` (its rules deployed by `apm install` in the plan), commit:
+
+```bash
+git add -A && git commit -m "chore: configure partition"
+```
+
 ## Expected
 
 ### 01.a - The plans folder is taken from the project's rule, then recorded

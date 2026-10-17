@@ -25,6 +25,15 @@ Your `partition-commerce` project should be at the commit of step 10: `catalog` 
 
 `[architect]` gives you the integration after the move: none. `price-list` answers from its own data; `product` no longer calls `PriceListPrices`.
 
+The answers to the plan's questions on the move, when the assistant asks:
+
+| Question | Answer |
+| --- | --- |
+| An unknown product, now that `price-list` reads nothing of `product` | `[architect]` As the contract says: `404` `PRICE_NOT_FOUND`, no price for it in that list; the product check goes |
+| A `priceListId` or a `productId` that is not a UUID | `[architect]` `404` `PRICE_NOT_FOUND`, the only code the contract gives this operation |
+| `PriceListPrices`, once nothing calls it | `[architect]` It goes, with its implementation and the exception of the ArchUnit test |
+| A client still calling the old path | `[architect]` None outside this repository: no period with both paths |
+
 ## Prompt
 
 **11.a** — copy the contract of [`11-provided/`](11-provided/) over the old one, at the root of `partition-commerce`, and commit it alone:
@@ -41,11 +50,21 @@ When the assistant asks how to decide on the move, answer:
 
 > A proposal.
 
-Validate the move of `getProductPrice` to `price-list` by name.
+Validate the move of `getProductPrice` to `price-list` by name. Then commit the specs:
+
+```bash
+git add docs && git commit -m "docs(catalog): catalog 1.1.0 in the specs; the move of getProductPrice validated"
+```
 
 **11.b** — type:
 
 > Carry out the move of `getProductPrice` from `product` to `price-list`.
+
+Once the plan is `done`, commit:
+
+```bash
+git add -A && git commit -m "refactor(catalog): getProductPrice moves from product to price-list"
+```
 
 ## Expected
 
@@ -91,12 +110,13 @@ flowchart LR
       invoice["invoice · rich<br/>Rule A · Rule D: voided<br/>≈ — tok"]
       payment["payment · rich<br/>Rule D: reversed<br/>≈ — tok"]
       refund["refund · rich<br/>≈ — tok"]
-      file_billing[("area.md<br/>AR-2 · Rule B")]
+      file_billing[("area.md<br/>AR-1 · AR-3 · Rule B")]
     end
     subgraph area_catalog["catalog"]
       product["product · thin<br/>≈ — tok"]
       price_list["price-list · rich<br/>≈ — tok"]
       discount["discount · thin<br/>≈ — tok"]
+      file_catalog[("area.md<br/>AR-1")]
     end
     yaml["application.yaml<br/>fraud-review list"]
   end

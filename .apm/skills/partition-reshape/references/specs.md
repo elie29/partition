@@ -46,6 +46,10 @@ The specs move with the code, in the same plan. Nothing is deleted: a spec that 
 
 A unit passes from `<bc>` to `<bc-to>`: it leaves the derived sections of `<bc>`, joins those of `<bc-to>`, and its `Coverage` line changes. A rule that only that unit carried moves with it, by a person.
 
+## The area file
+
+After a merge, a removal or a move, read the area file of each area the reshape touched. An area rule that now binds only one bounded context, and a word only one bounded context uses, come down to that bounded context's spec, carried by a person, and leave the area file: a rule to `Business rules`, a word to `Language`. An area file left with no rule and no word is deleted by a person; the area then loads none. A fission adds bounded contexts to an area and brings nothing down.
+
 ## History
 
 Each reshape adds a line to the `## History` section of `bounded-contexts.md`, creating the section if it is absent. Its `Nature` is `fission`, `merge`, `removal` or `move`; its `Detail` names the bounded contexts (`<bc-b>` absorbed by `<bc-a>`, criteria lost; a bounded context removed, its units and what became of them; a unit, its bounded context of departure and of arrival). It is the only place where the dated _why_ of a reshape is recorded; the specs carry only the current state.
@@ -54,6 +58,7 @@ Each reshape adds a line to the `## History` section of `bounded-contexts.md`, c
 
 - **Merges carried out** — for each, the hand-written sections of `<bc-b>` to carry over into `<bc-a>`, then the folder of `<bc-b>` to delete by hand.
 - **Removals carried out** — for each, the hand-written sections, business rules included, to archive or to reassign, then the folder to delete by hand.
+- **Area entries to bring down** — each area rule or word left to one bounded context, and the spec it goes to; then each area file left empty, to delete by hand.
 
 ## Anti-patterns
 
@@ -62,4 +67,5 @@ Each reshape adds a line to the `## History` section of `bounded-contexts.md`, c
 | Delete the spec or the folder of a bounded context absorbed by a merge or removed | Freeze the spec under a banner, leave the folder, report it at closing |
 | Copy the business rules of the absorbed bounded context into the absorbing one | Leave the carry-over to a person, banner on the absorbing spec |
 | Copy a rule both halves of a fission need into both specs | Give it one home, as the precondition on rules says |
-| Leave in the area file a rule only the two merged halves shared | Bring it down to the merged spec, by a person |
+| Leave in the area file a rule or a word one bounded context alone holds after the reshape | Bring it down to that spec, by a person |
+| Keep an area file with no rule and no word | Have a person delete it |

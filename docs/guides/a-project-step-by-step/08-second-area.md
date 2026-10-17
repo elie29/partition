@@ -89,9 +89,9 @@ The answers to the plan's questions on the catalog, when the assistant asks:
 | "A product reference is unique": a `createProduct` whose reference another product holds | `[BA]` Refused: `409`, nothing created. References are compared exactly as written |
 | "A price list holds one price per product": a `setPrice` for a product already priced in that list | `[BA]` The new price replaces the old one: `200`, the price set. A price list keeps no history |
 | "A price is never negative": a negative price; zero | `[BA]` A negative amount is refused: `400`, nothing set. Zero is a price |
-| "A price is never negative" has the words of `invoice` BR-10 | `[BA]` Two meanings: the price a price list sells at, and the price on an invoice line. Each rule stays in its own spec |
+| "A price is never negative" has the words of `invoice`'s rule on the price of a line (step 04) | `[BA]` Two meanings: the price a price list sells at, and the price on an invoice line. Each rule stays in its own spec |
 | The currency of a price list and billing's Currency | `[BA]` One meaning: a three-letter ISO 4217 code |
-| "A currency is a three-letter ISO 4217 code" for the register | `[architect]` No: a word both areas share is not an invariant. Each area keeps its meaning in its Language, and each spec its own check (`invoice` BR-13, `price-list` its own) |
+| "A currency is a three-letter ISO 4217 code" for the register | `[architect]` No: a word both areas share is not an invariant. Each area keeps its meaning in its Language, and each spec its own check (`invoice` its rule on a currency, from step 04; `price-list` its own) |
 | A price in a currency other than its list's | `[BA]` Refused: `400`, nothing set |
 | `getProductPrice`: `at` (a day) against `effectiveFrom` (a date-time) | `[BA]` The product's price in that list applies when its `effectiveFrom` is on or before the end of day `at`, in UTC; otherwise `404`. `effectiveFrom` may be in the past |
 | An unknown product id or an unknown price list | `[architect]` `404`, as the contract says |
@@ -112,7 +112,7 @@ The attack of the specs, at 08.c, finds what those answers leave open. `[BA]`, `
 | A future price hides the current one | `[BA]` Intended: the last price set replaces the price, whatever its `effectiveFrom`; until then the product has no price in that list (`404`). A change with no gap is set with `effectiveFrom` absent or past |
 | The order of the refusals | `[architect]` The project's API rule sets it: a negative amount is content (`400`), a non-UUID an identifier (`404`), a currency other than the list's a rule on what is held (`400`). `getProductPrice`: the product, the price list, then the day. The first refusal stops the checks: a negative amount in another currency gives one `errors` item |
 | "Today" when `at` is absent | `[BA]` The day in UTC, as for `at` |
-| An unknown currency code (`XYZ`) | `[BA]` Refused, `400`, on `createPriceList` and `setPrice`: a currency is a known ISO 4217 code, as `invoice` BR-13 says |
+| An unknown currency code (`XYZ`) | `[BA]` Refused, `400`, on `createPriceList` and `setPrice`: a currency is a known ISO 4217 code, as `invoice`'s rule on a currency says |
 | Fields accepted but not kept | `[TL]` The project's API rule: a value the contract's schema refuses gets `400`, whether kept or not. `[BA]` A validity ending before it starts is accepted: it governs nothing |
 | `listProducts`: the filter, the paging | `[BA]` `references` is compared exactly, as a reference is. An unknown reference matches nothing, and a reference given twice counts once. A page past the last gets `200`, no item, the totals true |
 | Words | `[BA]` **Product**: what the shop sells. **Reference**: the code a product is known by, unique. **Label**: its name as given at creation. **Price list**: the prices of products in one currency, for one channel. **Channel**: `SHOP`, `MARKETPLACE` or `B2B`, kept and returned, governs no price. **Price**: an amount in `Money` and its `effectiveFrom`; its amount is "the amount". **Day**: a calendar date in UTC |
@@ -182,6 +182,12 @@ git add -A && git commit -m "feat(catalog): products and price lists"
 
 > Measure the budget.
 
+Then commit the record of the day:
+
+```bash
+git add docs/budget && git commit -m "docs(budget): the record of the day"
+```
+
 ## Expected
 
 ### 08.a — The script reads the contract, the assistant decides nothing it shows
@@ -227,7 +233,7 @@ INV-DATA-001 — Every amount is stored in minor units, with its currency. (from
 
 ### 08.c — The rules, the forms, the code
 
-You should see `partition-spec` write the BA's three rules and remove the banners, and `partition-hexagon` make `product` **thin** with its reason — and still with all its ports; `price-list` rich. The ArchUnit test gains the one dependency allowed across the line, `product`'s outbound adapter on `PriceListPrices`, as step 07 allowed `PaymentRefunds`. The generator gets one execution per bounded context of `catalog.openapi.json`, as billing has one per bounded context. Code under `product` and `pricelist`, the schema of `product` and `pricelist` in new migrations at the next free numbers (from `V7`), as the project's database rule says, no merged migration edited. `product` answers `getProductPrice` by calling `price-list` through an interface of its application layer, `PriceListPrices`, written in `Contracts with neighbours` of both specs; `price-list` reads nothing of `product`; the C4 model gains the components `product` and `price-list` (`context:` each). The contract declares a bearer `security`: the plan builds nothing for it, or asks you, and the `[TL]` answer settles it. The plan stops on what the specs leave open and asks, and the attack, before building, raises findings; the two tables of **Provided** answer them, and the same words in `price-list`'s "A price is never negative" and `invoice` BR-10 are reported before the answer that they mean two things. A rule a person gives in the answers that binds both, with no owner and held by no other area, opens `catalog/area.md`, numbered within that file from AR-1, as the template and the glossary define them, nothing written about `billing/area.md`'s numbering, written only after you validate it (BR-13): the error envelope's content, pointing to the API rule, and the base path the answers carry, or the base path left pointed to the contract's `servers`. The order of refusals and the schema's `400` are the project's API rule: the specs follow it and point to it, without restating it, and nothing goes to the register or to the area file for them. The `[TL]`'s answer on what `price-list` logs goes to `.apm/instructions/backend-security.instructions.md`, deployed. Closing as before.
+You should see `partition-spec` write the BA's three rules and remove the banners, and `partition-hexagon` make `product` **thin** with its reason — and still with all its ports; `price-list` rich. The ArchUnit test gains the one dependency allowed across the line, `product`'s outbound adapter on `PriceListPrices`, as step 07 allowed `PaymentRefunds`. The generator gets one execution per bounded context of `catalog.openapi.json`, as billing has one per bounded context. Code under `product` and `pricelist`, the schema of `product` and `pricelist` in new migrations at the next free numbers (from `V7`), as the project's database rule says, no merged migration edited. `product` answers `getProductPrice` by calling `price-list` through an interface of its application layer, `PriceListPrices`, written in `Contracts with neighbours` of both specs; `price-list` reads nothing of `product`; the C4 model gains the components `product` and `price-list` (`context:` each). The contract declares a bearer `security`: the plan builds nothing for it, or asks you, and the `[TL]` answer settles it. The plan stops on what the specs leave open and asks, and the attack, before building, raises findings; the two tables of **Provided** answer them, and the same words in `price-list`'s "A price is never negative" and `invoice`'s rule on the price of a line are reported before the answer that they mean two things. A rule a person gives in the answers that binds both, or a word of the BA both use, with no owner and held by no other area, opens `catalog/area.md`, numbered within that file from AR-1, as the template and the glossary define them, nothing written about `billing/area.md`'s numbering, written only after you validate it (BR-13): the error envelope's content, pointing to the API rule, and the base path the answers carry, or the base path left pointed to the contract's `servers`. The order of refusals and the schema's `400` are the project's API rule: the specs follow it and point to it, without restating it, and nothing goes to the register or to the area file for them. The `[TL]`'s answer on what `price-list` logs goes to `.apm/instructions/backend-security.instructions.md`, deployed. Closing as before.
 
 ### 08.d — Who pays for what
 
@@ -276,7 +282,7 @@ flowchart LR
     subgraph area_catalog["catalog"]
       product["product · thin<br/>≈ — tok"]:::new
       price_list["price-list · rich<br/>≈ — tok"]:::new
-      file_catalog[("area.md, when a rule binds both")]:::new
+      file_catalog[("area.md, when a rule or a word binds both")]:::new
     end
     yaml["application.yaml<br/>fraud-review list"]
   end
@@ -336,7 +342,7 @@ flowchart LR
 - [x] 08.c — The ArchUnit test allows only `product` → `PriceListPrices` across the line; one generator execution per bounded context of `catalog.openapi.json`
 - [x] 08.c — Code under `product` and `pricelist`; the schema of `product` and `pricelist` in new migrations at the next free numbers (from `V7`), as the project's database rule says, no merged migration edited; the two `MinorUnits.java` name `INV-DATA-001`, `V4` and `V6` unchanged
 - [x] 08.c — `product` answers `getProductPrice` through `PriceListPrices`, written in `Contracts with neighbours` of both specs; `price-list` reads nothing of `product`
-- [x] 08.c — A rule only the two hold opens `catalog/area.md`, numbered from AR-1, after your validation; the order of refusals and the schema's `400` left to the project's API rule, not restated; the logging answer, when asked, in the security rule
+- [x] 08.c — A rule or a word only the two hold opens `catalog/area.md`, numbered from AR-1, after your validation; the order of refusals and the schema's `400` left to the project's API rule, not restated; the logging answer, when asked, in the security rule
 - [x] 08.c — The C4 model gains `product` and `price-list` (`context:` each); closing as before
 - [x] 08.d — `partition-budget`: the invariant register loads in every session, for every bounded context
 - [x] 08.d — `invoice`, `payment`, `refund` load `billing/area.md`; `product`, `price-list` `catalog/area.md` when it exists; each its own spec

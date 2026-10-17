@@ -30,6 +30,16 @@
 
 <For each context over a threshold, or about to be: what makes the load exceed the need.>
 
+## Options
+
+<Every option, whatever the gauges; none chosen here.>
+
+- Scope or cut a rule (`partition-rules`): <what, or "none to propose">
+- Trim a spec of what the contract or the code already says (`partition-spec`): <what, or "none to propose">
+- Hold a workshop on a boundary, then prepare the move (`partition-reshape`): <what, or "none to propose">
+- Promote a component to a container, or a container to a system (`partition-reshape`): <what, or "none to propose">
+- Nothing: <the reason>
+
 ## Decision
 
 <Taken by the people named above, not by the assistant: scope or cut a rule / trim a spec / hold a workshop on a boundary / promote a component / nothing. One line each, with its owner and date.>

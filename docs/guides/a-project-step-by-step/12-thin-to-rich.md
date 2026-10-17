@@ -24,9 +24,21 @@ Your `partition-commerce` project should be at the commit of step 11: `product` 
 
 > Add this business rule to `product`: a product can be retired; a retired product is never reactivated.
 
+Once the rule is written, commit the spec alone, before the code:
+
+```bash
+git add docs && git commit -m "docs(product): a retired product is never reactivated"
+```
+
 **12.b** — type:
 
 > Plan and build the retirement of a product.
+
+Once the plan is `done`, commit:
+
+```bash
+git add -A && git commit -m "feat(product): retire a product; product becomes rich"
+```
 
 ## Expected
 
@@ -62,12 +74,13 @@ flowchart LR
       invoice["invoice · rich<br/>Rule A · Rule D: voided<br/>≈ — tok"]
       payment["payment · rich<br/>Rule D: reversed<br/>≈ — tok"]
       refund["refund · rich<br/>≈ — tok"]
-      file_billing[("area.md<br/>AR-2 · Rule B")]
+      file_billing[("area.md<br/>AR-1 · AR-3 · Rule B")]
     end
     subgraph area_catalog["catalog"]
       product["product · rich<br/>≈ — tok"]:::new
       price_list["price-list · rich<br/>≈ — tok"]
       discount["discount · thin<br/>≈ — tok"]
+      file_catalog[("area.md<br/>AR-1")]
     end
     yaml["application.yaml<br/>fraud-review list"]
   end

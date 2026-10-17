@@ -18,7 +18,7 @@ Your `partition-commerce` project should be at the commit of step 16: one jar. `
 
 `[TL]` gives you the build, [`parent-pom.xml`](17-provided/parent-pom.xml): a parent `pom.xml` (packaging `pom`) with two modules, `commerce-app` and `payment-app`, each a Spring Boot jar with its own `application.yaml`, H2 database and Flyway migrations. It lands beside the current `pom.xml`, which it replaces during the move: replaced before, the build would break until both modules exist.
 
-`[architect]`, on the two records of a payment (BR-21) once they live in two processes: _`invoice` decides: of two `recordPayment`, or a pay and a cancel, the first it records holds. `payment` stores its payment only once `invoice` has answered that it is recorded; a `409` stores nothing, as today. A payment `invoice` recorded and `payment` then failed to store stays open until REQ-5, with the charge a lost record leaves._
+`[architect]`, on the two records of a payment, `invoice`'s and `payment`'s, once they live in two processes: _`invoice` decides: of two `recordPayment`, or a pay and a cancel, the first it records holds. `payment` stores its payment only once `invoice` has answered that it is recorded; a `409` stores nothing, as today. A payment `invoice` recorded and `payment` then failed to store stays open until REQ-5, with the charge a lost record leaves._
 
 `[TL]`, on the data: _no instance holds data to keep, the payment rows are not copied. The migrations of `payment-app` create its tables, the payment's and the refunds', from `V1`; a new migration of `commerce-app` drops them; no merged migration is edited._
 
@@ -38,9 +38,21 @@ Leave `parent-pom.xml` uncommitted: the move turns it into `pom.xml`.
 
 > Prepare the promotion of `payment` from a component to a container.
 
+If a precondition was missing and a plan met it, commit that plan once `done`, `parent-pom.xml` left out:
+
+```bash
+git add -A -- . ':!parent-pom.xml' && git commit -m "refactor(payment): the preconditions of the promotion of payment"
+```
+
 **17.b** — type:
 
 > Carry out the promotion of `payment` to `payment-app`. I validate it by name.
+
+Once the plan is `done`, commit:
+
+```bash
+git add -A && git commit -m "refactor(payment): payment becomes payment-app"
+```
 
 ## Expected
 
