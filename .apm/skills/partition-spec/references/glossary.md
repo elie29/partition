@@ -101,7 +101,9 @@ Two kinds of rules stand outside this hierarchy: rule files, which say how code 
 
 **Context Budget** — The tokens the assistant must absorb for a task. Exceeded when a task loads more than it needs.
 
-**_Always_ gauge** — The token estimate the budget script (`partition-budget`) prints for each bounded context: what any task of it loads before reading code. That is the project's entry file, the instruction, the descriptions of the skills and agents, the rule files that apply, the invariant register, the area file and the durable spec. Its threshold is the key `budget.always` of `docs/partition.yml`. _Synonyms:_ gauge.
+**_Always_ gauge** — The token estimate the budget script (`partition-budget`) prints for each bounded context: what any task of it loads before reading code. That is the project's entry file, the instruction, the descriptions of the skills and agents, the rule files that apply, the invariant register, the area file and the durable spec. It is compared to the _Always_ threshold. _Synonyms:_ gauge.
+
+**_Always_ threshold** — The most tokens the model is allowed to handle before reading code, set by the owner in the key `budget.always` of `docs/partition.yml` (32 000 by default). It measures what the model can hold, not the size of a bounded context: one value per project, and every bounded context is held to it, however large its domain. _Synonyms:_ threshold, limit, max. _Not:_ the size of a bounded context; a value per bounded context or per area.
 
 ## Architecture
 
