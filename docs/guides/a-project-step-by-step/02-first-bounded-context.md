@@ -169,7 +169,7 @@ You should see `partition-hexagon` read the form from the `Business rules` of th
 
 ### 02.c — "Cancelled" cannot be written twice
 
-You should see `partition-spec` (_Create a spec_, step 5) keep one meaning per word, no synonym. It writes Invoice, Issued and Paid, removes the banner on the BA's confirmation, and **refuses to write "Cancelled" with two meanings** in one bounded context. It asks you which meaning holds here, and recalls that a word meaning something else in a neighbour marks a boundary. Give the BA's answer for now: both meanings are needed, the question is open.
+You should see `partition-spec` (_Write the spec of a new bounded context_, step 5) keep one meaning per word, no synonym. It writes Invoice, Issued and Paid, removes the banner on the BA's confirmation, and **refuses to write "Cancelled" with two meanings** in one bounded context. It asks you which meaning holds here, and recalls that a word meaning something else in a neighbour marks a boundary. Give the BA's answer for now: both meanings are needed, the question is open.
 
 `Open questions` gains, in words that can be answered: _"Cancelled" means "voided before any payment" for an unpaid invoice and "reversed within 24 hours" for a paid one: one bounded context or two?_ This is the question the workshop of step 06 answers.
 

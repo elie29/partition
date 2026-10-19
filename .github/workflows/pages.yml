@@ -1,0 +1,64 @@
+name: pages
+
+# Publishes the getting-started series (docs/learn/) on GitHub Pages, from the public repository only.
+# The site is built from a staged tree that mirrors docs/learn/ and assets/, so the relative links of the
+# articles (03-set-up.md, ../../assets/x.svg) work on the site as they do on GitHub.
+# Turning Pages on (Settings > Pages > Source: GitHub Actions) is the owner's act, once the repository is public.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.repository == 'elie29/partition'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Stage the site tree
+        run: |
+          mkdir -p _site_src/docs _site_src/assets
+          cp -R docs/learn _site_src/docs/learn
+          cp -R assets/. _site_src/assets/
+          mv _site_src/docs/learn/_config.yml _site_src/_config.yml
+          cat > _site_src/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>Partition</title>
+          <meta http-equiv="refresh" content="0; url=docs/learn/">
+          <p><a href="docs/learn/">Go to the Partition getting-started series</a></p>
+          HTML
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - uses: actions/jekyll-build-pages@44a6e6beabd48582f863aeeb6cb2151cc1716697 # v1.0.13
+        with:
+          source: _site_src
+          destination: _site
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+
+  deploy:
+    if: github.repository == 'elie29/partition'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

@@ -6,7 +6,7 @@ The specs move with the code, in the same plan. Nothing is deleted: a spec that 
 
 `<bc>` becomes `<bc>` and `<bc-new>`.
 
-- **Spec of `<bc-new>`** — created from the template of the `partition-spec` skill, `assets/spec.md`. When the bounded context comes from a source, its `Source parts owned` lists the units it takes, with their links.
+- **Spec of `<bc-new>`** — created from the template of the `partition-spec` skill, `assets/spec.md`. Its `Source parts owned` lists the units it takes, with their links.
 - **Spec of `<bc>`** — the units that leave are taken out of its `Source parts owned`. Each rule that leaves goes where the precondition on rules sent it (`SKILL.md`, _Preconditions_), in the same change.
 - **`bounded-contexts.md`** — a line for `<bc-new>` in `Bounded contexts retained`, with the criteria that justify it; in `Coverage`, the units that moved pass to `<bc-new>`; the `Decided` line and, when the record kept a point against a criterion, its line in `Kept against the criteria`. A line of `Decisions not to split` or `Alternatives rejected` the fission overturns moves to `History`, dated, so that the record never contradicts itself.
 

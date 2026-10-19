@@ -29,7 +29,7 @@ You should get an answer read from the files of `partition-commerce`, each with 
 | Rule | In [where a rule lives](../where-a-rule-lives.md) | In `partition-commerce` | Why it differs |
 | --- | --- | --- | --- |
 | Rule A | `billing/invoice/spec.md`, BR-3 | `billing/invoice/spec.md`, BR-3 | — |
-| Rule B | `billing/area.md`, AR-1 | `customer/fraud/spec.md`, BR-3; `payment` consumes `CustomerStatus` and keeps its copy, a business rule from REQ-4, REQ-6 | an area rule (AR-3, step 07), a rule of `payment` after the merge (step 13), then of its owner (step 16) |
+| Rule B | `billing/area.md`, AR-1 | `customer/fraud/spec.md`, BR-3; `payment` consumes `CustomerStatus` and keeps its copy, a business rule from REQ-4, REQ-6, reported as a duplicate until that source is amended | an area rule (AR-3, step 07), a rule of `payment` after the merge (step 13), then of its owner once the risk team's old spec was decomposed (step 16) |
 | Rule C | `invariants.md`, INV-DATA-001 | `invariants.md`, INV-DATA-001, from source | the same level; it climbed plan → spec → area → register (steps 04, 06, 08) |
 | Rule D | `invoice/spec.md` and `payment/spec.md`, `Language` | the same | — |
 
@@ -103,7 +103,7 @@ flowchart LR
 
 - [ ] The answer is read from the files of `partition-commerce`, each rule with its path
 - [ ] Rule A: `billing/invoice/spec.md`, BR-3
-- [ ] Rule B: `customer/fraud/spec.md`, BR-3; `payment` consumes `CustomerStatus` and keeps its copy, a business rule from REQ-4, REQ-6
+- [ ] Rule B: `customer/fraud/spec.md`, BR-3; `payment` consumes `CustomerStatus` and keeps its copy, a business rule from REQ-4, REQ-6, reported as a duplicate until that source is amended
 - [ ] Rule C: `invariants.md`, INV-DATA-001, from source
 - [ ] Rule D: `Language` of `invoice/spec.md` and `payment/spec.md`
 - [ ] `invoice`, `payment` load the register, `billing/area.md` and their spec

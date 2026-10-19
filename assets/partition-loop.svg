@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 465" role="img" aria-labelledby="t d">
   <title id="t">The Partition loop</title>
-  <desc id="d">Bring what you have: a source, what you describe, or a behaviour to change. Each one enters through the spec, where you write the business rules. Then the plan holds the state, the work is built and verified one task at a time, and the gate, the spec and the README close it. When the code and the spec disagree, the spec moves first. The budget is measured, and a context that grew is split. One spec per bounded context, sized to what the assistant can hold.</desc>
+  <desc id="d">Bring what you have: a source, what you describe (saved as a source), or a behaviour to change. Each one enters through the spec, where you write the business rules. Then the plan holds the state, the work is built and verified one task at a time, and the gate, the spec and the README close it. When the code and the spec disagree, the spec moves first. The budget is measured, and a context that grew is split. One spec per bounded context, sized to what the assistant can hold.</desc>
   <defs>
     <style>
       .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
@@ -32,7 +32,7 @@
   <circle cx="425" cy="84" r="2.6" fill="#4cc9f0"/>
   <circle cx="436" cy="84" r="2.6" fill="#4cc9f0"/>
   <text x="425" y="134" class="sans" font-size="17" font-weight="600" fill="#eceef2" text-anchor="middle">What you describe</text>
-  <text x="425" y="154" class="sans" font-size="14" fill="#aab0ba" text-anchor="middle">no source yet</text>
+  <text x="425" y="154" class="sans" font-size="14" fill="#aab0ba" text-anchor="middle">saved as a source</text>
 
   <!-- A behaviour to change: opposite arrows -->
   <circle cx="695" cy="86" r="22" fill="none" stroke="#4cc9f0" stroke-width="2"/>

@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 750" role="img" aria-labelledby="t d">
   <title id="t">Where to start with Partition: five journeys</title>
-  <desc id="d">Five journeys. 1, initialize the project, once: declare the bounded contexts, measure the budget, scope the rules. 2, create a bounded context from a source or from what you describe; you validate the split and write the business rules. 3, deliver through a plan: one task, one verification, closed by the gate, the spec and the README. 4, change a bounded context: the spec moves first, then the code, delivered again through a plan. 5, split a context that grew: measured, people draw the boundary, the extracted context is created as in journey 2. At any time: the gate, the attack, the C4 views, the pattern grid, the hexagon check and the spec auditor.</desc>
+  <desc id="d">Five journeys. 1, initialize the project, once: write the configuration, with no bounded context, measure the budget, scope the rules. 2, create a bounded context from a source or from what you describe; you validate the split and write the business rules. 3, deliver through a plan: one task, one verification, closed by the gate, the spec and the README. 4, change a bounded context: the spec moves first, then the code, delivered again through a plan. 5, split a context that grew: measured, people draw the boundary; the extracted context, created by partition-reshape, then has its rules confirmed and lives through journeys 3 and 4. At any time: the gate, the attack, the C4 views, the pattern grid, the hexagon check and the spec auditor.</desc>
   <defs>
     <style>
       .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
@@ -23,7 +23,7 @@
   <text x="74" y="202.46" class="sans" font-size="19" font-weight="700" fill="#eceef2" text-anchor="middle">1</text>
   <text x="104" y="203" class="sans" font-size="21" font-weight="600" fill="#eceef2">Initialize the project</text>
   <text x="60" y="240" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Set up Partition for this project.”</text>
-  <text x="60" y="269" class="sans" font-size="16" fill="#aab0ba">Declare the bounded contexts, measure</text>
+  <text x="60" y="269" class="sans" font-size="16" fill="#aab0ba">Write the configuration, measure</text>
   <text x="60" y="291" class="sans" font-size="16" fill="#aab0ba">the budget, scope the rules. Once.</text>
   <path d="M60 344H380" stroke="#5b6472" stroke-width="1.5"/>
   <text x="60" y="370" class="mono" font-size="14.5" fill="#9ae3f8">partition-budget · partition-rules</text>
@@ -88,6 +88,7 @@
   <path d="M1120 466L1120 396" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
   <text x="1132" y="436" class="sans" font-size="15" fill="#9aa2ae" text-anchor="start">code realigned</text>
   <path d="M640 466L640 396" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
-  <text x="652" y="436" class="sans" font-size="15" fill="#9aa2ae" text-anchor="start">the extracted context</text>
+  <text x="652" y="427" class="sans" font-size="15" fill="#9aa2ae" text-anchor="start">the extracted context:</text>
+  <text x="652" y="446" class="sans" font-size="15" fill="#9aa2ae" text-anchor="start">its rules confirmed</text>
 
 </svg>

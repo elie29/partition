@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="t d">
+  <title id="t">Split once, or pay on every request</title>
+  <desc id="d">On the left, the project split into six bounded contexts, Orders, Catalog, Billing, Shipping, Customers and Stock, linked by contracts; each one fits in the assistant's context. One request, one context, one contract to respect. On the right, two curves of cumulative cost over requests: split, a cost paid once and then a gentle slope; not split, a slope that steepens and ends up above the first. Where they cross, the split is paid back.</desc>
+  <defs>
+    <style>
+      .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#7a8291"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="720" rx="16" fill="#0f1218"/>
+  <rect x="1" y="1" width="1278" height="718" rx="15" fill="none" stroke="#5b6472" stroke-width="2"/>
+  <text x="40" y="66" class="sans" font-size="30" font-weight="600" fill="#eceef2">Split once, or pay on every request</text>
+  <text x="40" y="104" class="sans" font-size="18" fill="#aab0ba">The context budget: bounded contexts sized to what the assistant holds well, linked by contracts.</text>
+
+  <!-- The project, split into bounded contexts -->
+  <circle cx="320" cy="356" r="220" fill="none" stroke="#8a6a2e" stroke-width="2.5" stroke-dasharray="3 7"/>
+  <!-- Contracts: Orders and each neighbour -->
+  <path d="M320 295.2V272.8M376 332.3L396 323.7M354.1 406.3L369.9 429.7M285.9 406.3L270.1 429.7M264 332.3L244 323.7" stroke="#7a8291" stroke-width="2.5"/>
+  <g fill="#0f1218" stroke="#7a8291" stroke-width="2.5">
+    <circle cx="320" cy="284" r="5"/>
+    <circle cx="386" cy="328" r="5"/>
+    <circle cx="362" cy="418" r="5"/>
+    <circle cx="278" cy="418" r="5"/>
+    <circle cx="254" cy="328" r="5"/>
+  </g>
+  <g fill="#1f1a12" stroke="#e8a93a" stroke-width="3">
+    <circle cx="320" cy="356" r="56"/>
+    <circle cx="320" cy="212" r="56"/>
+    <circle cx="452" cy="300" r="56"/>
+    <circle cx="404" cy="480" r="56"/>
+    <circle cx="236" cy="480" r="56"/>
+    <circle cx="188" cy="300" r="56"/>
+  </g>
+  <g fill="none" stroke="#4cc9f0" stroke-width="3" stroke-dasharray="8 6">
+    <circle cx="320" cy="356" r="63"/>
+    <circle cx="320" cy="212" r="63"/>
+    <circle cx="452" cy="300" r="63"/>
+    <circle cx="404" cy="480" r="63"/>
+    <circle cx="236" cy="480" r="63"/>
+    <circle cx="188" cy="300" r="63"/>
+  </g>
+  <g class="sans" font-size="17" font-weight="600" fill="#f5cd7a" text-anchor="middle">
+    <text x="320" y="362">Orders</text>
+    <text x="320" y="218">Catalog</text>
+    <text x="452" y="306">Billing</text>
+    <text x="404" y="486">Shipping</text>
+    <text x="236" y="486">Customers</text>
+    <text x="188" y="306">Stock</text>
+  </g>
+  <text x="320" y="606" class="sans" font-size="18" fill="#aab0ba" text-anchor="middle">One request, one context, one contract to respect</text>
+
+  <!-- Cumulative cost -->
+  <path d="M688 276H1112M688 368H1112M688 460H1112" stroke="#2a303a" stroke-width="1.5"/>
+  <path d="M688 552H1134" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <path d="M688 552V154" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="702" y="166" class="sans" font-size="17" fill="#aab0ba">Cumulative cost</text>
+  <text x="1142" y="586" class="sans" font-size="17" fill="#aab0ba" text-anchor="end">Requests, over time</text>
+  <path d="M688 552C888 504 1048 392 1112 192" fill="none" stroke="#e8a93a" stroke-width="5" stroke-dasharray="12 8" stroke-linecap="round"/>
+  <path d="M688 552C712 552 732 440 760 440L1112 364" fill="none" stroke="#4cc9f0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="760" cy="440" r="8" fill="#4cc9f0" stroke="#0f1218" stroke-width="3"/>
+  <text x="707" y="360" class="sans" font-size="18" font-weight="600" fill="#eceef2">The split,</text>
+  <text x="707" y="383" class="sans" font-size="18" font-weight="600" fill="#eceef2">paid once</text>
+  <path d="M994.6 400V552" stroke="#7a8291" stroke-width="2" stroke-dasharray="7 5"/>
+  <circle cx="994.6" cy="389.3" r="9" fill="#eceef2" stroke="#0f1218" stroke-width="3"/>
+  <text x="1006" y="515" class="sans" font-size="18" font-weight="600" fill="#eceef2">The split</text>
+  <text x="1006" y="538" class="sans" font-size="18" font-weight="600" fill="#eceef2">is paid back</text>
+  <text x="1124" y="198" class="sans" font-size="18" font-weight="600" fill="#f5cd7a">Not split</text>
+  <text x="1124" y="370" class="sans" font-size="18" font-weight="600" fill="#4cc9f0">Split</text>
+
+  <!-- Legend -->
+  <circle cx="52" cy="665" r="11" fill="none" stroke="#4cc9f0" stroke-width="3" stroke-dasharray="6 4"/>
+  <text x="74" y="671" class="sans" font-size="17" fill="#eceef2">The assistant's context</text>
+  <path d="M688 645H720" stroke="#4cc9f0" stroke-width="5" stroke-linecap="round"/>
+  <text x="732" y="651" class="sans" font-size="17" fill="#eceef2">Cumulative cost, split</text>
+  <path d="M688 677H720" stroke="#e8a93a" stroke-width="5" stroke-dasharray="10 6" stroke-linecap="round"/>
+  <text x="732" y="683" class="sans" font-size="17" fill="#eceef2">Cumulative cost, not split</text>
+</svg>

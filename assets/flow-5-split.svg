@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1146" role="img" aria-labelledby="t d">
   <title id="t">Journey 5: split a context that grew</title>
-  <desc id="d">The assistant measures the budget on its schedule or on a warning sign, says why a gauge is over and shows the options without choosing; you decide. It prepares the workshop material without proposing a boundary; you draw the boundary in Event Storming with the architect, and the decision is recorded. Four preconditions must hold: callers behind an interface, one adapter, a frozen contract, and a spec and language of its own for the new context, with each rule in one home. The move goes through a plan and is proved to be a move. Afterwards the C4 model, the configuration and the budget record are updated.</desc>
+  <desc id="d">The assistant measures the budget on its schedule or on a warning sign, says why a gauge is over and shows the options without choosing, a promotion among them; you decide. It prepares the decision, a workshop or a proposal: it gathers the material and asks the architect the way, the material as it is, for a workshop, or a proposal built on it; you draw the boundary in Event Storming with the architect, or validate a proposal, and the decision is recorded. Four preconditions must hold: callers behind an interface, one adapter, a frozen contract, and a spec and language of its own for the new context, with each rule in one home. The move goes through a plan and is proved to be a move. Afterwards the C4 model, the configuration and the budget record are updated.</desc>
   <defs>
     <style>
       .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
@@ -35,7 +35,7 @@
   <text x="96" y="323" class="sans" font-size="19" font-weight="600" fill="#eceef2">Why a gauge is over, and the options</text>
   <text x="1218" y="323" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-budget</text>
   <text x="96" y="346" class="sans" font-size="16" fill="#aab0ba">A rule without a scope, a spec that describes two things, code that grew, a plan read whole. Options shown, never</text>
-  <text x="96" y="369" class="sans" font-size="16" fill="#aab0ba">chosen: scope a rule (partition-rules), trim the spec (partition-spec), hold a boundary workshop, or nothing.</text>
+  <text x="96" y="369" class="sans" font-size="16" fill="#aab0ba">chosen: scope a rule (partition-rules), trim the spec (partition-spec), hold a boundary workshop, promote, or nothing.</text>
   <path d="M70 389L70 413" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
   <rect x="40" y="415" width="1200" height="54" rx="8" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
   <circle cx="70" cy="443" r="14" fill="#e8a93a"/>
@@ -45,15 +45,15 @@
   <rect x="40" y="495" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
   <circle cx="70" cy="523" r="14" fill="#0b78a0"/>
   <text x="70" y="528.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">D</text>
-  <text x="96" y="529" class="sans" font-size="19" font-weight="600" fill="#eceef2">Prepare the workshop</text>
+  <text x="96" y="529" class="sans" font-size="19" font-weight="600" fill="#eceef2">Prepare the decision</text>
   <text x="1218" y="529" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-reshape</text>
   <text x="96" y="552" class="sans" font-size="16" fill="#aab0ba">Domain events, words with two meanings, what each coming feature loads, dependencies not behind an interface</text>
-  <text x="96" y="575" class="sans" font-size="16" fill="#aab0ba">(file:line). The material, as it is: no boundary proposed.</text>
+  <text x="96" y="575" class="sans" font-size="16" fill="#aab0ba">(file:line). The architect picks the way: this material as it is, for a workshop, or a proposal built on it.</text>
   <path d="M70 595L70 619" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
   <rect x="40" y="621" width="1200" height="77" rx="8" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
   <circle cx="70" cy="649" r="14" fill="#e8a93a"/>
   <text x="70" y="654.32" class="sans" font-size="15" font-weight="700" fill="#0f1218" text-anchor="middle">E</text>
-  <text x="96" y="655" class="sans" font-size="19" font-weight="600" fill="#f5cd7a">You draw the boundary, in Event Storming with the architect</text>
+  <text x="96" y="655" class="sans" font-size="19" font-weight="600" fill="#f5cd7a">You draw the boundary, in Event Storming with the architect, or validate a proposal</text>
   <text x="96" y="678" class="sans" font-size="16" fill="#aab0ba">The decision and who took it are recorded; what the workshop left open comes back to you as questions.</text>
   <text x="1218" y="678" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">docs/architecture/reshapes/</text>
   <path d="M70 698L70 722" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>

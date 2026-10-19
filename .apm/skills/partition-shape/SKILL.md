@@ -6,7 +6,7 @@ license: MIT
 
 # From a source to bounded contexts
 
-A source is what a system is specified by: an API contract, a PRD, an existing spec, a context someone describes. This skill reads it, decides with the owner how it splits into bounded contexts, writes one durable spec per bounded context, and later keeps those specs in step with each new version of the source. A merge, a fission, a removal or a move of a bounded context that exists is the `partition-reshape` skill's: this one only proposes it. It writes documentation only: never code, and never a change to a source it was given; a source pasted in the chat is saved once, as the owner validates it.
+A source is what a system is specified by: an API contract, a PRD, a spec written before Partition, a context someone describes. It is read where it lives, any file of the repository or a URL. This skill reads it, decides with the owner how it splits into bounded contexts, writes one durable spec per bounded context, and later keeps those specs in step with each new version of the source. A merge, a fission, a removal or a move of a bounded context that exists is the `partition-reshape` skill's: this one only proposes it. It writes documentation only: never code, and never a change to a source it was given; a source pasted in the chat is saved once, as the owner validates it.
 
 A spec **points to its source**, it does not copy it: it lists the parts of the source the context owns, each with a link. Only three things are copied into the spec, word for word with their anchor, because the spec must hold them: the **business rules**, the **invariants** and the **decisions** the source states.
 
@@ -23,21 +23,22 @@ First make sure the source is a file; then look at `<specs>/<area>/bounded-conte
 | Present with a sha, and the source changed since | LOAD `references/delta.md` |
 | Present with a sha, and the scope asked differs from the scope recorded | Stop and ask: extend the recorded scope through the delta, or choose another target folder |
 | An API contract given for a bounded context that exists, whose `bounded-contexts.md` records another source | Not a source of the decomposition: enter no procedure. It is the contract that bounded context shows, recorded in its `Contracts with neighbours` (`partition-spec`); the recorded source stays the only source, its provenance unchanged |
+| The API contract of a system a bounded context only calls | Not a source: enter no procedure. It is recorded in that bounded context's `Contracts with neighbours` (`partition-spec`), read where it lives; never decomposed |
 
 Both procedures apply the six criteria C1–C6 and the rules R1–R6 of `references/criteria.md`. There is one definition; never restate or adapt it.
 
 ## The reader of the source
 
-| Source                                                                           | LOAD                             |
-| -------------------------------------------------------------------------------- | -------------------------------- |
-| An API contract                                                                  | `references/sources/openapi.md`  |
-| Any other document: a PRD, an existing spec, a described context saved as a file | `references/sources/document.md` |
+| Source | LOAD |
+| --- | --- |
+| An API contract | `references/sources/openapi.md` |
+| Any other document: a PRD, a spec written before Partition, a described context saved as a file | `references/sources/document.md` |
 
 The reader says what a unit is (an operation, or a requirement or story under its anchor), how the scope is written, how the inventory is built and how C2, C5 and C6 are measured.
 
 ## Inputs
 
-`source` (a file under `paths.contracts` or `paths.sources` of `docs/partition.yml`, or a URL) and `area` (the target folder, kebab-case) are mandatory and are **never inferred**: not from the name of the source, not from its title or a heading, not even when a single source is present. When one is missing, stop and ask, showing what exists. `scope`, `base` (a git ref) and `extend` (a scope extension) are optional and are detailed in the procedures.
+`source` (any file of the repository, wherever it lives, or a URL) and `area` (the target folder, kebab-case) are mandatory and are **never inferred**: not from the name of the source, not from its title or a heading, not even when a single source is present. When one is missing, stop and ask, showing what exists. `scope`, `base` (a git ref) and `extend` (a scope extension) are optional and are detailed in the procedures.
 
 ## The script
 

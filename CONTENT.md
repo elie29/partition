@@ -22,8 +22,8 @@ Being deployed is not the same as being loaded. There are three levels.
 ### Loaded only when the skill is used
 
 - The body of the `SKILL.md`.
-- Its `references/`, read only when the skill points to them: the glossary of the method's words, the procedures for decomposing a source and for following its versions, one reader per kind of source, the criteria C1–C6 and the rules R1–R6, the admission test of the invariant register, the takeover of an existing spec, the format of the C4 model, the build-time architecture checks, the rubric and the format of the regression verdict.
-- Its `assets/`, copied into the project only when the file does not exist yet: the templates of the durable spec, the area file, the invariant register, the plan, `partition.yml` and its schema, the budget record, the pattern grid, the C4 model and the split record, and the twelve rule skeletons (backend and frontend).
+- Its `references/`, read only when the skill points to them: the glossary of the method's words, the procedures for decomposing a source and for following its versions, one reader per kind of source, the criteria C1–C6 and the rules R1–R6, the admission test of the invariant register, the format of the C4 model, the build-time architecture checks, the rubric and the format of the regression verdict.
+- Its `assets/`, copied into the project only when the file does not exist yet: the templates of the durable spec, the area file, the invariant register, the plan, `partition.yml` and its schema, the budget record, the pattern grid, the C4 model, the decomposition record and the reshape record, and the twelve rule skeletons (backend and frontend).
 
 ### Never read, only executed
 
@@ -40,14 +40,14 @@ Being deployed is not the same as being loaded. There are three levels.
 | `partition-attack` | Adversarial review of a spec or a design before implementation |
 | `partition-budget` | Measures the Context Budget per bounded context and records the assessment |
 | `partition-c4` | The C4 as text; generates the draw.io views and the sequence diagrams; turns a hand-drawn draw.io file into the model |
-| `partition-shape` | Decomposes a source (API contract, PRD, spec, described context) into bounded contexts that point to it, then follows its versions |
+| `partition-shape` | Decomposes a source (API contract, PRD, spec written before Partition, described context), read where it lives, into the bounded contexts that point to it, then follows its versions |
 | `partition-gate` | Regression audit of a change: SHIP, SHIP WITH CONDITIONS or HOLD, earned by execution |
 | `partition-hexagon` | Thin or rich hexagon; checks dependency direction against the project's layer map |
 | `partition-patterns` | The project's pattern grid, at design time and as an audit |
 | `partition-plan` | The plan is the state: header, task index, partial resume, closing through the gate, the spec and the README |
 | `partition-readme` | Realigns a README with the code |
 | `partition-rules` | Creates, scopes and migrates the project's rules, backend and frontend |
-| `partition-spec` | Creates and changes the durable spec of a bounded context; feeds the invariant register through its admission test; takes over an existing spec |
+| `partition-spec` | Writes the durable spec of a bounded context `partition-shape` retained or a fission created, and changes it, the spec first; places a statement at its level and feeds the invariant register through its admission test |
 | `partition-reshape` | Reshapes the bounded contexts that exist: fission, merge, removal, move; promotes a component |
 
 And one agent, `spec-auditor`: a reader who did not write the code, auditing the code of one bounded context against its spec.
@@ -60,10 +60,12 @@ And one agent, `spec-auditor`: a reader who did not write the code, auditing the
 | `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `CHANGELOG.md`, `LICENSE` | The front page and the rules of the repository on GitHub |
 | `RELEASING.md` | How the maintainer releases a version: the number, the steps, the tag |
 | `CONTENT.md` | This page: what the repository holds, what is deployed and what is loaded |
-| `assets/` | The hero image and the journey diagrams of the README |
+| `assets/` | The hero image, the loop and the journey diagrams of the README, and the figures of the series in `docs/learn/` |
 | `docs/specs/partition/spec.md` | The durable spec of the package |
 | `docs/plans/` | The plans of the package, and their decisions; the folder appears with the first plan |
-| `docs/guides/` | Walk-throughs for readers of the repository: where a rule lives |
+| `docs/guides/` | Walk-throughs for readers of the repository: where a rule lives, and a project step by step |
+| `docs/learn/` | The getting-started series, published on GitHub Pages by `.github/workflows/pages.yml` |
+| `docs/designs/` | The designs of the package's own changes: the input of a plan |
 | `docs/budget/`, `docs/partition.yml` | The package's budget, measured on itself |
 | `tests/` | The tests and package checks, run with `npm test` |
 | `scripts/update-version.mjs` | Sets the version in the four places that carry it, at release time |
@@ -85,7 +87,7 @@ Most of them are not typed by hand. The assistant creates each one from its temp
 
 ### Written by hand
 
-- The source: the API contract, the PRD, the existing spec, delivered under a stable name.
+- The source: the API contract, the PRD, the spec written before Partition, under a stable name, read where it lives in the repository; a context described in the chat is saved as one.
 - The business rules of each spec: written by a person, or copied from the source and confirmed by one.
 - The answers to the questions of the rule skeletons, when the code does not show the convention.
 - The form of each hexagon.
@@ -98,10 +100,10 @@ Most of them are not typed by hand. The assistant creates each one from its temp
 
 | File | Skill |
 | --- | --- |
-| `docs/partition.yml` | the first skill that needs it creates it from its template (`partition-plan` with the plans folder alone); the owner then fills and adjusts it by hand: the bounded contexts, their code paths, the thresholds |
-| Specs: `docs/specs/<area>/<bounded-context>/spec.md` | `partition-spec`; `partition-shape` when they come from a source |
+| `docs/partition.yml` | the first skill that needs it creates it from its template (`partition-plan` with the plans folder alone); `partition-budget` fills the rest with the owner: the threshold and the schedule of the assessment; the owner may adjust any key by hand; `contexts:` starts empty, and `partition-shape` declares each bounded context it retains, asking for its code paths (`partition-reshape` a fission's) |
+| Specs: `docs/specs/<area>/<bounded-context>/spec.md` | `partition-shape`, from a source, through the steps of `partition-spec`; `partition-reshape` for a fission; `partition-spec` for every change |
 | The area file: `docs/specs/<area>/area.md` | `partition-spec`; `partition-shape` when a source states rules shared by several bounded contexts |
-| The split record: `bounded-contexts.md` | `partition-shape`, once the owner validated the plan (bounded-contexts in plural) |
+| The decomposition record: `bounded-contexts.md` | `partition-shape`, once the owner validated the plan (bounded-contexts in plural); `partition-reshape` updates it after a reshape |
 | A source pasted or described in the chat | `partition-shape` saves it to a file, the owner validates it |
 | The invariant register: `invariants.md` | `partition-spec`, through the admission test |
 | The rules: `.apm/instructions/` | `partition-rules`, from the code and the owner's answers |

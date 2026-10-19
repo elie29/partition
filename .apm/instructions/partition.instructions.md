@@ -7,7 +7,7 @@ description: Partition - spec first, the plan is the state, done means real outp
 - The durable spec of a bounded context (its `spec.md` under `docs/specs/`) is the source of truth; the code implements it. When they disagree or a behaviour changes, settle it in the spec first with `partition-spec`, then change the code.
 - If the work contradicts an invariant of the register, a rule of the area file or a business rule of the spec, stop and flag it before writing code. A rule copied from a source changes only through its source: when the source contradicts itself, say so and ask the owner of the source which requirement holds; propose no wording for the copied rule.
 - Work inside one bounded context. Read a neighbour through its contract only.
-- Bounded contexts come from a source (an API contract, a PRD, a spec, a described context) through `partition-shape`. Their spec points to the source and copies only the business rules, invariants and decisions it states.
+- New bounded contexts come from a source (an API contract, a PRD, a spec, a described context) through `partition-shape`; the one a fission creates, from `partition-reshape`. Their spec points to the source and copies only the business rules, invariants and decisions it states.
 - Do not invent a requirement, a behaviour, an API or a data model. When something is missing, stop and ask.
 
 ### State

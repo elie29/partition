@@ -14,12 +14,12 @@ Plans are one file per feature, in one folder per project. With `bridge: superpo
 
 The folder is declared once, never guessed at each session:
 
-1. `docs/partition.yml` says it: `paths.plans`, or `docs/superpowers/plans/` when `bridge: superpowers`. Use it.
+1. `docs/partition.yml` says it: `paths.plans`. Use it, even with `bridge: superpowers`, which only says the Superpowers plugin writes the plan's body.
 2. Nothing is declared there, but an instruction of the project names one folder: the team has decided. Use it, say which, and write it as `paths.plans` in `docs/partition.yml`.
 3. Nothing names it: look for `docs/plans/` and `docs/superpowers/plans/`.
    - Exactly one exists: use it, say which, and write it as `paths.plans` in `docs/partition.yml`.
    - Both exist, or neither: ask the owner once, then write the answer there. Never pick between two folders on your own: a plan opened in the wrong one is a second state of the work.
-4. If `docs/partition.yml` does not exist, create it with that one key under the first line of the template, which links the schema, rewritten for the project's target as its second line says (the full template is `partition-budget`'s `assets/partition.yml`); the rest is filled when the contexts are declared.
+4. If `docs/partition.yml` does not exist, create it with that one key under the first line of the template, which links the schema, rewritten for the project's target as its second line says (the full template is `partition-budget`'s `assets/partition.yml`); `partition-budget` fills the rest with the owner (its _Configuration_).
 
 The user's own instructions, or another of the project, may name a different folder. What `docs/partition.yml` declares wins, then the project's instruction; say that they disagree so the owner can align them. The owner can change the folder at any time, in either place.
 
@@ -55,7 +55,7 @@ Each task names its scope, its verification command and the **expected result, w
 
 Write the plan **first**, then reply. The reply is an echo of what was written: no state that appears in the chat may be absent from the plan.
 
-1. Tick what is done: `- [x] Task 3 — 2026-08-11 · c370994`, or `uncommitted` while the change is still in the working tree, in the task's section and in the index. A task is ticked in the index only when all its steps are, and only after its verification command was actually run.
+1. Tick what is done: `- [x] Task 3 — 2026-08-11 · c370994 — <title>`, or `uncommitted` while the change is still in the working tree, in the task's section and in the index. A task is ticked in the index only when all its steps are, and only after its verification command was actually run.
 2. Update `Resume at` to the real next step and refresh `Last updated`.
 3. Append every decision taken in the conversation to `## Decisions`: one line, with date and reason, and the alternatives that lost. A decision that lives only in the chat did not happen. A decision that binds a later task is also written, in the same write, into the section of each task it binds: a resume reads that section, not `## Decisions`.
 4. Record any blocker in `## Blockers`: what is blocked, what unblocks it, who owns it. Delete the entry when it clears. A blocker that says a file, a line or a command result of the repository is not yet as required is written only after reading that file or running that command in this turn, and an entry carried from an earlier turn is checked the same way: when the repository already shows it done, there is no blocker, and the entry is deleted. A finding left in `Open questions` of a spec is a blocker of every task that implements what it reaches, owned by the person who settles it, until the spec moves: those tasks wait, with no interim behaviour.

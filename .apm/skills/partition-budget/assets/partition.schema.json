@@ -8,7 +8,7 @@
     "version": { "description": "The version of this file's format.", "enum": [1] },
     "target": { "description": "Whose loading rules the gauges follow.", "enum": ["claude", "copilot"] },
     "bridge": {
-      "description": "none, or superpowers: the plans are then under docs/superpowers/plans.",
+      "description": "none, or superpowers: the Superpowers plugin writes the body of each plan. The folder of the plans is paths.plans.",
       "enum": ["none", "superpowers"]
     },
     "paths": {
@@ -19,10 +19,13 @@
         "invariants": { "type": "string", "description": "The invariant register. Default <specs>/invariants.md." },
         "designs": { "type": "string", "description": "The folder of the designs." },
         "plans": { "type": "string", "description": "The folder of the plans. Default docs/plans." },
-        "contracts": { "type": "string", "description": "The folder of the contracts." },
+        "contracts": {
+          "type": "string",
+          "description": "The default folder where a pasted contract, or one read from a URL, is saved; a contract elsewhere in the repository is read where it lives. Default docs/contracts."
+        },
         "sources": {
           "type": "string",
-          "description": "PRDs and described contexts, decomposed by partition-shape. Default docs/sources."
+          "description": "The default folder where a pasted or described source (a PRD, a described context) is saved, decomposed by partition-shape; a source elsewhere in the repository, a spec written before Partition included, is read where it lives. Default docs/sources."
         },
         "schemas": {
           "type": "string",

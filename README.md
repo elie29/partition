@@ -20,7 +20,7 @@ It has no workflow engine, no cast of role agents and no ceremony: it runs besid
 
 ## Why
 
-On a green-field project an AI assistant works wonders. As the project grows, its answers lose accuracy. The model has not changed: what it has to hold has grown, and every request pays for it, in tokens, in review time, in regressions outside the scope asked, and in explaining the same context again.
+An AI assistant works wonders while it can hold the whole project. As the project grows, its answers lose accuracy. The model has not changed: what it has to hold has grown, and every request pays for it, in tokens, in review time, in regressions outside the scope asked, and in explaining the same context again. The pressure is the size of what the assistant holds, whatever the age of the project.
 
 Two things fix that, and neither is a prompt:
 
@@ -40,7 +40,7 @@ Each bounded context has one durable spec. `docs/partition.yml` declares where i
 - **What a source decided stays with the spec.** Its `Decisions` section holds the decisions the source states, with their reason. You do not fill it by hand: `partition-shape` copies them word for word when it decomposes the source (journey 2) and adds the ones a new version states (journey 4); a person confirms them. A decision taken while building lives in the plan that took it.
 - **What is shared goes up one level, once.** A rule shared by the bounded contexts of one area goes to its area file; what spans areas or layers goes to the invariant register, after its admission test. You do not write them by hand: `partition-shape` places what a source states (journey 2), `partition-plan` proposes what a closed plan established (journey 3), `partition-reshape` moves what a split or a merge shares (journey 5), each where `partition-spec` sends it. You validate every entry, and most work admits nothing. [Where a rule lives](docs/guides/where-a-rule-lives.md) walks through an example.
 
-Skills: `partition-spec` to create or change a spec, `partition-attack` to challenge it before planning; the `spec-auditor` agent audits the code of one context against its spec.
+Skills: `partition-spec` to write or change a spec, `partition-attack` to challenge it before planning; the `spec-auditor` agent audits the code of one context against its spec.
 
 ### The state is in the plan, not in the chat
 
@@ -49,16 +49,17 @@ A session can be cleared at any moment. What exists only in the chat is lost, so
 - **Where:** the plans folder declared in `docs/partition.yml` (`docs/plans/` by default). When none is declared, `partition-plan` takes the folder a project instruction names, or finds it on disk, and records it there; it asks you when neither settles it.
 - **What it holds:** `partition-plan` opens it from its template: a header (`Status`, `Resume at`, `Last updated`), a task index with a checkbox per task, each task with its verification command and expected result, then `## Decisions` and `## Blockers`. With `bridge: superpowers` the plugin writes the body and `partition-plan` adds the header, the index and the two sections.
 - **Every turn:** before it replies, the assistant writes the plan: what is done (with the date and the commit sha, or `uncommitted`), where to resume, every decision made in the conversation, every blocker. It does not commit; you do.
-- **Resume:** _"Resume."_ The assistant reads the header, the task index and the one task named in `Resume at`, nothing more, and announces where it restarts.
+- **Resume:** _"Resume."_ The assistant reads the header, the task index, the one task named in `Resume at` and `## Blockers`, nothing more, and announces where it restarts.
 - **Close:** when the last task is ticked, in this order: a `partition-gate` verdict on the plan's changes (HOLD keeps the plan open; each reason of a HOLD and each condition becomes a task, or a blocker when only a person can act); what the work established goes to the durable spec, the area file or the invariant register, each entry validated by you; the README is realigned with `partition-readme` when what users install, run or configure changed; then `done`.
 
 Skill: `partition-plan`, with `partition-gate` and `partition-readme` at closing. The optional [reminder hook](#the-reminder-hook-optional-claude-code) catches a plan closed without those steps.
 
 ### Bounded contexts come from a source
 
-A bounded context is found from what the system is specified by: an API contract, a PRD, an existing spec, or a context you describe. _"Decompose `docs/sources/billing-prd.md` into bounded contexts, area `billing`."_
+A bounded context is found from what the system is specified by: an API contract, a PRD, a spec written before Partition, or a context you describe. Every new bounded context comes from one, through `partition-shape`; only the split of a context that grew comes from `partition-reshape`. _"Decompose `docs/sources/billing-prd.md` into bounded contexts, area `billing`."_
 
-- **A pasted source is saved first.** Context given in the chat is written to `docs/sources/` and validated by you before anything is derived from it.
+- **A source is read where it lives.** Any file of the repository, whatever its folder, or a URL. An old spec stays where it is and is never changed: it cannot be used as is, so it is decomposed like any other source, its rulings read as the decisions and rules it states.
+- **A pasted or described source is saved first.** A source given in the chat is written to `docs/sources/`, a contract pasted or read from a URL to `docs/contracts/`, and validated by you before anything is derived from it. A context with no document behind it is described this way.
 - **The spec points to its source.** Each spec lists the parts of the source its context owns (operations, requirements, sections), each with a link. Fields, requirement text and error codes stay in the source, so nothing drifts. Only the business rules, invariants and decisions the source states are copied.
 - **You decide the split; the assistant proposes.** Before a boundary moves, it asks how you want to decide: a workshop, whose result it saves to `docs/sources/` and challenges against the criteria, or a proposal of two or three options with one recommended. A point you keep against a criterion is recorded, and not proposed again. Then it shows the plan (contexts, what each owns, the gaps) and stops. A new context, a merge, a removal, a move is validated by name.
 - **The criteria are written down:** a context needs a root aggregate of its own and one more reason (its own language, its own life cycle, its own external dependencies); shared data or shared business rules argue against a split.
@@ -123,10 +124,10 @@ You do not call the skills by name. You say what you are doing, and the assistan
 
 ### The first day
 
-1. **Declare your bounded contexts.** _"Set up Partition for this project."_ The assistant creates `docs/partition.yml` with you: the contexts, where their code lives, the budget threshold. It asks; it does not guess a boundary from your folders. When a contract or a PRD describes the system, derive the contexts from it with `partition-shape` (step 4).
+1. **Set up Partition.** _"Set up Partition for this project."_ The assistant creates `docs/partition.yml` with you: the budget threshold and the schedule of the assessment. It asks for no bounded context and does not guess one from your folders: `contexts:` stays empty until `partition-shape` declares each one it retains from a source, at step 4 (a contract, a PRD, a spec written before Partition, a context you describe).
 2. **Measure.** _"Measure the context budget."_ You get, in tokens, what every session loads before any work starts, and what any task of each bounded context loads before reading code.
 3. **Scope your rules.** _"Our rules load in every session, fix that."_ Each rule gets the files it applies to and one source for every assistant.
-4. **Write the first durable spec**, or derive it from a source: _"Decompose `shop.openapi.json` into bounded contexts, area `catalog`"_, or _"Decompose this PRD"_.
+4. **Derive the first durable specs from a source**: _"Decompose `shop.openapi.json` into bounded contexts, area `catalog`"_, _"Decompose this PRD"_, or a context you describe, saved as a source first.
 5. **Fill and confirm the business rules yourself.** No skill deduces one; rules copied from a source wait for your confirmation. A context whose business rules are empty or unconfirmed is not fit for design, and the assistant will say so.
 
 ### Day to day
@@ -139,7 +140,7 @@ You do not call the skills by name. You say what you are doing, and the assistan
 | "We are done, close the plan" | `partition-plan`, with `partition-gate` and `partition-readme` |
 | "Enable the reminder hook" | `partition-plan` |
 | "Is this safe to ship?" · "did I break anything?" · "check my last commit" | `partition-gate` |
-| "Decompose this PRD" · "the contract moved to 1.5.0" · "what does this change of the source break?" | `partition-shape` |
+| "Decompose this PRD" · "decompose our old spec" · "a new context: here is what it does" · "the contract moved to 1.5.0" · "what does this change of the source break?" | `partition-shape` |
 | "Add a container" · "draw the checkout sequence" · "turn our draw.io into the model" | `partition-c4` |
 | "Should this be a Strategy?" · "audit our patterns" | `partition-patterns` |
 | "Does this module need a domain layer?" · "check the architecture" | `partition-hexagon` |
@@ -155,24 +156,26 @@ You do not call the skills by name. You say what you are doing, and the assistan
   <img src="assets/flow-overview.svg" alt="Where to start: 1 initialize the project, 2 create a bounded context, 3 deliver through a plan, 4 change a bounded context, 5 split a context that grew, and what can be asked at any time" width="100%">
 </p>
 
+New to the method? The [getting-started series](docs/learn/README.md), for a tech lead deciding to adopt Partition, explains why it works this way, maps the repository, walks through each journey below, shows how to adopt it on an existing project, and says where a rule lands.
+
 In each journey below, a blue step is the assistant with the skill it uses; an amber step is yours: a decision or an action only you take.
 
 #### 1. Initialize the project
 
 <p align="center">
-  <img src="assets/flow-1-initialize.svg" alt="Initialize the project: install, declare the bounded contexts, name them, measure the budget, scope the rules, optionally the C4 model and the reminder hook" width="100%">
+  <img src="assets/flow-1-initialize.svg" alt="Initialize the project: install, write the configuration with no bounded context, measure the budget, scope the rules, optionally the C4 model and the reminder hook" width="100%">
 </p>
 
 #### 2. Create a bounded context
 
 <p align="center">
-  <img src="assets/flow-2-create.svg" alt="Create a bounded context: from a source, decomposed and validated by name; or without one, declared and started by hand; then you confirm the business rules, the spec is attacked, and its form chosen" width="100%">
+  <img src="assets/flow-2-create.svg" alt="Create a bounded context: always from a source, read where it lives or, when pasted, described or a contract at a URL, saved first; decomposed, the architect choosing a workshop or a proposal, and validated by name; then you confirm the business rules, the spec is attacked, and its form chosen" width="100%">
 </p>
 
 #### 3. Deliver through a plan
 
 <p align="center">
-  <img src="assets/flow-3-deliver.svg" alt="Deliver through a plan: open it, one task and one verification at a time, the plan written before every reply, resume from its header, close through the gate, the spec and the README" width="100%">
+  <img src="assets/flow-3-deliver.svg" alt="Deliver through a plan: open it, one task and one verification at a time, the plan written before every reply, resume from its header, task index, current task and blockers, close with the last tick through the gate, the spec and the README" width="100%">
 </p>
 
 #### 4. Change a bounded context
@@ -184,14 +187,14 @@ In each journey below, a blue step is the assistant with the skill it uses; an a
 #### 5. Split a context that grew
 
 <p align="center">
-  <img src="assets/flow-5-split.svg" alt="Split a context that grew: measure, see why a gauge is over, you decide, prepare the workshop, you draw the boundary, check four preconditions, move through a plan, measure again" width="100%">
+  <img src="assets/flow-5-split.svg" alt="Split a context that grew: measure, see why a gauge is over, you decide, prepare the decision, a workshop or a proposal, you draw the boundary, check four preconditions, move through a plan, measure again" width="100%">
 </p>
 
 A merge, a removal or the move of a unit goes through `partition-reshape` the same way: validated by name, its preconditions checked, carried out through a plan.
 
 ## What is in the package
 
-Twelve skills, one agent (`spec-auditor`, a reader who did not write the code), one always-on instruction of about 500 tokens, and six scripts that do the mechanical work exactly, so the assistant does not read what a script can count. What each one does, where it lands and when it is loaded: [CONTENT.md](CONTENT.md).
+Twelve skills, one agent (`spec-auditor`, a reader who did not write the code), one always-on instruction of about 600 tokens, and six scripts that do the mechanical work exactly, so the assistant does not read what a script can count. What each one does, where it lands and when it is loaded: [CONTENT.md](CONTENT.md).
 
 An optional hook for Claude Code reminds the assistant to close a plan properly: see [The reminder hook](#the-reminder-hook-optional-claude-code) below.
 
@@ -231,12 +234,12 @@ docs/
 │       ├── bounded-contexts.md    how a source was split, and why
 │       ├── area.md                the language and the rules shared in the area: AR-n
 │       └── <bounded-context>/spec.md   the durable spec of one bounded context
-├── contracts/                     API contracts, under stable names
-├── sources/                       PRDs and described contexts, under stable names
+├── contracts/                     by default, API contracts pasted or read from a URL
+├── sources/                       by default, PRDs and contexts pasted or described in the chat, and workshop results
 ├── designs/  plans/               one per feature: the input, and the state
 ├── architecture/model.yml         the C4, as text
 ├── architecture/patterns-grid.md  your rulings on patterns
-├── architecture/reshapes/         one record per split, merge, removal or move
+├── architecture/reshapes/         one record per split, merge, removal, move or promotion
 └── budget/YYYY-MM-DD.md           one record per day of assessment
 ```
 
@@ -246,10 +249,10 @@ The folders under `paths:` in `docs/partition.yml` are yours to change: specs, t
 | --- | --- | --- | --- |
 | `specs` | `docs/specs` | one durable spec per bounded context, by area | [Durable spec](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `invariants` | `<specs>/invariants.md` | what spans areas or layers | [Invariant register](.apm/skills/partition-spec/references/glossary.md#documents) |
-| `designs` | none | one per feature: what it builds | [Design](.apm/skills/partition-spec/references/glossary.md#documents) |
+| `designs` | `docs/designs` | one per feature: what it builds | [Design](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `plans` | `docs/plans` | one per feature: its state and its decisions | [Plan](.apm/skills/partition-spec/references/glossary.md#documents) |
-| `contracts` | `docs/contracts` | API contracts, under stable names | [Contract](.apm/skills/partition-spec/references/glossary.md#documents) |
-| `sources` | `docs/sources` | PRDs and described contexts, under stable names | [Source](.apm/skills/partition-spec/references/glossary.md#documents) |
+| `contracts` | `docs/contracts` | where an API contract pasted or read from a URL is saved; one elsewhere in the repository is read where it lives | [Contract](.apm/skills/partition-spec/references/glossary.md#documents) |
+| `sources` | `docs/sources` | where a source pasted or described in the chat is saved; one elsewhere, an old spec included, is read where it lives | [Source](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `schemas` | none: declare it only if you document your persistence | the schema documents of your persistence | schema documents |
 
 ## It keeps its own budget
@@ -262,7 +265,7 @@ npm run budget
 
 ## Beside your process tools
 
-Partition does not brainstorm, plan a sprint or run a TDD loop. Use what you already use for that. With the Superpowers plugin for Claude Code, set `bridge: superpowers` in `docs/partition.yml`: plans stay under `docs/superpowers/plans/` and Partition adds its header and its closing on top of what the plugin writes.
+Partition does not brainstorm, plan a sprint or run a TDD loop. Use what you already use for that. With the Superpowers plugin for Claude Code, set `bridge: superpowers` in `docs/partition.yml`: the plugin writes the body of each plan and Partition adds its header and its closing on top of it. The plans stay in the folder `paths.plans` declares.
 
 ## The method
 

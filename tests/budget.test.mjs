@@ -196,6 +196,14 @@ test('budget: a plan in progress is measured whole and as read on resume; a done
   assert.ok(p.resume > 100, `resume ${p.resume}`);
   assert.equal(p.wholeOver, true);
 });
+test('budget: paths.plans decides the folder of the plans, even with bridge: superpowers', () => {
+  const plan = '# P\n\n> **Status:** in progress\n> **Resume at:** Task 1 — go\n\n## Tasks\n\n- [ ] Task 1 — a\n';
+  const dir = tmp({
+    'docs/partition.yml': 'bridge: superpowers\npaths:\n  plans: docs/plans\n',
+    'docs/plans/p.md': plan,
+  });
+  assert.equal(measureProject(dir).plans.length, 1);
+});
 test('budget: the copilot target reads its own files', () => {
   const dir = tmp({
     '.github/copilot-instructions.md': x(400),

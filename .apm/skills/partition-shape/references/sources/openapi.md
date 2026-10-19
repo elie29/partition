@@ -1,6 +1,6 @@
 # Reading an API contract
 
-The reader of an OpenAPI contract. Unit: one operation, named by its `operationId`. Source folder: `paths.contracts` in `docs/partition.yml` (default `docs/contracts`). The procedures `references/decompose.md` and `references/delta.md` speak the vocabulary of an API contract (operation, `operationId`, tag, `components` schema): for this source it applies as written.
+The reader of an OpenAPI contract. Unit: one operation, named by its `operationId`. A contract is read where it lives: any file of the repository, whatever its folder. `paths.contracts` in `docs/partition.yml` (default `docs/contracts`) is the default folder where a pasted contract, or one read from a URL, is saved. The procedures `references/decompose.md` and `references/delta.md` speak the vocabulary of an API contract (operation, `operationId`, tag, `components` schema): for this source it applies as written.
 
 ## The script
 
