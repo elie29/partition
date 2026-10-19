@@ -2,7 +2,7 @@
 
 ## Reading the source
 
-This procedure is written in the vocabulary of an API contract: operation, `operationId`, tag, `components` schema, `scripts/contract.mjs`. For an API contract it applies as written, with `references/sources/openapi.md`. For any other document (a PRD, an existing spec, a described context saved under `paths.sources`), LOAD `references/sources/document.md` first: it gives the unit, the anchor, the scope syntax and the inventory that replace them, and `<contracts>/<contract>` stands for the path of that source.
+This procedure is written in the vocabulary of an API contract: operation, `operationId`, tag, `components` schema, `scripts/contract.mjs`. For an API contract it applies as written, with `references/sources/openapi.md`. For any other document (a PRD, a spec written before Partition, a described context saved under `paths.sources`), LOAD `references/sources/document.md` first: it gives the unit, the anchor, the scope syntax and the inventory that replace them, and `<contracts>/<contract>` stands for the path of that source.
 
 The source is **pointed to, never copied**, except the business rules, invariants and decisions it states: those are copied word for word into the spec, with their anchor (step 6.b).
 
@@ -12,9 +12,9 @@ Before the preconditions, read the project's paths in `docs/partition.yml`, unde
 
 | Written here | Key | Default |
 | --- | --- | --- |
-| `<contracts>/` — contracts folder | `paths.contracts` | `docs/contracts` |
+| `<contracts>/` — default folder of contracts | `paths.contracts` | `docs/contracts` |
 | `<specs>/` — specs folder | `paths.specs` | `docs/specs` |
-| `<sources>/` — other sources: PRDs, described contexts | `paths.sources` | `docs/sources` |
+| `<sources>/` — default folder of other sources: PRDs, described contexts | `paths.sources` | `docs/sources` |
 | `<schemas>/` — schema documents | `paths.schemas` | none: a project may have no schema documents |
 | `<invariants>` — invariant register | `paths.invariants` | `<specs>/invariants.md` |
 
@@ -35,11 +35,11 @@ The inputs are supplied by the user in their request. `source` and `area` are **
 
 | Input | Value to supply | Mandatory | Example |
 | --- | --- | --- | --- |
-| `source` | File name of the contract present in `<contracts>/`, or of the document under `<sources>/` | **Yes** | `shop.openapi.json` |
+| `source` | Path of the contract or of the document, wherever it lives in the repository, or a URL | **Yes** | `docs/contracts/shop.openapi.json` |
 | `area` | Target folder under `<specs>/` (kebab-case) | **Yes** | `catalog` |
 | `scope` | Scope: tags and/or `operationId`s to analyse — **leave empty for the whole contract** | No | `tag:Catalogue; operationId:GET_ORDERS` |
 
-- Source: `<contracts>/<contract>` (or the document under `paths.sources`)
+- Source: `<contracts>/<contract>`, the contract at its path (or the document, at its path)
 - Output root: `<specs>/<area>/`
 - Decomposition record: `<specs>/<area>/bounded-contexts.md`
 - One durable spec per bounded context: `<specs>/<area>/<bounded-context>/spec.md`
@@ -63,9 +63,9 @@ Check them **before reading anything else**. As long as a precondition fails, th
 
 | Precondition | If it fails |
 | --- | --- |
-| `source` is supplied, as a real file name | Stop and ask for the name of the contract. Show the list of the files in `<contracts>/` so that the user chooses. |
+| `source` is supplied, as a real path of the repository (a URL: `references/sources/openapi.md` or `references/sources/document.md`) | Stop and ask for the name of the contract. Show the list of the files in `<contracts>/` so that the user chooses. |
 | `area` is supplied, as a real folder name | Stop and ask for the target folder. Show the existing folders of `<specs>/`. Never derive this name from the name of the contract, from the OpenAPI title or from a tag. |
-| The file `<contracts>/<contract>` exists and is readable | Stop, report it, show the available files. Do not guess the file that was meant, even when a single one is present, even when a name is close. |
+| The source exists at its path and is readable | Stop, report it, show the available files. Do not guess the file that was meant, even when a single one is present, even when a name is close. |
 | If `scope` is supplied: every entry respects the scope syntax | Stop, quote the invalid entry, recall the syntax. |
 | If `scope` is supplied: every `tag` and every `operationId` quoted exists in the contract | Stop, quote the value that was not found, show the list of the `tags` and `operationId`s of the contract. Never retain a close value. |
 | If `scope` is supplied: the selection contains at least one operation | Stop and report it. Do not fall back on the whole contract. |
@@ -179,7 +179,7 @@ The command prints these items, the last one excepted, with the summary and the 
 Two cases of dependency are handled apart:
 
 - **Unnamed dependency** — a third party mentioned without being identified ("retrieved from an external API") is recorded as it stands. It cannot satisfy C5: the criterion is settled "no" for lack of proof, and the identity of the system goes to `Open questions`.
-- **Inter-contract reference** — a path quoted in a description or an example (`/payments/{paymentId}`, `/refunds`) that appears in another file of `<contracts>/` is exposed by the project itself, not by a third party. It does not count for C5; it is recorded in the `Scope` section of the spec, under "Out of scope", with the contract that exposes it. A quoted path that appears in no contract of `<contracts>/` goes to `Open questions`.
+- **Inter-contract reference** — a path quoted in a description or an example (`/payments/{paymentId}`, `/refunds`) that appears in another contract of the project is exposed by the project itself, not by a third party. Look for it in every contract of the project: the files of `<contracts>/` and the source of every other decomposition record (`<specs>/*/bounded-contexts.md`), wherever it lives. It does not count for C5; it is recorded in the `Scope` section of the spec, under "Out of scope", with the contract that exposes it. A quoted path that appears in no contract of the project goes to `Open questions`.
 
 Also record the **coupling matrix** that serves as the measure of C6. It covers the whole contract and lists, for each shared structure, the operations that use it:
 
@@ -206,7 +206,7 @@ The decision is the architect's. Follow `references/boundary-decision.md`: tell 
 Contract           : <contracts>/<contract>
 Version            : <info.version>
 Provenance         : <sha of the contract's commit, or `uncommitted`>
-Scope              : <value of scope, or `whole contract`>
+Scope              : <value of scope, or `whole source`>
 Operations read    : <n> in scope / <N> in the contract
 Out of scope       : <operationId…, or "none">
 Bounded contexts   : <bc-1>, <bc-2>, … (<m> retained)
@@ -250,7 +250,7 @@ After validation only, and exactly according to the validated plan.
 
 Write the decomposition record from `assets/bounded-contexts.md`:
 
-- the title carries `<area>`; the header lines carry `<contracts>/<contract>`, `info.version`, the date and the sha of the contract's commit (or `uncommitted`), the value of `scope` (or `whole contract`) and `<n> / <N>`;
+- the title carries `<area>`; the header lines carry `<contracts>/<contract>`, `info.version`, the date and the sha of the contract's commit (or `uncommitted`), the value of `scope` (or `whole source`) and `<n> / <N>`;
 - the two paragraphs about the `Scope` line and the `Provenance` line are kept as they are;
 - `Splitting criteria applied` recalls the six criteria and the decision rules R1–R6 of `references/criteria.md`;
 - `Gaps detected` also holds the couplings outside the scope and the orphan schemas of step 2;

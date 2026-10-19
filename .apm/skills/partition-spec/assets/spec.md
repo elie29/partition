@@ -10,7 +10,7 @@
 >
 > **Decomposition:** see `../bounded-contexts.md`
 
-<!-- Keep the header above only when this spec is derived from a source by partition-shape. -->
+<!-- The header above is filled by partition-shape, or partition-reshape for a fission. -->
 <!-- The empty ">" lines keep each header line on its own line when the Markdown is reformatted. -->
 
 ## Business objective

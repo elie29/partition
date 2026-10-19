@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 993" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 890" role="img" aria-labelledby="t d">
   <title id="t">Journey 1: initialize the project</title>
-  <desc id="d">Six steps, once per project. You install the package and check the instruction is loaded. The assistant declares the bounded contexts with you in docs/partition.yml; you name the contexts and their code, or only the source they come from. It measures the context budget, scopes the rules, and optionally writes the C4 model and enables the reminder hook. Then the first durable specs are written, in journey 2.</desc>
+  <desc id="d">Five steps, once per project. You install the package and check the instruction is loaded. The assistant writes docs/partition.yml with you; it asks for no bounded context, and contexts: stays empty until each one comes from a source. It measures the context budget, scopes the rules, and optionally writes the C4 model and enables the reminder hook. Then the first durable specs are written, in journey 2.</desc>
   <defs>
     <style>
       .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
@@ -13,8 +13,8 @@
       <path d="M0 0L10 5L0 10z" fill="#4cc9f0"/>
     </marker>
   </defs>
-  <rect width="1280" height="993" rx="16" fill="#0f1218"/>
-  <rect x="1" y="1" width="1278" height="991" rx="15" fill="none" stroke="#5b6472" stroke-width="2"/>
+  <rect width="1280" height="890" rx="16" fill="#0f1218"/>
+  <rect x="1" y="1" width="1278" height="888" rx="15" fill="none" stroke="#5b6472" stroke-width="2"/>
   <circle cx="58" cy="56" r="18" fill="#0b78a0"/>
   <text x="58" y="62.84" class="sans" font-size="20" font-weight="700" fill="#eceef2" text-anchor="middle">1</text>
   <text x="90" y="66" class="sans" font-size="30" font-weight="600" fill="#eceef2">Initialize the project</text>
@@ -30,50 +30,44 @@
   <rect x="40" y="266" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
   <circle cx="70" cy="294" r="14" fill="#0b78a0"/>
   <text x="70" y="299.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">B</text>
-  <text x="96" y="300" class="sans" font-size="19" font-weight="600" fill="#eceef2">Declare the bounded contexts</text>
+  <text x="96" y="300" class="sans" font-size="19" font-weight="600" fill="#eceef2">Write the configuration</text>
   <text x="1218" y="300" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-budget</text>
   <text x="96" y="323" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Set up Partition for this project.”</text>
-  <text x="96" y="346" class="sans" font-size="16" fill="#aab0ba">The assistant asks for each context, where its code lives, and the budget threshold.</text>
+  <text x="96" y="346" class="sans" font-size="16" fill="#aab0ba">The assistant asks for the threshold and the review; it asks for no bounded context.</text>
   <text x="1218" y="323" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">docs/partition.yml</text>
   <path d="M70 366L70 390" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
-  <rect x="40" y="392" width="1200" height="77" rx="8" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
-  <circle cx="70" cy="420" r="14" fill="#e8a93a"/>
-  <text x="70" y="425.32" class="sans" font-size="15" font-weight="700" fill="#0f1218" text-anchor="middle">C</text>
-  <text x="96" y="426" class="sans" font-size="19" font-weight="600" fill="#f5cd7a">You name the contexts and their code</text>
-  <text x="96" y="449" class="sans" font-size="16" fill="#aab0ba">A contract or a PRD already describes the system? Name only the source and the area: the contexts come from it in 2.</text>
-  <path d="M70 469L70 493" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
-  <rect x="40" y="495" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
-  <circle cx="70" cy="523" r="14" fill="#0b78a0"/>
-  <text x="70" y="528.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">D</text>
-  <text x="96" y="529" class="sans" font-size="19" font-weight="600" fill="#eceef2">Measure the context budget</text>
-  <text x="1218" y="529" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-budget</text>
-  <text x="96" y="552" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Measure the context budget.”</text>
-  <text x="96" y="575" class="sans" font-size="16" fill="#aab0ba">In tokens: what every session loads, and what any task of each bounded context loads before reading code.</text>
-  <text x="1218" y="552" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">docs/budget/YYYY-MM-DD.md</text>
-  <path d="M70 595L70 619" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
-  <rect x="40" y="621" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
-  <circle cx="70" cy="649" r="14" fill="#0b78a0"/>
-  <text x="70" y="654.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">E</text>
-  <text x="96" y="655" class="sans" font-size="19" font-weight="600" fill="#eceef2">Scope the rules</text>
-  <text x="1218" y="655" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-rules</text>
-  <text x="96" y="678" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Our rules load in every session, fix that.”</text>
-  <text x="96" y="701" class="sans" font-size="16" fill="#aab0ba">Each rule gets the files it applies to, from one source deployed to every assistant.</text>
-  <text x="1218" y="678" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">.apm/instructions/</text>
-  <path d="M70 721L70 745" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
-  <rect x="40" y="747" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
-  <circle cx="70" cy="775" r="14" fill="#0b78a0"/>
-  <text x="70" y="780.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">F</text>
-  <text x="96" y="781" class="sans" font-size="19" font-weight="600" fill="#eceef2">Optional: the architecture as text, the reminder hook</text>
-  <text x="1218" y="781" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-c4 · partition-plan</text>
-  <text x="96" y="804" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Add a container.” · “Enable the Partition reminder hook.”</text>
-  <text x="96" y="827" class="sans" font-size="16" fill="#aab0ba">The C4 model and its draw.io views; a Claude Code hook that recalls how a plan closes.</text>
-  <text x="1218" y="804" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">docs/architecture/model.yml</text>
-  <path d="M70 847L70 877" fill="none" stroke="#4cc9f0" stroke-width="2.5" marker-end="url(#b)"/>
-  <rect x="40" y="881" width="580" height="52" rx="26" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-dasharray="7 6"/>
-  <text x="330" y="914" class="sans" font-size="18" font-weight="600" fill="#4cc9f0" text-anchor="middle">Then write the first durable specs → cf. journey 2</text>
-  <rect x="40" y="952" width="34" height="20" rx="5" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
-  <text x="86" y="967" class="sans" font-size="15" fill="#aab0ba" text-anchor="start">the assistant, with the skill it uses</text>
-  <rect x="400" y="952" width="34" height="20" rx="5" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
-  <text x="446" y="967" class="sans" font-size="15" fill="#aab0ba" text-anchor="start">you: a decision or an action only you take</text>
+  <rect x="40" y="392" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="420" r="14" fill="#0b78a0"/>
+  <text x="70" y="425.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">C</text>
+  <text x="96" y="426" class="sans" font-size="19" font-weight="600" fill="#eceef2">Measure the context budget</text>
+  <text x="1218" y="426" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-budget</text>
+  <text x="96" y="449" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Measure the context budget.”</text>
+  <text x="96" y="472" class="sans" font-size="16" fill="#aab0ba">In tokens: what every session loads, and what any task of each bounded context loads before reading code.</text>
+  <text x="1218" y="449" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">docs/budget/YYYY-MM-DD.md</text>
+  <path d="M70 492L70 516" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="518" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="546" r="14" fill="#0b78a0"/>
+  <text x="70" y="551.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">D</text>
+  <text x="96" y="552" class="sans" font-size="19" font-weight="600" fill="#eceef2">Scope the rules</text>
+  <text x="1218" y="552" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-rules</text>
+  <text x="96" y="575" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Our rules load in every session, fix that.”</text>
+  <text x="96" y="598" class="sans" font-size="16" fill="#aab0ba">Each rule gets the files it applies to, from one source deployed to every assistant.</text>
+  <text x="1218" y="575" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">.apm/instructions/</text>
+  <path d="M70 618L70 642" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <rect x="40" y="644" width="1200" height="100" rx="8" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <circle cx="70" cy="672" r="14" fill="#0b78a0"/>
+  <text x="70" y="677.32" class="sans" font-size="15" font-weight="700" fill="#eceef2" text-anchor="middle">E</text>
+  <text x="96" y="678" class="sans" font-size="19" font-weight="600" fill="#eceef2">Optional: the architecture as text, the reminder hook</text>
+  <text x="1218" y="678" class="mono" font-size="15" fill="#4cc9f0" text-anchor="end">partition-c4 · partition-plan</text>
+  <text x="96" y="701" class="sans" font-size="16.5" font-style="italic" fill="#4cc9f0">“Add a container.” · “Enable the Partition reminder hook.”</text>
+  <text x="96" y="724" class="sans" font-size="16" fill="#aab0ba">The C4 model and its draw.io views; a Claude Code hook that recalls how a plan closes.</text>
+  <text x="1218" y="701" class="mono" font-size="14" fill="#9aa2ae" text-anchor="end">docs/architecture/model.yml</text>
+  <path d="M70 744L70 774" fill="none" stroke="#4cc9f0" stroke-width="2.5" marker-end="url(#b)"/>
+  <rect x="40" y="778" width="580" height="52" rx="26" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-dasharray="7 6"/>
+  <text x="330" y="811" class="sans" font-size="18" font-weight="600" fill="#4cc9f0" text-anchor="middle">Then write the first durable specs → cf. journey 2</text>
+  <rect x="40" y="849" width="34" height="20" rx="5" fill="#161a22" stroke="#5b6472" stroke-width="2"/>
+  <text x="86" y="864" class="sans" font-size="15" fill="#aab0ba" text-anchor="start">the assistant, with the skill it uses</text>
+  <rect x="400" y="849" width="34" height="20" rx="5" fill="#1f1a12" stroke="#8a6a2e" stroke-width="2"/>
+  <text x="446" y="864" class="sans" font-size="15" fill="#aab0ba" text-anchor="start">you: a decision or an action only you take</text>
 
 </svg>

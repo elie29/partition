@@ -1,6 +1,6 @@
 # Reading a document source
 
-The reader of a PRD, an existing spec, or a described context saved as a file. Unit: one requirement or story, or one section when the document identifies none, named by its anchor. A part that only records decisions, defines terms or gives context is not a unit: the decisions it states are copied, the rest is pointed to. Source folder: `paths.sources` in `docs/partition.yml` (default `docs/sources`).
+The reader of a PRD, a spec written before Partition, or a described context saved as a file. Unit: one requirement or story, or one section when the document identifies none, named by its anchor. A part that only records decisions, defines terms or gives context is not a unit: the decisions it states are copied, the rest is pointed to. A source is read where it lives: any file of the repository, whatever its folder, or a URL. `paths.sources` in `docs/partition.yml` (default `docs/sources`) is the default folder where a pasted or described source is saved.
 
 The procedures `references/decompose.md` and `references/delta.md` speak the vocabulary of an API contract. For a document, read: _unit_ for operation, _anchor_ for `operationId`, _section_ for tag, _the source_ for the contract, _entity_ for schema. `scripts/contract.mjs` does not apply: what it computes, you do by reading, as this file says.
 
@@ -10,16 +10,16 @@ The blocking preconditions of the procedures hold, read for a document:
 
 | Precondition | If it fails |
 | --- | --- |
-| `source` is supplied, as a real file under `<sources>/` or a URL | Stop and ask; show the files of `<sources>/`. Never guess, even when a single file is present. |
+| `source` is supplied, as a real file of the repository, wherever it lives, or a URL | Stop and ask; show the files of `<sources>/`. Never guess, even when a single file is present. |
 | The file exists and is readable, or the URL can be read | Stop and report it. A URL that cannot be read: ask the owner to save the document under `<sources>/`. |
 | If `scope` or `extend` is supplied: every entry respects the scope syntax below and every anchor exists | Stop, quote the entry, show the anchors that exist. |
 | The source has at least one unit with a stable anchor in the scope | Stop: there is nothing to decompose until the owner gives the parts their anchors. |
 
 ## Anchors
 
-A unit is named by the identifier the document gives it (`REQ-12`, `US-4`), otherwise by the slug of its heading (`#refund-a-paid-order`). An anchor is quoted exactly, never shortened or renamed.
+A unit is named by the identifier the document gives it (`REQ-12`, `US-4`), otherwise by the slug of its heading (`#refund-a-paid-order`). A statement outside any unit is anchored by its place: the identifier or heading that holds it; a dated item under a heading, such as an entry of a ruling history, by that heading and its date (`#6-ruling-history`, 2024-03-12). An anchor is quoted exactly, never shortened or renamed.
 
-A part with no stable anchor (no identifier, a heading repeated or missing) is not given one: list it in `Gaps detected` with the question "which anchor should this part carry?". It is analysed only once the owner has answered, in the source.
+A part with no stable anchor (no identifier, a heading repeated or missing, a date repeated under one heading) is not given one: list it in `Gaps detected` with the question "which anchor should this part carry?". It is analysed only once the owner has answered, in the source.
 
 ## Scope
 
@@ -47,6 +47,14 @@ Copied word for word into the spec, with the anchor as source, only when the sou
 - a business rule: a condition and what must happen, true for the context. It goes to `Business rules`, marked "from source", under the "TO VALIDATE" banner;
 - an invariant: true across the project. It goes to `Applicable area rules and invariants` as a candidate and through the admission test of the register (`partition-spec`); one that fails it becomes an area rule or a business rule, at the level that holds it;
 - a decision: a choice made, with the reason the source gives for it. It goes to `Decisions`, dated by the version or date of the source. A choice the source records without its reason is not a decision: it is pointed to, and asked in `Open questions` only when it leaves something unsettled.
+
+A spec written before Partition may hold three more kinds of part. None is copied whole, and the source is never changed:
+
+| Part | How it is read |
+| --- | --- |
+| A ruling history, or a decision log | Ruling by ruling, each anchored by its heading and its date. A ruling with its reason is a decision the source states: it goes to `Decisions`. A ruling that states a rule is a business rule the source states: it goes to `Business rules`, marked "from source", under the "TO VALIDATE" banner. A ruling that states a rule and gives its reason goes to both, each entry anchored to the same ruling. Any other ruling is pointed to, as a choice without its reason is. No annex is written: the source stays as it is. |
+| A section on how code is written | Not a unit and not a business rule. It is reported as a candidate for a rule file, which `partition-rules` writes on the owner's word, scoped to the code it binds. Never an area rule. |
+| A file of invariants | Entry by entry: each entry is an invariant the source states, and goes through the admission test as above. |
 
 When the source marks its rules, a marked sentence is the whole rule (a sentence after `Rule:`, an item of a list of rules): the sentences around it are not copied with it.
 

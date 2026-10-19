@@ -119,7 +119,7 @@ Validate the writing plan the assistant shows:
 
 > Replace BR-1 with the new rule of REQ-1. I confirm it. Trigger: an issue for an order that already has an invoice that is not cancelled. Expected effect: refused, nothing is issued; of two issues of one order at the same moment, the second is refused.
 
-**05.d** — by now the assistant has asked the questions of the plan. Give their answers from the first table of **Provided**, say yes to removing the open question BR-1 answers, and end the message with:
+**05.d** — by now the assistant has asked the questions of the plan. Give their answers from the first table of **Provided**, and end the message with:
 
 > Now plan and build the feature.
 
@@ -177,7 +177,7 @@ You should see `partition-spec` leave the new text to the business analyst, not 
 | ---- | ------------------------------------------------------- | ------------------ |
 | BR-1 | An order has at most one invoice that is not cancelled. | from source: REQ-1 |
 
-The open question of step 04 on REQ-1 and REQ-2 is answered; `Open questions` is hand-written, so the assistant asks before removing it, and removes it at 05.d once you say yes. The dated reason goes to `## Decisions` of the plan: the one 05.a opened, or, when none did, the one 05.d opens.
+The open question of step 04 on REQ-1 and REQ-2 is answered: it leaves `Open questions` in the change that writes its answer, that answer being your word. The dated reason goes to `## Decisions` of the plan: the one 05.a opened, or, when none did, the one 05.d opens.
 
 ### 05.d — Only then the plan and the code
 
@@ -227,7 +227,7 @@ flowchart LR
 - [x] 05.b — It says a change that does not move the decomposition is the normal case
 - [x] 05.b — After validation, the provenance of `bounded-contexts.md` and of the spec moves to the new sha and 1.0.1, and `History` gains a line
 - [x] 05.b — BR-1 is untouched, reported as a copied rule whose source changed
-- [x] 05.c — On the BA's instruction, BR-1 reads "An order has at most one invoice that is not cancelled.", from source REQ-1, shown; it asks before removing the answered open question
+- [ ] 05.c — On the BA's instruction, BR-1 reads "An order has at most one invoice that is not cancelled.", from source REQ-1, shown; the answered open question leaves `Open questions` in the same change
 - [x] 05.d — The plan opens, or resumes, with the reason of the new BR-1 in its `## Decisions`, not in the spec
 - [x] 05.d — The answers of **Provided** are settled in the spec before the code
 - [x] 05.d — It asks the architect how BR-1 is held in the database, and does not choose alone

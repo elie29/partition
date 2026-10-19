@@ -53,7 +53,7 @@ A gauge reads `—` until the step is run. When you check the step, run `node .c
 
 Read only the problems and the figures, and the guide is the story of one project growing, then settling.
 
-Steps 02, 06, 07, 08, 10, 11, 13, 14 and 15 carry the boundary decision of BR-33: the assistant asks how the architect decides, then proposes or challenges. Their replay is the condition set before BR-33 shipped.
+Steps 02, 06, 07, 08, 10, 11, 13, 14, 15 and 16 carry the boundary decision of BR-33: the assistant asks how the architect decides, then proposes or challenges. Their replay is the condition set before BR-33 shipped.
 
 **Setting up**
 
@@ -82,7 +82,7 @@ Steps 02, 06, 07, 08, 10, 11, 13, 14 and 15 carry the boundary decision of BR-33
 
 **Inherit and release**
 
-- [**16**](16-takeover.md#the-shape-after) — The risk team's spec → the area `customer`; `fraud` owns Rule B
+- [**16**](16-old-spec-as-source.md#the-shape-after) — The risk team's old spec, decomposed as a source → the area `customer`; `fraud` owns Rule B
 - [**17**](17-promotion.md#the-shape-after) — CardPay's own rhythm → `payment-app`
 
 **Looking back**
@@ -94,7 +94,12 @@ Steps 02, 06, 07, 08, 10, 11, 13, 14 and 15 carry the boundary decision of BR-33
 
 "Every amount is stored in minor units, with its currency." One rule climbs every level, each time because the set of bounded contexts that need it grows:
 
-| Step | Who needs it | It lives in | Why there | | --- | --- | --- | | 04 | the feature being built | the plan, `## Decisions` | decided while building it | | 04 | `invoice`, the only bounded context | `billing/invoice/spec.md` | true for every feature; fails the admission test: one area | | 06 | `invoice` and `payment`, no owner | `billing/area.md` | shared within one area | | 08 | `billing` and `catalog` | `invariants.md`, `INV-DATA-001` | stated by the catalog contract; spans two areas: passes the admission test |
+| Step | Who needs it | It lives in | Why there |
+| --- | --- | --- | --- |
+| 04 | the feature being built | the plan, `## Decisions` | decided while building it |
+| 04 | `invoice`, the only bounded context | `billing/invoice/spec.md` | true for every feature; fails the admission test: one area |
+| 06 | `invoice` and `payment`, no owner | `billing/area.md` | shared within one area |
+| 08 | `billing` and `catalog` | `invariants.md`, `INV-DATA-001` | stated by the catalog contract; spans two areas: passes the admission test |
 
 Rule B goes the other way: an area rule of `billing` at step 07, a business rule of `payment` when the two bounded contexts that shared it merge at step 13, and a rule of `fraud`, its owner, at step 16.
 
@@ -130,6 +135,9 @@ Every case of every skill, and the step that exercises it. A case without a step
 | `partition-shape` | delta of a contract: a move proposed | 11 |
 | `partition-shape` | delta of a contract: a removal proposed | 15 |
 | `partition-shape` | a tag of the recorded scope no longer exists: stop and ask | 15 |
+| `partition-shape` | a spec written before Partition, read where it lives: its ruling history read ruling by ruling, each anchored by its heading and its date; a ruling that states a rule copied as a business rule | 16 |
+| `partition-shape` | a section on how code is written, reported as a candidate for a rule file of `partition-rules` | 16 |
+| `partition-shape` | a rule a spec of another area already holds: quoted as a candidate and reported; its owner named by a person, then written by `partition-spec` | 16 |
 | `partition-spec` | a business rule from source, under "TO VALIDATE", confirmed by a person | 02 |
 | `partition-spec` | an admission test that fails | 04 |
 | `partition-spec` | the spec moves first | 05 |
@@ -137,10 +145,8 @@ Every case of every skill, and the step that exercises it. A case without a step
 | `partition-spec` | the area file created the first time a rule is shared | 06 |
 | `partition-spec` | an admission test that passes | 08 |
 | `partition-spec` | a contradiction with a higher level stops the work | 09 |
-| `partition-spec` | take over an existing spec | 16 |
-| `partition-spec` | a spec without a source | 16 |
 | `partition-spec` | one home: a deployable points to the spec, never copies it | 17 |
-| `partition-reshape` | prepare the workshop; the record; the preconditions; prove it was a move | 06 |
+| `partition-reshape` | prepare the decision; the record; the preconditions; prove it was a move | 06 |
 | `partition-reshape` | fission, raised by a word with two meanings in one bounded context | 06 |
 | `partition-reshape` | move | 11 |
 | `partition-reshape` | merge in an area with an area file: the shared rule comes down | 13 |
@@ -163,5 +169,8 @@ Every case of every skill, and the step that exercises it. A case without a step
 | `partition-gate` | the verdict at the closing of a plan | 04 |
 | `partition-readme` | realign the README at closing | 04 |
 | `spec-auditor` agent | audit the code of one bounded context against its spec | 18 |
-| `partition-shape` | a document at a URL | not needed: such a document is saved as Markdown under `docs/sources/` first, and read as a file |
+| `partition-shape` | a document at a URL: read as is, recorded `external` with its version or date; at a delta the owner says what changed, or saves the new version as a file | not covered: every source of this guide is a file of the repository, committed alone |
 | `partition-shape` | a bootstrap over a `bounded-contexts.md` without a usable sha | not covered: avoided by committing each source alone before it is read ([02](02-first-bounded-context.md)) |
+| `partition-shape` | an API contract given for a bounded context that exists, whose decomposition records another source: recorded in its `Contracts with neighbours`, never a second source | 04 |
+| `partition-shape` | the API contract of a system a bounded context only calls: recorded in that bounded context's `Contracts with neighbours`, never decomposed | not covered: CardPay, the only system called, comes with no contract |
+| `partition-shape` | a context described in the chat: saved as a source, validated, then decomposed | not covered: every source of this guide is a PRD, a contract or a spec written before Partition |

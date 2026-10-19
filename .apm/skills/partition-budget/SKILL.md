@@ -10,7 +10,7 @@ The budget is the tokens the assistant must absorb for a task. It is exceeded as
 
 ## Configuration
 
-Gauges read `docs/partition.yml`. If it is missing, create it from `assets/partition.yml` with the owner: the bounded contexts, the paths of their code, the thresholds. Ask; do not guess a boundary from the folder tree. The file keeps every key the answers leave alone, at its value and with its comment, so the owner sees each key when adjusting it by hand; only the example bounded context goes.
+Gauges read `docs/partition.yml`. If it is missing, or holds only what `partition-plan` wrote (its `paths.plans` stays), fill it from `assets/partition.yml` with the owner: the threshold (`budget.always`) and the schedule of the assessment (`budget.review`). Ask no bounded context and do not guess one from the folder tree: `contexts:` stays empty until `partition-shape` declares each bounded context it retains, or `partition-reshape` a fission's. The file keeps every key the answers leave alone, at its value and with its comment, so the owner sees each key when adjusting it by hand; only the example bounded context goes.
 
 Rewrite the template's first line for the project's target, as its second line says: it then points the editor at `assets/partition.schema.json` as installed, the only list of the keys. `budget.mjs` checks the file against that schema before it measures, and lists every key it does not know.
 
@@ -50,7 +50,7 @@ Procedure:
 
 1. Run the script. Paste its output, unedited, into the record of the day, `docs/budget/YYYY-MM-DD.md`, made from `assets/assessment.md`. One record per day, named by its date: a second assessment the same day replaces that day's record. The record of an earlier day is never overwritten: the series is the trend.
 2. For each feature that is coming, write what it needs to load and what it will load. The question is the budget's: to deliver this, must the assistant absorb more than the feature needs? If yes, a domain is leaving its circle.
-3. For each gauge over its threshold, say what makes it so: a rule without a scope, a spec that describes two things, code that grew, a plan read whole.
+3. For each gauge over its threshold, say what makes it so: a rule without a scope, a spec that describes two things, code that grew, a plan read whole. Read the reshape records under `docs/architecture/reshapes/`: a fission, a merge, a removal or a move may explain it.
 4. Present the options. You do not choose among them:
    - scope or cut a rule (`partition-rules`);
    - trim a spec of what the contract or the code already says (`partition-spec`);

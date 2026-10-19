@@ -38,4 +38,4 @@ Three outcomes are possible, and all three are legitimate:
 
 ## Naming a bounded context
 
-Name each bounded context after its business vocabulary, in **kebab-case**, in the singular of the aggregate (`order`, `product`, `price-list`). Never the snake_case of code packages, never the name of an endpoint or of a chapter.
+Propose a name for each bounded context after its business vocabulary, in **kebab-case**, in the singular of the aggregate (`order`, `product`, `price-list`). Never the snake_case of code packages, never the name of an endpoint or of a chapter. The name is a proposal: the architect keeps it or chooses another when deciding the boundary (`references/boundary-decision.md`).

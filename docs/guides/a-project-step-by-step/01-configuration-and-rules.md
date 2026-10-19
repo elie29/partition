@@ -26,8 +26,8 @@ Your `partition-commerce` project should be at the commit of step 00: the skelet
 | Pointer line to `.apm/instructions/` | none: each rule loads by its scope | `[TL]` |
 | What is said twice with your global file | left as it is: outside the plan; you align your own file | you |
 | Budget threshold | the default, 32 000; assessment every quarter | `[architect]` |
-| `bridge` | `none`: plans stay in `docs/plans/` | `[TL]` |
-| Bounded contexts | none yet: the first comes at step 02 | `[architect]` |
+| `bridge` | `none`: no plugin writes the plans' body | `[TL]` |
+| Bounded contexts | not asked: the first comes from a source at step 02 | `[architect]` |
 | Paths of specs, invariants, designs, sources | the template's defaults; `paths.schemas` stays undeclared | `[architect]` |
 | Who holds the budget assessment | you, as `[architect]` and `[TL]`; no product owner yet | you |
 | Next assessment | one quarter from today | `[architect]` |
@@ -95,7 +95,7 @@ The plan opens with the header (`Status: in progress`, `Resume at`, `Last update
 
 ### 01.b - The configuration
 
-`docs/partition.yml` exists now, with one key. `partition-budget` (_Configuration_) asks you for what the file does not say: the bounded contexts and the paths of their code, the threshold, the review. It does not guess a bounded context from the folder tree: there is none yet, so `contexts:` stays absent or empty. It fills the file from the template `assets/partition.yml` with your answers: every other key is written with its default and its comment, so you see each key when you adjust the file by hand.
+`docs/partition.yml` exists now, with one key. `partition-budget` (_Configuration_) asks you for what the file does not say: the threshold, the review. It asks for no bounded context and does not guess one from the folder tree: `contexts:` stays absent or empty until `partition-shape` declares the first one, at step 02. It fills the file from the template `assets/partition.yml` with your answers: every other key is written with its default and its comment, so you see each key when you adjust the file by hand.
 
 ```yaml
 # yaml-language-server: $schema=../.claude/skills/partition-budget/assets/partition.schema.json
@@ -145,7 +145,7 @@ You should see `partition-rules` fire (_Migrate existing rules_). Nothing moves 
 4. After your validation, each file starts with `description` and `applyTo`, has no `#` or `##` heading (its sections start at `###`, BR-32), and carries the text moved without rewriting it.
 5. The old lines stay in `.claude/CLAUDE.md` until you remove them, and it tells you so: while both exist, the rules load twice.
 6. Run `apm install`: it deploys them as `.claude/rules/backend-*.md`, each scoped by its `applyTo`.
-7. `partition-budget` runs again and shows the every-session total before and after. Once you have removed the moved lines from `.claude/CLAUDE.md`, the total goes down, and no rule is listed "without a scope" but the package's `.claude/rules/partition.md`, unscoped by design. The entry file is listed by its name, with no such label.
+7. `partition-budget` runs again and shows the every-session total before and after. Once you have removed the moved lines from `.claude/CLAUDE.md`, the total goes down, and no rule is listed "without a scope"; the package's `.claude/rules/partition.md` is listed as `(instruction)`, unscoped by design. The entry file is listed by its name, with no such label.
 
 ### The first budget record
 
@@ -185,11 +185,11 @@ When the assistant ticks the last task, it starts the closing **in the same turn
 - `partition-gate` on the plan's changes, from the commit before its first task to the working tree. No Java changed: the verdict says what ran (`./mvnw clean install`) and what could not be verified.
 - What the plan established for good: nothing for a spec, an area file or the register. "Zero" is the normal outcome, and the assistant reports it.
 - The README: there is none. `partition-readme` offers to create one from the code: the build command moved out of `.claude/CLAUDE.md` lands there.
-- `Status: done`, `Resume at: - (nothing; every task is checked)`.
+- `Status: done`, `Resume at: — (nothing; every task is checked)`; the last task, every task still marked `uncommitted` and `Last updated` carry the date alone.
 
 ### Watch
 
-`bridge: superpowers` puts the plans under `docs/superpowers/plans/`, and `paths.plans` names a folder: the skill does not say which wins when both are set. You use Superpowers and keep your plans in `docs/plans/`, so the run should keep `bridge: none`. If it sets `bridge: superpowers`, that is a gap.
+`paths.plans` decides the folder of the plans; `bridge: superpowers` only says the Superpowers plugin writes their body. The run should keep `paths.plans: docs/plans` whatever the bridge. If it moves the plans to `docs/superpowers/plans/` because of the bridge, that is a gap.
 
 ### The shape after
 
@@ -219,7 +219,7 @@ flowchart LR
 - [x] 01.a - The plan has the header (`Status: in progress`, `Resume at`, `Last updated · uncommitted`), the `## Tasks` index and the goal
 - [x] 01.a - Each task has its own section, with its verification and its expected result written before it runs
 - [x] 01.a - `## Decisions` records the plans folder, with today's date and the reason; `## Blockers` is present
-- [x] 01.b - `partition-budget` asks for the bounded contexts and their code paths, the threshold and the review
+- [ ] 01.b - `partition-budget` asks for the threshold and the review, and for no bounded context
 - [x] 01.b - No bounded context is guessed from the folder tree: `contexts:` stays absent or empty (`contexts: []`)
 - [x] 01.b - `docs/partition.yml` is the template filled with your answers: `budget.always: 32000`, `budget.review: quarterly`, every other key at its default, no bounded context, `paths.schemas` undeclared — the first run of 2026-10-12 left out `budget.chars_per_token`: fixed in BR-31 and `partition-budget`, replayed
 - [x] 01.b - `budget.mjs` checks the file against the schema: no finding
@@ -229,7 +229,7 @@ flowchart LR
 - [x] 01.c - Each file starts with `description` and `applyTo`, has no `#` or `##` heading, and carries the text unrewritten
 - [x] 01.c - The old lines stay in `.claude/CLAUDE.md`, and it says the rules load twice while both exist
 - [x] 01.c - `apm install` deploys `.claude/rules/backend-*.md`, each scoped by its `applyTo`
-- [x] 01.c - `partition-budget` shows the every-session total before and after; once the moved lines are removed, the total goes down and only `.claude/rules/partition.md` is listed without a scope
+- [x] 01.c - `partition-budget` shows the every-session total before and after; once the moved lines are removed, the total goes down and no rule is listed "without a scope"; the package's `.claude/rules/partition.md` is listed as `(instruction)`, unscoped by design
 - [x] Budget - `docs/budget/YYYY-MM-DD.md` comes from `assets/assessment.md`, with the output of `budget.mjs` pasted unedited
 - [x] Budget - It lists `.claude/CLAUDE.md`, `.claude/rules/partition.md`, 13 descriptions (12 skills, 1 agent), no bounded context, the setup plan, not enough history for a trend; no figure is written by hand
 - [x] 01.d - Python 3 is found by trying `python3`, `python`, `py -3`, in that order
@@ -240,5 +240,5 @@ flowchart LR
 - [x] Closing - `partition-gate` covers the plan's changes; its verdict says what ran (`./mvnw clean install`) and what could not be verified
 - [x] Closing - Nothing is established for a spec, an area file or the register, and "zero" is reported
 - [x] Closing - `partition-readme` offers to create a README from the code, with the build command moved out of `.claude/CLAUDE.md`
-- [x] Closing - `Status: done`, `Resume at: - (nothing; every task is checked)`
-- [x] Watch - `bridge` stays `none`: `bridge: superpowers` is not set
+- [ ] Closing - `Status: done`, `Resume at: — (nothing; every task is checked)`; the last task, every task still marked `uncommitted` and `Last updated` carry the date alone
+- [ ] Watch - `paths.plans` stays `docs/plans`: the bridge does not move the plans

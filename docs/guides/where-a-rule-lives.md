@@ -68,7 +68,7 @@ Four rules have to find a home:
 For each rule, ask:
 
 1. **Is it true for every feature?** If it holds only for the feature at hand, it is an acceptance criterion and goes to the design of that feature. All four rules here are durable.
-2. **Does one bounded context own it?** Then it lives in that bounded context's spec, and the others consume its result through its contract.
+2. **Does one bounded context own it?** Then it lives in that bounded context's spec, and the others consume its result through its contract. Only a copy that another bounded context's own source states stays in its spec, reported as a duplicate, until that source is amended.
 3. **Otherwise, which is the lowest level that holds it all?** One area: its area file. Several areas or layers: the invariant register, after its admission test.
 
 The levels and their precedence are in the [hierarchy of rules](../../.apm/skills/partition-spec/references/glossary.md#the-hierarchy-of-rules).
@@ -117,7 +117,7 @@ Each spec names it, without repeating it:
 
 It does not go to the register: it spans one area only, so it fails the second condition of the admission test. `product` and `price-list` never load it.
 
-If later a `fraud` bounded context exposes "customer blocked: yes or no", the rule moves to its spec and `payment` and `refund` consume the answer through its contract, as Rule A does. Until then the area file holds it.
+If later a `fraud` bounded context exposes "customer blocked: yes or no", a person names it the owner: the rule goes to its spec, and `payment` and `refund` consume the answer through its contract, as Rule A does. Until then the area file holds it. When the source of `payment` or `refund` also states the rule, that copy stays in its spec, reported as a duplicate, until its source is amended; the assistant moves nothing.
 
 ## Step 3 — Rule C: across areas
 

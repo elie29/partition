@@ -6,7 +6,7 @@
 
 version: 1
 target: claude                # whose loading rules the gauges follow: claude | copilot
-bridge: none                  # none | superpowers (plans under docs/superpowers/plans)
+bridge: none                  # none | superpowers (the plugin writes the plans' body; paths.plans keeps the folder)
 
 paths:
   specs: docs/specs

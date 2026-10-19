@@ -39,7 +39,7 @@ A rule has no `#` or `##` heading: its sections start at `###`. `apm compile` gi
 3. Set each `applyTo` to real paths of this repository. Check that it matches files: a scope that matches nothing is a rule that never loads.
 4. Answer the questions of each file from two sources only: the code as it is, and the owner. Quote the file that shows a convention. When the code shows two conventions, ask which is the rule. Never fill a question from what is usual elsewhere: an unanswered question stays a question for the owner.
 5. Write each rule as one imperative line, with the reason when it is not obvious, and say how it is verified. Remove the questions and the comment once answered.
-6. Run `apm install`, then `partition-budget`: the report must list no rule "without a scope". Only the entry file and the instruction of the package are listed without a scope.
+6. Run `apm install`, then `partition-budget`: the report must list no rule "without a scope". The entry file is listed by its name, and the instruction of the package as `(instruction)`: neither is a rule file.
 
 ## Add or change one rule
 

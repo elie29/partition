@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="t d">
+  <title id="t">The project grows; the share a task needs shrinks</title>
+  <desc id="d">Four circles, larger and larger, from 1 cm to 1 000 km, show the project over time: the first files, the first features, the product, a few months later. A dashed circle shows what a task needs. At first it covers the whole project and everything is useful; then it covers a smaller and smaller share of it, and the assistant takes in the rest for nothing. Each feature widens what the assistant takes in, not what the task needs.</desc>
+  <defs>
+    <style>
+      .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
+    </style>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#7a8291"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="720" rx="16" fill="#0f1218"/>
+  <rect x="1" y="1" width="1278" height="718" rx="15" fill="none" stroke="#5b6472" stroke-width="2"/>
+  <text x="40" y="66" class="sans" font-size="30" font-weight="600" fill="#eceef2">The project grows; the share a task needs shrinks</text>
+  <text x="40" y="104" class="sans" font-size="18" fill="#aab0ba">Each feature widens what the assistant takes in, not what the task needs.</text>
+
+  <!-- Legend -->
+  <circle cx="52" cy="150" r="11" fill="#1f1a12" stroke="#e8a93a" stroke-width="3"/>
+  <text x="74" y="156" class="sans" font-size="17" fill="#eceef2">The project, which the assistant takes in</text>
+  <circle cx="452" cy="150" r="11" fill="none" stroke="#4cc9f0" stroke-width="3" stroke-dasharray="6 4"/>
+  <text x="474" y="156" class="sans" font-size="17" fill="#eceef2">What a task needs</text>
+
+  <!-- The four stages -->
+  <circle cx="136" cy="376" r="13" fill="#1f1a12" stroke="#e8a93a" stroke-width="3"/>
+  <circle cx="136" cy="376" r="42" fill="none" stroke="#4cc9f0" stroke-width="3" stroke-dasharray="9 6"/>
+  <text x="136" y="317" class="sans" font-size="17" fill="#aab0ba" text-anchor="middle">Everything is useful</text>
+
+  <circle cx="376" cy="376" r="37" fill="#1f1a12" stroke="#e8a93a" stroke-width="3"/>
+  <circle cx="376" cy="376" r="42" fill="none" stroke="#4cc9f0" stroke-width="3" stroke-dasharray="9 6"/>
+
+  <circle cx="640" cy="376" r="96" fill="#1f1a12" stroke="#e8a93a" stroke-width="3"/>
+  <circle cx="640" cy="376" r="32" fill="none" stroke="#4cc9f0" stroke-width="3" stroke-dasharray="9 6"/>
+
+  <circle cx="1008" cy="376" r="188" fill="#1f1a12" stroke="#e8a93a" stroke-width="3"/>
+  <circle cx="1008" cy="376" r="22" fill="none" stroke="#4cc9f0" stroke-width="3" stroke-dasharray="9 6"/>
+  <text x="1008" y="436" class="sans" font-size="17" fill="#f5cd7a" text-anchor="middle">The rest is taken in for nothing</text>
+
+  <!-- Time axis -->
+  <path d="M40 608H1226" fill="none" stroke="#7a8291" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="1236" y="590" class="sans" font-size="17" fill="#aab0ba" text-anchor="end">Time and features</text>
+  <path d="M136 600V616M376 600V616M640 600V616M1008 600V616" stroke="#7a8291" stroke-width="2.5"/>
+  <text x="136" y="646" class="sans" font-size="24" font-weight="600" fill="#eceef2" text-anchor="middle">1 cm</text>
+  <text x="136" y="672" class="sans" font-size="17" fill="#aab0ba" text-anchor="middle">the first files</text>
+  <text x="376" y="646" class="sans" font-size="24" font-weight="600" fill="#eceef2" text-anchor="middle">10 cm</text>
+  <text x="376" y="672" class="sans" font-size="17" fill="#aab0ba" text-anchor="middle">the first features</text>
+  <text x="640" y="646" class="sans" font-size="24" font-weight="600" fill="#eceef2" text-anchor="middle">100 m</text>
+  <text x="640" y="672" class="sans" font-size="17" fill="#aab0ba" text-anchor="middle">the product</text>
+  <text x="1008" y="646" class="sans" font-size="24" font-weight="600" fill="#eceef2" text-anchor="middle">1 000 km</text>
+  <text x="1008" y="672" class="sans" font-size="17" fill="#aab0ba" text-anchor="middle">a few months later</text>
+</svg>

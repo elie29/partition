@@ -172,14 +172,14 @@ Routing (_Step 4_): REQ-6 acts on "a refund", an entity no other unit acts on (C
 
 The re-check of R1 meets `invoice` / `payment`: the pair fails R1 on C2, and `payment` is listed under `Kept against the criteria`, C2, since step 06. REQ-4 changes by a rule, not by the entity it acts on, so C2 does not change for the units of `payment`: the merge is **not proposed again**.
 
-Against `invoice`, R1 holds. Against `payment`, the criteria do not settle it: C2 and C3 call for a split, R4 (the same fraud rule, the same CardPay, the amount paid) for grouping. `refund` would move a boundary, so the assistant asks you the way (`references/boundary-decision.md`). With _a proposal_, two options:
+Against `invoice`, R1 holds. Against `payment`, the criteria do not settle it: C2 and C3 call for a split, R4 (the same fraud rule, the same CardPay, the amount paid) for grouping. `refund` would move a boundary, so the assistant asks you the way (`references/boundary-decision.md`). With _a proposal_, one line first says how many splits the criteria leave (its text to confirm at the replay). Then the options, numbered, side by side; the run of this guide showed two:
 
-| Option | Bounded contexts and their units | What it costs | What it brings |
-| --- | --- | --- | --- |
-| `refund` | `payment`: REQ-4, REQ-5; `refund`: REQ-6 | the fraud rule to the area file; CardPay used by two; a contract to read the amount paid | a refund's own life, on CardPay's schedule; the accountant's operation apart |
-| attachment | `payment`: REQ-4, REQ-5, REQ-6 | a second life cycle in `payment`; its language widened | the rule, the data and CardPay in one place (R4) |
+| Option | Bounded contexts and their units | Criteria satisfied | Criterion broken | What it costs | What it brings |
+| --- | --- | --- | --- | --- | --- |
+| 1. `refund` | `payment`: REQ-4, REQ-5; `refund`: REQ-6 | C2, C3, C4 | to confirm at the replay | the fraud rule to the area file; CardPay used by two; a contract to read the amount paid | a refund's own life, on CardPay's schedule; the accountant's operation apart |
+| 2. attachment | `payment`: REQ-4, REQ-5, REQ-6 | to confirm at the replay | to confirm at the replay | a second life cycle in `payment`; its language widened | the rule, the data and CardPay in one place (R4) |
 
-It recommends one, with why; the run of this guide recommended the attachment. The decision is the architect's: you choose `refund`, with the reason of **Provided**. The attachment goes to `Alternatives rejected`, with that reason.
+Each `Criterion broken` names a criterion of C1–C6 or a rule of R1–R6, or reads "None"; the option it recommends reads "None", with why. The run of this guide, before BR-33, recommended the attachment. The decision is the architect's: you choose `refund`, with the reason of **Provided**. The attachment goes to `Alternatives rejected`, with that reason.
 
 The rule on fraud review is stated in REQ-4 (`payment`) and REQ-6 (`refund`): a rule the source states for units of several bounded contexts of one area, with no owner among them. It goes **once** to the area file, never into each spec (6.c, `partition-spec`).
 
@@ -197,7 +197,7 @@ Decomposition:
   Pairs re-evaluated     : invoice / payment — unchanged, payment kept against C2
   Kept, not proposed     : payment (C2), kept on <date of step 06>
   Proposals              : new bounded context refund (REQ-6)
-  Decided by             : proposal; refund chosen by you, as [architect], with your reason
+  Decided by             : proposal, option 1; refund chosen by you, as [architect], with your reason
 Writing plan:
   ≈ docs/specs/billing/bounded-contexts.md      (patch: retained, coverage, history, provenance)
   ≈ docs/specs/billing/payment/spec.md          (patch: derived sections)
@@ -291,9 +291,10 @@ flowchart LR
 - [x] 07.a — `git diff` lists REQ-6 added (additive) and REQ-4 modified, a rule that tightens it: breaking
 - [x] 07.a — Routing: REQ-6 meets C2 and C3, fails C5 against `payment`, C6 discussed under R4; R1 holds against `invoice` and `payment`
 - [x] 07.a — The re-check does not propose the merge of `invoice` and `payment` again: `payment` is kept against C2, and REQ-4 changes by a rule, not by its entity
-- [x] 07.a — It asks the way for `refund`; with a proposal, two options side by side, option 1 recommended with why
+- [ ] 07.a — It asks the way for `refund`; with a proposal, numbered options side by side, with `Criteria satisfied` and `Criterion broken` (a criterion of C1–C6, a rule of R1–R6, or "None"); the recommended option reads "None", with why
+- [ ] 07.a — With a proposal, one line first says how many splits the criteria leave
 - [x] 07.a — `refund` is retained on your choice, validated by name, whichever option it recommended; the option not chosen goes to `Alternatives rejected` with your reason
-- [x] 07.a — The plan matches the block shown: 1 added, 1 modified, the pair `invoice` / `payment` unchanged and `payment` kept against C2, the `Decided by` line, the files to write, the two rules copied word for word
+- [ ] 07.a — The plan matches the block shown: 1 added, 1 modified, the pair `invoice` / `payment` unchanged and `payment` kept against C2, the `Decided by` line, the files to write, the two rules copied word for word
 - [x] 07.a — The fraud-review rule goes once to the area file, never into the spec of `payment` or `refund`
 - [x] 07.a — `billing/area.md` gains AR-3 under the banner of copied rules: binds `payment`, `refund`; `from source: REQ-4, REQ-6`
 - [x] 07.a — `refund/spec.md`: header at 1.1; `Source parts owned` REQ-6; BR-1 under "TO VALIDATE"; `External dependencies` CardPay

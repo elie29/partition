@@ -45,13 +45,13 @@ Two kinds of rules stand outside this hierarchy: rule files, which say how code 
 
 **Area file** — `<specs>/<area>/area.md`: the language and the area rules shared by the bounded contexts of one area. Only the bounded contexts of that area read it. In DDD terms, a **shared kernel**: keep it small; it changes only with the agreement of the bounded contexts it binds. _Optional:_ created the first time a rule or a word is shared. _Not:_ the decomposition record.
 
-**Decomposition record** — `<specs>/<area>/bounded-contexts.md`: how a source was split into the bounded contexts of an area (criteria applied, bounded contexts retained, coverage, history). It holds no rule. _Optional:_ written only when a source is decomposed (`partition-shape`).
+**Decomposition record** — `<specs>/<area>/bounded-contexts.md`: how a source was split into the bounded contexts of an area (criteria applied, bounded contexts retained, coverage, history). It holds no rule. _Optional:_ written the first time a source is decomposed into its area (`partition-shape`).
 
-**Source** — The document bounded contexts are derived from: an API contract, a PRD, an existing spec, or a described context saved as a file. Pointed to, never copied, except for the business rules, invariants and decisions it states. _Optional:_ a durable spec can be written without one. _Not:_ "source of truth", which is the durable spec; source code.
+**Source** — The document, wherever it lives in the repository or at a URL, that bounded contexts are derived from: an API contract, a PRD, a spec written before Partition, or a described context saved as a file. Pointed to, never copied, except for the business rules, invariants and decisions it states. _Not:_ "source of truth", which is the durable spec; source code.
 
 **Unit** — The smallest part of a source the splitting criteria judge: an operation of an API contract, or a requirement or story of a document, or one of its sections when it identifies none. A part that only records decisions, defines terms or gives context is not a unit.
 
-**Anchor** — The stable name of a unit in its source: an `operationId`, an identifier such as `REQ-12`, or the slug of a heading. A statement outside any unit is anchored by its place in the source, in the form the reader of that source gives (for an API contract, the JSON Pointer of the description that states it). An anchor is written whole wherever it is quoted.
+**Anchor** — The stable name of a unit in its source: an `operationId`, an identifier such as `REQ-12`, or the slug of a heading. A statement outside any unit is anchored by its place in the source, in the form the reader of that source gives (for an API contract, the JSON Pointer of the description that states it; for a document, the identifier or heading that holds it). A dated item under a heading, such as an entry of a ruling history, is anchored by that heading and its date; a date repeated under one heading is not a stable anchor. An anchor is written whole wherever it is quoted.
 
 **Provenance** — The version and the commit sha of the source a durable spec was derived from.
 

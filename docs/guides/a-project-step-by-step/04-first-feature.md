@@ -190,7 +190,11 @@ git add . && git commit -m "feat(invoice): domain and migration"
 
 > Resume.
 
-**04.e** — let the assistant carry the plan to its end. When it shows the closing, validate what it proposes for the spec. Once the plan is `done`, deploy the rule its answers added and commit:
+**04.e** — let the assistant carry the plan to its end. If the closing did not start with the last tick, type:
+
+> We are done, close the plan.
+
+When it shows the closing, validate what it proposes for the spec. Once the plan is `done`, deploy the rule its answers added and commit:
 
 ```bash
 apm install
@@ -216,6 +220,8 @@ You should see `partition-plan` open the plan in `docs/plans/`. Superpowers may 
 
 The design names the contract of **Provided** and a sequence diagram of the issue, drawn from the model: `partition-c4` adds a `dynamic` view (`issue-invoice`: accountant → invoice → database), runs `--check`, and prints it with `--mermaid issue-invoice` to paste in the design. Every participant is an element of the model; nothing is drawn by hand beside it.
 
+The contract is given for `invoice`, which exists and was decomposed from the PRD: it is not a second source of that decomposition, and no shaping procedure is entered for it. It is the contract `invoice` shows: `invoice/spec.md` records `billing.openapi.json` under `Contracts with neighbours`, and `bounded-contexts.md` keeps the PRD as its only source, its provenance unchanged.
+
 The decision on amounts goes to `## Decisions` of the plan, with its date, its reason and what lost (a decimal column): **Rule C is born in the plan.**
 
 The convention of the columns goes to a rule file, not to the spec: `partition-rules` (_Add or change one rule_) adds one line to `.apm/instructions/backend-database.instructions.md`, whose scope fits, after checking that no rule says it already; then `apm install`. How code is written here is a rule; what must be true of the business is the spec.
@@ -240,7 +246,7 @@ Run `./mvnw verify`: it runs the tests, ArchUnit included: the domain imports no
 
 You should see `partition-plan` (_Resume_) work from a session that knows nothing:
 
-1. It opens the plan whose `Status` is `in progress` and reads **only** its header, its `## Tasks` index and the task named in `Resume at`. It does not read the rest of the plan, nor any `done` plan.
+1. It opens the plan whose `Status` is `in progress` and reads **only** its header, its `## Tasks` index, the task named in `Resume at` and its `## Blockers`. It does not read the rest of the plan, nor any `done` plan.
 2. It reconciles every `uncommitted` marker: you committed at 04.c, so it finds that commit with `git log -- <the files the task names>` and writes its sha in the task, the index and `Last updated`.
 3. It **announces** the step it restarts at, before changing anything.
 4. It restarts there, not at the first unchecked box when the two differ.
@@ -263,7 +269,7 @@ When the assistant ticks the last task, it starts the closing in the same turn, 
 
 4. The README: the project now has an API. `partition-readme` realigns it (the endpoints, how to run), and changes neither code nor spec.
 5. The C4 model was changed in the plan (`issue-invoice`): regenerated.
-6. `Status: done`; the last task and `Last updated` carry the date alone.
+6. `Status: done`; the last task, every task still marked `uncommitted` and `Last updated` carry the date alone, and `Resume at` reads `— (nothing; every task is checked)`.
 
 ### Watch
 
@@ -303,12 +309,13 @@ flowchart LR
 - [x] 04.b — The plan, in `docs/plans/`, has the Partition header, the task index, a verification and its expected result per task, `## Decisions` and `## Blockers`
 - [x] 04.b — `partition-c4` adds the `dynamic` view `issue-invoice` (accountant → invoice → database), runs `--check`, and prints it with `--mermaid issue-invoice` for the design
 - [x] 04.b — Every participant of the diagram is an element of the model; nothing is drawn by hand beside it
+- [ ] 04.b — `invoice/spec.md`, `Contracts with neighbours`: the contract it shows, `billing.openapi.json`; `bounded-contexts.md` keeps the PRD as its only source, its provenance unchanged
 - [x] 04.b — The decision on amounts is in `## Decisions` of the plan, with its date, its reason and what lost (a decimal column)
 - [x] 04.b — `partition-rules` adds the column convention as one line to `backend-database.instructions.md`, after checking no rule says it already, then `apm install`; nothing goes to the spec
 - [x] 04.b — The rule on YAML goes to `backend-architecture.instructions.md`, its `applyTo` reaching the resources; no `.properties` file is created
 - [x] 04.c — The files listed above are created, `V1__invoice.sql` and `ArchitectureTest.java` included
 - [x] 04.c — `./mvnw verify` runs the tests, ArchUnit included: the domain imports no Spring, the controller calls no repository
-- [x] 04.d — It reads only the header, the `## Tasks` index and the task in `Resume at`; no other part, no `done` plan
+- [ ] 04.d — It reads only the header, the `## Tasks` index, the task in `Resume at` and `## Blockers`; no other part, no `done` plan
 - [x] 04.d — Every `uncommitted` marker gets the sha of `feat(invoice): domain and migration`, in the task, the index and `Last updated`
 - [x] 04.d — It announces the step it restarts at, before changing anything
 - [x] 04.d — It restarts at `Resume at`, not at the first unchecked box when the two differ
@@ -319,5 +326,5 @@ flowchart LR
 - [x] 04.e — Rule C is in the spec of `invoice`, under `Persistence`; the dated reason stays in the plan
 - [x] 04.e — `partition-readme` realigns the README (the endpoints, how to run), and changes neither code nor spec
 - [x] 04.e — The C4 model is regenerated
-- [x] 04.e — `Status: done`; the last task and `Last updated` carry the date alone
+- [ ] 04.e — `Status: done`; the last task, every task still marked `uncommitted` and `Last updated` carry the date alone; `Resume at` reads `— (nothing; every task is checked)`
 - [x] Watch — Rule C is not admitted to the register on the layer clause

@@ -482,7 +482,7 @@ const asList0 = (v) => (Array.isArray(v) ? v : []);
 
 // A plan is resumed from its header, its task index and the task named in "Resume at".
 function measurePlans(root, cfg, tok, limits) {
-  const dir = cfg.bridge === 'superpowers' ? 'docs/superpowers/plans' : (cfg.paths?.plans ?? 'docs/plans');
+  const dir = cfg.paths?.plans ?? (cfg.bridge === 'superpowers' ? 'docs/superpowers/plans' : 'docs/plans');
   let names = [];
   try {
     names = fs.readdirSync(path.resolve(root, dir)).filter((n) => n.endsWith('.md'));

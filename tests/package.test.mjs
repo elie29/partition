@@ -182,9 +182,10 @@ test('the fields of a plan task and of a reshape proof are list items, one per l
   }
 });
 
-// Each repository names itself; the sync rewrites the name, so this list holds in both.
+// Each repository names itself, and the series names the public one; the sync rewrites partition to partition, so
+// the pattern takes both names (written so the sync leaves it as is) and this list holds in both repositories.
 test('the files that name the repository are these, and no other', () => {
-  const pattern = 'elie29/partition(?![\\w-])';
+  const pattern = 'elie29/partition(?:-base)?(?![\\w-])';
   const base = [
     'docs/plans',
     'docs/prompts',
@@ -196,18 +197,33 @@ test('the files that name the repository are these, and no other', () => {
   ].map((d) => `:!${d}`);
   let listed = '';
   try {
-    listed = execFileSync('git', ['grep', '-lzIP', pattern, '--', '.', ...base], { cwd: repo, encoding: 'utf8' });
+    listed = execFileSync('git', ['grep', '-lzIP', '--untracked', pattern, '--', '.', ...base], {
+      cwd: repo,
+      encoding: 'utf8',
+    });
   } catch (e) {
     if (e.status !== 1) throw e;
   }
   assert.deepEqual(listed.split('\0').filter(Boolean).sort(), [
     '.github/ISSUE_TEMPLATE/config.yml',
+    '.github/workflows/pages.yml',
     'README.md',
     'RELEASING.md',
     'SECURITY.md',
     'assets/flow-1-initialize.svg',
     'docs/guides/a-project-step-by-step/00-empty-folder.md',
+    'docs/learn/01-why-partition.md',
+    'docs/learn/02-repository-map.md',
+    'docs/learn/03-set-up.md',
+    'docs/learn/04-create-a-bounded-context.md',
+    'docs/learn/05-deliver-through-a-plan.md',
+    'docs/learn/06-change-at-any-moment.md',
+    'docs/learn/07-reshape-when-it-grows.md',
+    'docs/learn/08-adopt-on-an-existing-project.md',
+    'docs/learn/09-where-a-rule-lands.md',
+    'docs/learn/README.md',
     'scripts/update-version.mjs',
+    'tests/learn.test.mjs',
     'tests/package.test.mjs',
     'tests/release.test.mjs',
   ]);

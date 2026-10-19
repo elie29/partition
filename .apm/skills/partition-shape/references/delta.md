@@ -10,9 +10,9 @@ Before the preconditions, read the project's paths in `docs/partition.yml`, unde
 
 | Written here | Key | Default |
 | --- | --- | --- |
-| `<contracts>/` — contracts folder | `paths.contracts` | `docs/contracts` |
+| `<contracts>/` — default folder of contracts | `paths.contracts` | `docs/contracts` |
 | `<specs>/` — specs folder | `paths.specs` | `docs/specs` |
-| `<sources>/` — other sources: PRDs, described contexts | `paths.sources` | `docs/sources` |
+| `<sources>/` — default folder of other sources: PRDs, described contexts | `paths.sources` | `docs/sources` |
 | `<schemas>/` — schema documents | `paths.schemas` | none: a project may have no schema documents |
 | `<invariants>` — invariant register | `paths.invariants` | `<specs>/invariants.md` |
 
@@ -34,12 +34,12 @@ The inputs are supplied by the user in their request.
 
 | Input | Value to supply | Mandatory | Example |
 | --- | --- | --- | --- |
-| `source` | File name of the contract present in `<contracts>/`, or of the document under `<sources>/` | **Yes** | `shop.openapi.json` |
+| `source` | Path of the contract or of the document, wherever it lives in the repository, or a URL | **Yes** | `docs/contracts/shop.openapi.json` |
 | `area` | Target folder under `<specs>/` (kebab-case) | **Yes** | `catalog` |
 | `base` | Git ref to compare against — **leave empty by default** | No | `a1b2c3d` |
 | `extend` | Scope extension: tags and/or `operationId`s to add to the recorded scope — **leave empty by default** | No | `tag:Catalogue; operationId:GET_ORDERS` |
 
-- Source: `<contracts>/<contract>` (or the document under `paths.sources`)
+- Source: `<contracts>/<contract>`, the contract at its path (or the document, at its path)
 - Output root: `<specs>/<area>/`
 - Decomposition record: `<specs>/<area>/bounded-contexts.md`
 - One durable spec per bounded context: `<specs>/<area>/<bounded-context>/spec.md`
@@ -57,9 +57,9 @@ Check them **before reading the contract**. As long as a precondition fails, the
 
 | Precondition | If it fails |
 | --- | --- |
-| `source` is supplied, as a real file name | Stop and ask for the name of the contract. Show the list of the files in `<contracts>/`. |
+| `source` is supplied, as a real path of the repository (a URL: `references/sources/openapi.md` or `references/sources/document.md`) | Stop and ask for the name of the contract. Show the list of the files in `<contracts>/`. |
 | `area` is supplied, as a real folder name | Stop and ask for the target folder. Never derive it from the name of the contract, from the OpenAPI title or from a tag. |
-| `<contracts>/<contract>` exists and is readable | Stop, report it, show the available files. Do not guess, even when a single file is present. |
+| The source exists at its path and is readable | Stop, report it, show the available files. Do not guess, even when a single file is present. |
 | `<specs>/<area>/bounded-contexts.md` exists | **This is not a delta but an initial decomposition** → send the user to the decomposition procedure (`references/decompose.md`). |
 | That file carries a `Provenance` line with a usable sha, or `external` for a document at a URL: then ask the owner what changed, or to save the new version as a file (`references/sources/document.md`, _Provenance and changes_) | **Base unknown, delta not computable** → send the user to the decomposition procedure (`references/decompose.md`) for a bootstrap pass that sets the baseline. Never invent a base, never take `HEAD~1` by default. |
 | If `extend` is supplied: every entry respects the scope syntax | Stop, quote the invalid entry, recall the syntax. |
