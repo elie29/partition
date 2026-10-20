@@ -32,6 +32,8 @@ A rule has no `#` or `##` heading: its sections start at `###`. `apm compile` gi
 - Only the entry file of the project stays unscoped. It is a map: what the project is, the few rules that hold everywhere, where the rest lives. It carries no detail a scoped rule can carry.
 - Backend and frontend in one repository: their scopes separate them (`backend/**`, `frontend/**`). In two repositories: each has its own rules and knows the other through the contract only.
 
+Every line of a rule file, added, changed or removed, by any procedure below or of another skill, is shown with its file and its scope and written only after the owner validates it, as an entry of the register or of an area file is.
+
 ## Start a set of rules
 
 1. Ask which profile: `assets/backend/` (architecture, security, testing, database, api-contract, naming) or `assets/frontend/` (architecture, design-ux, accessibility, api, testing, naming). The topics are a starting point: drop those that do not apply, add the project's own.
@@ -43,7 +45,7 @@ A rule has no `#` or `##` heading: its sections start at `###`. `apm compile` gi
 
 ## Add or change one rule
 
-Find the file whose topic and scope fit; add the line there. Create a file only for a new topic. Before adding, look for a rule that already says it: rewrite that line rather than adding a near-duplicate. A rule that binds the whole project and whose breach is a defect, not a matter of style, is a candidate for the invariant register instead (`partition-spec`).
+Find the file whose topic fits and whose `applyTo` matches only the code the line binds; add the line there. A file of that topic scoped wider does not fit: the line would load wherever that scope reaches. A line that binds part of the code, such as one bounded context, goes to a file of the same topic scoped to that part, named `<profile>-<topic>-<part>.instructions.md`, created if none exists, its scope checked to match files. Otherwise create a file only for a new topic. Before adding, look for a rule that already says it: rewrite that line rather than adding a near-duplicate, but never merge a line into one of a file scoped wider than the code it binds. A rule that binds the whole project and whose breach is a defect, not a matter of style, is a candidate for the invariant register instead (`partition-spec`); one that fails its admission test stays a line here when it says how code is shaped or what it does beside its observable behaviour (names, layout, configuration, framework, logs and other side channels), and goes to the spec when it says what a bounded context holds or shows.
 
 Keep a rule file to what is not obvious from the code. Remove a rule that has become obvious.
 
@@ -60,9 +62,9 @@ For rules already written for one assistant. Nothing moves unless the owner asks
 
 ## What a rule is not
 
-| It is                                               | It goes in                              |
-| --------------------------------------------------- | --------------------------------------- |
-| What must be true of the business                   | the durable spec of the bounded context |
-| True for the whole project and a defect when broken | the invariant register                  |
-| A procedure to carry out                            | a skill                                 |
-| The state of a piece of work                        | its plan                                |
+| It is                                  | It goes in                              |
+| -------------------------------------- | --------------------------------------- |
+| What must be true of the business      | the durable spec of the bounded context |
+| What passes the admission test (above) | the invariant register                  |
+| A procedure to carry out               | a skill                                 |
+| The state of a piece of work           | its plan                                |

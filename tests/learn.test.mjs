@@ -124,7 +124,17 @@ const pagesJob = (name) => {
 test('the Pages workflow runs only in elie29/partition', () => {
   const jobs = [...pagesWorkflow.split(/^jobs:$/m)[1].matchAll(/^ {2}([\w-]+):\s*$/gm)].map((m) => m[1]);
   assert.deepEqual(jobs.sort(), ['build', 'deploy']);
-  for (const name of jobs) assert.match(pagesJob(name), /^ {4}if: github\.repository == 'elie29\/partition'$/m, name);
+  for (const name of jobs)
+    assert.match(pagesJob(name), /^ {4}if: github\.repository == 'elie29\/partition'[ \n]/m, name);
+});
+
+test('the Pages workflow waits for the repository to be public', () => {
+  for (const name of ['build', 'deploy'])
+    assert.match(
+      pagesJob(name),
+      /^ {4}if: github\.repository == 'elie29\/partition' && github\.event\.repository\.visibility == 'public'$/m,
+      name,
+    );
 });
 
 test('the Pages workflow writes only in its deploy job', () => {

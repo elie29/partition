@@ -15,7 +15,7 @@ A durable rule has one home, at one level. The [hierarchy of rules](https://gith
 
 Beside them, the plan of a feature holds progress, tasks, blockers and the dated reason for each choice, under `## Decisions`. A choice made while building a feature is born there; what survives the feature leaves it at the closing, and the reason stays.
 
-Two kinds of rules stand outside the hierarchy. How code is written here is a line of a project rule file, scoped to the code it binds, however many bounded contexts it reaches: never a business rule, never an area rule. And the decision rules R1–R6 say how a source is split; they are part of the package, not of your specs.
+Two kinds of rules stand outside the hierarchy. How code is written here is a line of a project rule file, scoped to the code it binds, however many bounded contexts it reaches: never a business rule, never an area rule, unless a caller observes it at the contract; then it is put to you as two readings, rule file or business rule, neither proposed, and you choose. And the decision rules R1–R6 say how a source is split; they are part of the package, not of your specs.
 
 An area is optional, and so is its area file: it is created the first time its bounded contexts share a rule or a word, once you validate that entry. The register is optional too: it is created the first time an invariant is admitted.
 
@@ -41,7 +41,7 @@ A statement enters the invariant register only if all three conditions hold:
 2. It spans at least two areas or layers. It spans layers when it binds the same layers in every hexagon of the project. A rule one bounded context owns is local to it, even when bounded contexts of other areas consume its result through its contract.
 3. Violating it would be a defect, not a divergence of style.
 
-If any of the three fails, the statement belongs elsewhere: the area file of an area, the durable spec of a bounded context, a rule file of the project, an API contract, a schema document, or the plan. Most plans admit nothing to the register: that is the normal outcome, not a failure.
+If any of the three fails, the statement belongs elsewhere: the area file of an area, the durable spec of a bounded context, a rule file of the project, an API contract, a schema document, or the plan. It is placed by its object: what a bounded context holds or shows goes to its spec or its area file, the form of its stored data to `Persistence`; how its code is shaped and its side channels, logs included, to a rule file through `partition-rules`, even when a breach is a defect. Most plans admit nothing to the register: that is the normal outcome, not a failure.
 
 The register holds the what, one line per statement, in the present tense. The dated why lives in the plan that produced it. An invariant that becomes more precise is rewritten in place and keeps its identifier; an identifier removed is never reused; an entry copied from a source keeps the source's words and is never rewritten: its change is reported to you.
 
@@ -55,6 +55,7 @@ The level is decided by the table _Where a statement belongs_ of `partition-spec
 | The durable spec | a person, or the assistant copying word for word a rule a source states, marked "from source" with its anchor, under a "TO VALIDATE" banner | a person confirms the rules and removes the banner; a change to a spec is shown and validated before the code follows |
 | The area file | the same as a business rule: by a person, or copied from a source that states it | the owner, before anything is written: each rule and each word shown as it would be written, every column and the file it goes to |
 | The invariant register | the assistant shows the line, with its category and its next identifier | the owner, before anything is written, the register itself included; every change and every removal too |
+| A rule file | `partition-rules` shows the line with its file and scope | the owner, before it is written |
 
 No business rule, area rule or invariant is ever deduced from a source, a field name, an example or the code. A statement seen only in the code is a question for you. A rule copied from a source changes only through its source: when the source contradicts itself, the assistant says so and asks the owner of the source which requirement holds, and proposes no wording.
 
@@ -127,7 +128,7 @@ Where a rule lives is read from the files, not from a memory of the work. In a f
 
 > For Rules A, B, C and D of `docs/guides/where-a-rule-lives.md` in the Partition repository, say where each lives in this project, and which bounded contexts load it.
 
-On your own project, name your rules instead of the guide's. The answer comes from the specs, the area files and the register, each rule with its path. Through twenty steps, the guide checks that no rule was written twice but a copy a source states, none was deduced, none was moved by the assistant where a person had to move it, and none was settled by editing the higher level.
+On your own project, name your rules instead of the guide's. The answer comes from the specs, the area files and the register, each rule with its path. Through twenty steps, the guide shows that no rule was written twice but a copy a source states, none was deduced, none was moved by the assistant where a person had to move it, and none was settled by editing the higher level.
 
 ## Go deeper
 

@@ -77,12 +77,12 @@ Each unit is weighed against the six written criteria. A bounded context is reta
 
 A point the architect keeps against a criterion is recorded with the criterion, the names, the date and the reason, and is not proposed again unless a later version of the source changes, for the units of that point, the criterion it was kept against.
 
-Then the **hard stop**: the writing plan, before anything is written. In the guide, it reads:
+Then the **hard stop**: the writing plan, before anything is written. For example:
 
 ```text
 Source             : docs/sources/billing.md
 Version            : 1.0
-Provenance         : <sha of "docs(sources): billing 1.0">
+Provenance         : <sha of the source's commit>
 Scope              : whole source
 Units read         : 5 in scope / 5 in the source
 Out of scope       : none
@@ -153,7 +153,7 @@ It is assessed by the decomposition itself, and the assistant decides none of it
 Three kinds of part an old spec often holds are read as the reader says, none copied whole:
 
 - **A history of rulings**, ruling by ruling, each anchored by its heading and its date. A ruling that states a rule is a business rule the source states, copied "from source" under the "TO VALIDATE" banner; a ruling with its reason is a decision the source states, copied to `Decisions`; a ruling that states a rule and gives its reason goes to both, each anchored to the same ruling; any other ruling is pointed to. A date repeated under one heading is not a stable anchor.
-- **A section on how code is written** is not a unit and not a business rule: it is reported as a candidate for a rule file, which `partition-rules` writes on your word, scoped to the code it binds; never an area rule.
+- **A section on how code is written** is not a unit and not a business rule: it is reported as a candidate for a rule file, which `partition-rules` writes on your word, scoped to the code it binds; never an area rule. A convention a caller can observe is put to you as two readings, rule file or business rule, neither proposed.
 - **A file of invariants** is read entry by entry, each through the admission test of the register.
 
 **A rule another spec already holds** is reported, never moved by the assistant. When a spec of another area holds it, it spans two areas: it is quoted with its anchor under `Applicable area rules and invariants` of the new spec, as a candidate for the admission test, and listed among the gaps with the file and the identifier that hold it. When it fails the test, a person names its owner; then `partition-spec` writes it into the owner's `Business rules`, sourced to the ruling and to that validation, and the others consume its result through the owner's contract. A copy that another spec took from its own source stays there, reported as a duplicate, until that source is amended: a rule copied from a source changes only through its source.

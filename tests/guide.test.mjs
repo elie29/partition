@@ -1,4 +1,4 @@
-// Checks on the guide "a project step by step": its links, its provided folders, and the catalog versions it hands over.
+// Checks on the guide "a project step by step": its links, its provided folders, the catalog versions it hands over, and the shape of its steps.
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
@@ -94,23 +94,22 @@ for (const c of catalog) {
   });
 }
 
-// Every step opens on The problem and closes Expected on The shape after.
+// Every step reads as a story: the situation, what you bring, what you ask, what partition does, the shape after.
 const steps = pages.filter((n) => /^\d\d-/.test(n));
-const reshaped = steps.map((n) => n.slice(0, 2));
 const unchangedShape = ['09', '18'];
 
-for (const page of steps.filter((n) => reshaped.includes(n.slice(0, 2)))) {
-  test(`${page}: the problem opens the step, the shape after closes Expected`, () => {
+for (const page of steps) {
+  test(`${page}: the situation opens the step, the shape after closes it`, () => {
     const text = read(page);
-    const heads = [...outsideFences(text).matchAll(/^(#{2,3}) (.+)$/gm)].map((m) => `${m[1]} ${m[2]}`);
+    const heads = [...outsideFences(text).matchAll(/^## (.+)$/gm)].map((m) => m[1]);
     assert.deepEqual(
-      heads.filter((h) => h.startsWith('## ')),
-      ['## The problem', '## Before', '## Provided', '## Prompt', '## Expected', '## Verdict'],
+      heads.filter((h) => h !== 'Worth noticing'),
+      ['The situation', 'What you bring', 'What you ask', 'What partition does', 'The shape after'],
     );
-    const at = heads.indexOf('### The shape after');
-    assert.ok(at > -1, 'no ### The shape after');
-    assert.equal(heads[at + 1], '## Verdict', '### The shape after is not the last part of Expected');
-    const body = text.slice(text.indexOf('### The shape after'), text.indexOf('## Verdict'));
+    const noticing = heads.indexOf('Worth noticing');
+    if (noticing > -1)
+      assert.equal(heads[noticing + 1], 'The shape after', 'Worth noticing is not just before the shape after');
+    const body = text.slice(text.indexOf('## The shape after'));
     if (unchangedShape.includes(page.slice(0, 2))) {
       assert.match(body, /\]\(\d\d-[a-z0-9-]+\.md#the-shape-after\)/, 'no link to the last figure');
       assert.doesNotMatch(body, /```mermaid/);

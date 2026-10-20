@@ -1,64 +1,44 @@
-# Step 12 — `product` gains a status rule: thin becomes rich
+# Step 12 — A status rule → `product` becomes rich
 
-> **Session:** stay in the session of step 11, or open a fresh one: nothing here tests a cold start.
+## The situation
 
-## The problem
+`product` is thin: `docs/partition.yml` gives the reason, its only rule checks an input, "A product reference is unique." Now a product can be retired, and never reactivated. That is a status with a forbidden transition, and a thin hexagon has no domain layer to hold it.
 
-A product can now be retired, and never reactivated, while `product` is thin: its only rule checked an input.
+## What you bring
 
-## Before
+- [BA] The new business rule of `product`: _a product can be retired; a retired product is never reactivated._
+- [PO] The feature that needs it: _the catalog manager retires a product._
+- [architect] The bounds: _the retirement is a use case of the domain; it adds no operation to the catalog contract, which stays at 1.1.0._ A change of form is a change of code only.
 
-Your `partition-commerce` project should be at the commit of step 11: `product` is thin (`hexagons:` in `docs/partition.yml`, reason: its only rule checks an input), with one business rule, "A product reference is unique."
+The assistant asks other questions along the way. You answer them as the role would.
 
-## Provided
+## What you ask
 
-`[BA]` gives you a new business rule of `product`: _A product can be retired; a retired product is never reactivated._
-
-`[PO]` gives you the feature that needs it: _the catalog manager retires a product._
-
-`[architect]` gives you the bounds of the change: _the retirement is a use case of the domain; it adds no operation to the catalog contract, which stays at 1.1.0 until step 15._ A change of the form of a hexagon is a change of code only.
-
-## Prompt
-
-**12.a** — type:
+First the rule:
 
 > Add this business rule to `product`: a product can be retired; a retired product is never reactivated.
 
-Once the rule is written, commit the spec alone, before the code:
-
-```bash
-git add docs && git commit -m "docs(product): a retired product is never reactivated"
-```
-
-**12.b** — type:
+Once it is written, the spec is committed alone, before the code. Then:
 
 > Plan and build the retirement of a product.
 
-Once the plan is `done`, commit:
+## What partition does
 
-```bash
-git add -A && git commit -m "feat(product): retire a product; product becomes rich"
-```
+1. **The spec first.** `partition-spec` takes the rule from a person, the BA: it writes it as BR-2 of `product`, with its source (the BA, the date), shows it to you and gets it validated. No code changes yet.
+2. **The rule names the form.** `partition-hexagon` reads BR-2: a status that moves under conditions, with a transition that is forbidden. That is a row of its table that says rich.
+3. **A decision, recorded.** The change of form is a decision with its reason, in `## Decisions` of the plan and in `docs/partition.yml`: `product` becomes `form: rich`, its reason rewritten, a `domain` layer added to its layer map with what may depend on it. It is a change of form, not a promotion.
+4. **Carried out by the first tasks of the retirement's plan.** Not a plan of its own. These tasks move the code of `product` into a domain layer that imports nothing from outside it.
+5. **The move proved before the behaviour.** The expected result is written first; no behaviour is added or changed; the real output of the tests and of the layer-map check is shown, finding no dependency of the domain layer on anything outside it. Only then is the retirement built on the domain layer.
+6. **No new check to write.** The architecture test was generated from the layer map, so its generic rule already checks the new domain layer. If the plan reaches again for how a status is coded, it cites the pattern already decided, P-1, rather than reopening it.
+7. **Closing as at the previous steps.**
 
-## Expected
+**Why it works this way.** A domain layer is not grown by accretion, one "small check" at a time, inside a use case of a thin hexagon. The form is changed on purpose, on a recorded reason, and the move is proven alone, so that a failure afterwards can only come from the new behaviour.
 
-### 12.a — The spec first
+## Worth noticing
 
-You should see `partition-spec` take the rule from a person, the BA: it writes it as BR-2 of `product` with its source (the BA, the date), shows it to you and gets it validated. No code changes in this step.
+- The bounded contexts do not change: the form of a hexagon is how its code is shaped inside its boundary, not where the boundary goes.
 
-### 12.b — The form changes before the code grows
-
-You should see `partition-hexagon` (_Change the form from thin to rich_) find that the rule is a status that moves under conditions, with a transition that is forbidden — a row of the table that says **rich**. The change of form is:
-
-1. a decision, recorded in `## Decisions` of the plan, with its reason;
-2. recorded in `docs/partition.yml`: the hexagon of `product` becomes `form: rich`, its reason rewritten, a `domain` layer added to its map with what may depend on it;
-3. carried out by the first tasks of the plan of the retirement, not by a plan of its own: they bring `Product` into a domain layer that imports nothing from outside, and prove the move (no behaviour changed, the real output of the tests and of the layer-map check) before the retirement is built on it.
-
-It does **not** add a "small check" in the use case of retiring, inside a thin hexagon: a domain layer is not grown by accretion.
-
-The ArchUnit test needs no new rule: it was written from the map, so the new domain layer is checked by the generic rule. The pattern grid: if the plan reaches for P-1's question again (how a status is coded), it cites P-1 rather than reopening it. Closing as before.
-
-### The shape after
+## The shape after
 
 ```mermaid
 flowchart LR
@@ -107,17 +87,3 @@ flowchart LR
 **New:** `product` is rich: a `domain` layer. The bounded contexts are unchanged.
 
 **Cost:** a domain layer to write and test, for one rule.
-
-## Verdict
-
-- [ ] 12.a — `partition-spec` writes the rule as BR-2 of `product`, its source the BA and the date
-- [ ] 12.a — BR-2 is shown and validated
-- [ ] 12.a — No code changes
-- [ ] 12.b — `partition-hexagon` (_Change the form from thin to rich_) reads a status with a forbidden transition: **rich**
-- [ ] 12.b — The change of form is a decision in `## Decisions` of the plan, with its reason
-- [ ] 12.b — `docs/partition.yml`: `product` becomes `form: rich`, reason rewritten, a `domain` layer added to its map with what may depend on it
-- [ ] 12.b — The first tasks of the plan bring `Product` into a domain layer importing nothing from outside, and prove the move, before the retirement is built
-- [ ] 12.b — No "small check" in the use case of retiring inside a thin hexagon
-- [ ] 12.b — The ArchUnit test gains no new rule; the generic rule checks the new domain layer
-- [ ] 12.b — If the plan reaches for how a status is coded, it cites P-1 rather than reopening it
-- [ ] 12.b — The closing is as at the previous steps

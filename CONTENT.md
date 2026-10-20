@@ -91,7 +91,7 @@ Most of them are not typed by hand. The assistant creates each one from its temp
 - The business rules of each spec: written by a person, or copied from the source and confirmed by one.
 - The answers to the questions of the rule skeletons, when the code does not show the convention.
 - The form of each hexagon.
-- Every validation: the split plan, an invariant admitted, a ruling on a pattern, the decisions of a workshop.
+- Every validation: the split plan, an invariant admitted, a line of a rule file, a rewritten scope, a ruling on a pattern, the decisions of a workshop.
 - The layout a person sets in the C4 diagrams in draw.io, kept across regenerations; what nobody changed, the script places again.
 - The design of a feature, or the process tool that writes it.
 - The commits.
@@ -106,7 +106,7 @@ Most of them are not typed by hand. The assistant creates each one from its temp
 | The decomposition record: `bounded-contexts.md` | `partition-shape`, once the owner validated the plan (bounded-contexts in plural); `partition-reshape` updates it after a reshape |
 | A source pasted or described in the chat | `partition-shape` saves it to a file, the owner validates it |
 | The invariant register: `invariants.md` | `partition-spec`, through the admission test |
-| The rules: `.apm/instructions/` | `partition-rules`, from the code and the owner's answers |
+| The rules: `.apm/instructions/` | `partition-rules`, from the code and the owner's answers; each line shown with its file and scope, written once the owner validates it |
 | The plans | `partition-plan`; with `bridge: superpowers`, the plugin writes the body |
 | The C4 model: `docs/architecture/model.yml` | `partition-c4`; once from a hand-drawn `.drawio` file, the owner answering what the drawing leaves open |
 | The pattern grid | `partition-patterns`, recording the owner's ruling |

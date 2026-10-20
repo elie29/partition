@@ -29,8 +29,8 @@ REMINDER = (
     "share into its area file, and run the others through the admission test of the invariant register "
     "(partition-spec, references/invariants.md). Show the owner every entry you would write in the area "
     "file or the register, and write it only once validated; then report the identifiers touched and "
-    "the candidates rejected, even when none was admitted. Realign the README with partition-readme when "
-    "users see the change."
+    "the candidates rejected, even when none was admitted. When what users install, run or configure "
+    "changed, those who build and maintain the project included, realign the README with partition-readme."
 )
 
 

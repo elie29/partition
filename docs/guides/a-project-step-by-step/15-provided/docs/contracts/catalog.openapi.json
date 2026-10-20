@@ -739,7 +739,7 @@
             }
           },
           "404": {
-            "description": "No such product, or no price for it",
+            "description": "No such product, or no price for it in that price list",
             "content": {
               "application/json": {
                 "schema": {

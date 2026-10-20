@@ -1,100 +1,49 @@
-# Step 11 — Catalog contract v1.1: a unit moves between bounded contexts
+# Step 11 — Catalog 1.1.0 → a unit moves; a call disappears
 
-> **Session:** 📌 open a **fresh session** at 11.a for the delta; stay in that session for the move that follows.
+## The situation
 
-## The problem
+`getProductPrice` belongs to `product`, which answers it by calling `price-list` through `PriceListPrices`. Catalog 1.1.0 reads the price of a product within a price list: the path is rewritten, the `operationId` is kept. The operation now acts on the price list, not on the product.
 
-Catalog 1.1.0 reads the price of a product within a price list: the path is rewritten, the `operationId` is kept.
+## What you bring
 
-## Before
+- [architect] Catalog 1.1.0, [`docs/contracts/catalog.openapi.json`](11-provided/docs/contracts/catalog.openapi.json), in [`11-provided/`](11-provided/): `getProductPrice` moves to `/price-lists/{priceListId}/product-prices/{productId}`, under the tag `PriceList`; `priceListId` moves from the query to the path. Nothing else changes.
+- [architect] The integration after the move: none. `price-list` answers from its own data; `PriceListPrices` goes once nothing calls it.
 
-Your `partition-commerce` project should be at the commit of step 10: `catalog` with `product`, `price-list`, `discount`. `getProductPrice` (`GET /products/{productId}/price`) belongs to `product`, which answers it by calling `price-list` through its contract `PriceListPrices`.
+The assistant asks other questions along the way (an unknown product, now that `price-list` reads nothing of `product`; a client still calling the old path). You answer them as the role would.
 
-## Provided
+## What you ask
 
-`[architect]` gives you catalog 1.1.0, [`docs/contracts/catalog.openapi.json`](11-provided/docs/contracts/catalog.openapi.json): the price of a product is now read **within a price list**. The path is rewritten; the `operationId` is unchanged. In the excerpt of step 08:
-
-```diff
--    "/products/{productId}/price": { "get": { "operationId": "getProductPrice", "tags": ["Product"] } },
-+    "/price-lists/{priceListId}/product-prices/{productId}": {
-+      "get": { "operationId": "getProductPrice", "tags": ["PriceList"] }
-+    },
-```
-
-`info.version` becomes `1.1.0`, and `priceListId` moves from the query to the path. Nothing else changes.
-
-`[architect]` gives you the integration after the move: none. `price-list` answers from its own data; `product` no longer calls `PriceListPrices`.
-
-The answers to the plan's questions on the move, when the assistant asks:
-
-| Question | Answer |
-| --- | --- |
-| An unknown product, now that `price-list` reads nothing of `product` | `[architect]` As the contract says: `404` `PRICE_NOT_FOUND`, no price for it in that list; the product check goes |
-| A `priceListId` or a `productId` that is not a UUID | `[architect]` `404` `PRICE_NOT_FOUND`, the only code the contract gives this operation |
-| `PriceListPrices`, once nothing calls it | `[architect]` It goes, with its implementation and the exception of the ArchUnit test |
-| A client still calling the old path | `[architect]` None outside this repository: no period with both paths |
-
-## Prompt
-
-**11.a** — copy the contract of [`11-provided/`](11-provided/) over the old one, at the root of `partition-commerce`, and commit it alone:
-
-```bash
-git add docs/contracts/catalog.openapi.json && git commit -m "docs(contracts): catalog 1.0.0 -> 1.1.0"
-```
-
-📌 In a fresh session, type:
+Copy the contract over the old one and commit it alone before the prompt that reads it: its sha is what the next delta starts from. Then, in a fresh session:
 
 > The catalog contract changed to 1.1.0. Bring the specs in step with it.
 
-When the assistant asks how to decide on the move, answer:
+When the assistant asks how to decide on the move:
 
 > A proposal.
 
-Validate the move of `getProductPrice` to `price-list` by name. Then commit the specs:
-
-```bash
-git add docs && git commit -m "docs(catalog): catalog 1.1.0 in the specs; the move of getProductPrice validated"
-```
-
-**11.b** — type:
+Once the move is validated by name and the specs are committed, in the same session:
 
 > Carry out the move of `getProductPrice` from `product` to `price-list`.
 
-Once the plan is `done`, commit:
+## What partition does
 
-```bash
-git add -A && git commit -m "refactor(catalog): getProductPrice moves from product to price-list"
-```
+1. **The delta, from the recorded sha.** `partition-shape` diffs the contract from the sha of 1.0.0, on the recorded scope. `getProductPrice` is modified: path changed, `operationId` unchanged, a required path parameter added. The tag moved, but the operation stays in scope either way.
+2. **Breaking, and confronted with the code.** A rewritten path is breaking: reported loudly, then searched in the code. The operation is implemented in `product` and does not answer the new path: a code / spec divergence, reported, nothing touched.
+3. **A move proposed.** The operation's terminal resource is now a sub-resource of `price-lists`: its root aggregate changed. A move, from `product` to `price-list`, attached by R3.
+4. **It asks the way, and says when there is no choice.** With a proposal, the criteria leave a single option: staying in `product` fails C2, and so does a bounded context of its own. It says so, with why the others fall, and invents no other option. R1 is re-checked on every pair: `product` and `price-list` still hold.
+5. **The plan is still shown.** You choose the move by name; that choice carries the proposal, not the writing plan. The plan is shown, the move marked `!`, and you validate it before anything is written. The closing lists the move under _Proposals validated_, to carry out with `partition-reshape`.
+6. **The record and the preconditions.** `partition-reshape` writes a dated record under `docs/architecture/reshapes/`, raised by the delta of 1.1.0. The preconditions hold: the operation is reached through the generated interface, one adapter, the contract frozen at 1.1.0. Then one plan.
+7. **Specs and code move together.** `getProductPrice` leaves `Source parts owned` of `product` for `price-list`'s; no rule was carried by that operation alone, so none moves. The controller method moves to `price-list`'s inbound layer, implementing the regenerated interface; `product` loses its call to `PriceListPrices`, and no longer lists `price-list` among its neighbours.
+8. **The proof.** Outside `price-list` and the generated sources, only the wiring and `product`'s removed call change: the real output of the command is shown.
+9. **Afterwards.** `bounded-contexts.md` gains the provenance of 1.1.0 and a `History` line, nature `move`: the unit, where it left, where it arrived. `partition-c4` drops the relation `product -> price-list`; `partition-budget` measures again.
 
-## Expected
+**Why it works this way.** A delta only proposes; `partition-reshape` carries out, behind interfaces, so the proof can show that nothing else moved. And a choice validated by name is the decision on the boundary, not a blank cheque on the files: what will be written is still shown to you first.
 
-### 11.a — The delta proposes a move, and confronts the code
+## Worth noticing
 
-You should see `partition-shape` run the delta, with the script:
+- The move removes a dependency instead of adding one: `price-list` answers from its own data, and `PriceListPrices` goes with its implementation.
 
-```bash
-node .claude/skills/partition-shape/scripts/contract.mjs diff docs/contracts/catalog.openapi.json --base <sha of 1.0.0> --scope "tag:Product; tag:PriceList; tag:Discount"
-```
-
-`getProductPrice` is **modified**: path changed, `operationId` unchanged. The script also reports a required path parameter added, `priceListId`. A path rewritten is **breaking**: loud report, and step 5 confronts it with the code — the operation is implemented in `product` and does not answer the new path: a **code / spec divergence**, reported, read-only.
-
-Its terminal resource is now `product-prices`, right after `{priceListId}`, and `price-lists` is the terminal resource of other operations in scope: a sub-resource of `price-lists`. Its root aggregate changed (C2): **move proposed**, from `product` to `price-list` (attached by R3: it shares the root aggregate). The tag moved too; the operation stays in scope either way.
-
-A move shifts a boundary: the assistant asks you the way (`references/boundary-decision.md`). With _a proposal_, it says the criteria leave a **single option**: the operation now acts on `price-lists`, so R3 attaches it to `price-list`; staying in `product` fails C2, and a bounded context of its own fails C2 as well. It invents no other option.
-
-The re-check of R1 on all pairs: `product` / `price-list` still hold. The plan shows the move with the marker `!`, and you validate the move **by name**. The closing lists it under _Proposals validated_: to carry out with `partition-reshape`.
-
-### 11.b — The move
-
-You should see `partition-reshape` write the record `docs/architecture/reshapes/YYYY-MM-DD-get-product-price.md`, raised by the delta of catalog 1.1.0. Preconditions: the operation is reached through the generated interface; one adapter; the contract frozen at 1.1.0. Then one plan:
-
-- The specs (`references/specs.md`, _Move_): `getProductPrice` leaves `Source parts owned` of `product` and joins those of `price-list`; its `Coverage` line changes; no rule was carried by that operation alone, so no rule moves. `product` no longer lists `price-list` under `Contracts with neighbours`.
-- The code: the controller method moves to `price-list`'s inbound layer, implementing the regenerated interface; `product` loses its call to `PriceListPrices`.
-- The proof: outside `com.commerce.pricelist` and the generated sources, only the wiring and `product`'s removed call change; the real output of the command is shown.
-- `bounded-contexts.md` gains the provenance of 1.1.0 and a `History` line, nature `move`: the unit, its bounded context of departure and of arrival.
-- The C4 model: the relation `product -> price-list` goes; regenerated. The budget measured again.
-
-### The shape after
+## The shape after
 
 ```mermaid
 flowchart LR
@@ -144,27 +93,3 @@ flowchart LR
 **New:** `getProductPrice` moves from `product` to `price-list`, which answers from its own data; the call `PriceListPrices` is gone (drawn dashed).
 
 **Cost:** callers follow the rewritten path.
-
-## Verdict
-
-- [ ] 11.a — `partition-shape` runs the delta with `contract.mjs diff`, `--base` the sha of 1.0.0, the recorded scope
-- [ ] 11.a — `getProductPrice` is **modified**: path changed, `operationId` unchanged
-- [ ] 11.a — The script also reports the required path parameter `priceListId` added
-- [ ] 11.a — The rewritten path is **breaking** and loudly reported
-- [ ] 11.a — Step 5 reports a code / spec divergence, read-only: implemented in `product`, not on the new path
-- [ ] 11.a — `getProductPrice` stays in scope although its tag moved to `PriceList`
-- [ ] 11.a — Root aggregate changed (C2): **move proposed** from `product` to `price-list`, attached by R3
-- [ ] 11.a — It asks the way for the move; with a proposal, a single option, said so, with why the others fall (C2)
-- [ ] 11.a — R1 re-checked on all pairs: `product` / `price-list` still hold
-- [ ] 11.a — The plan shows the move with `!`, and the move is validated by name
-- [ ] 11.a — The closing lists the move under _Proposals validated_, to carry out with `partition-reshape`
-- [ ] 11.b — `partition-reshape` writes `docs/architecture/reshapes/YYYY-MM-DD-get-product-price.md`, raised by the delta of catalog 1.1.0
-- [ ] 11.b — Preconditions checked: generated interface, one adapter, contract frozen at 1.1.0; then one plan
-- [ ] 11.b — `getProductPrice` leaves `Source parts owned` of `product`, joins `price-list`'s; its `Coverage` line changes
-- [ ] 11.b — No rule moves
-- [ ] 11.b — `product` no longer lists `price-list` under `Contracts with neighbours`
-- [ ] 11.b — The controller method moves to `price-list`'s inbound layer, implementing the regenerated interface
-- [ ] 11.b — `product` loses its call to `PriceListPrices`
-- [ ] 11.b — Proof, real output shown: outside `com.commerce.pricelist` and generated sources, only the wiring and `product`'s removed call change
-- [ ] 11.b — `bounded-contexts.md` gains the provenance of 1.1.0 and a `History` line, nature `move`, with the unit, its departure and its arrival
-- [ ] 11.b — The C4 model loses `product -> price-list` and is regenerated; the budget is measured again

@@ -193,7 +193,7 @@ A second workshop finds that a price is never managed apart from its product: `p
 
 ### A context with nothing left: the removal
 
-In the guide, catalog 2.0.0 moves the discounts to another system. Before classifying anything, the delta finds that a part of the recorded scope no longer exists: it stops and asks how to rewrite the scope. Then the removal is **proposed, never executed**; the criteria leave a single option, and you validate it by name.
+In the guide, catalog 2.0.0 moves the discounts to another system. Before classifying anything, the delta finds that a part of the recorded scope no longer exists: it stops and asks how to rewrite the scope. Your answer, validated by name, rewrites it in the record and in every spec, the History keeping the former scope. Then the removal is **proposed, never executed**; the criteria leave a single option, and you validate it by name.
 
 `partition-reshape` checks that nothing calls the context any more, with the search and its real output. The spec is frozen first, its hand-written sections intact, to be archived or reassigned by a person. The code is deleted only after the owner rules on it, in a task of its own; a new migration drops its table, and no merged migration is edited. What the area file now holds for one context alone is listed to come down, by a person; an area file left empty is deleted by a person, and its area then loads none.
 

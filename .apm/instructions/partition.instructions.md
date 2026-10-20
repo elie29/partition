@@ -12,7 +12,7 @@ description: Partition - spec first, the plan is the state, done means real outp
 
 ### State
 
-- The plan of the feature is the state of the work, kept with `partition-plan`; the chat is not. Plans live in the folder `docs/partition.yml` declares. If it declares none, use the folder an instruction of the project names and record it there. Without one, look in `docs/plans/` and `docs/superpowers/plans/`: one found, use it and record it; none or several, ask once and record the answer.
+- The plan is the state of the work, kept with `partition-plan`; the chat is not. Plans live in the folder `docs/partition.yml` declares. If it declares none, use the folder an instruction of the project names and record it there. Without one, look in `docs/plans/` and `docs/superpowers/plans/`: one found, use it and record it; none or several, ask once and record the answer.
 - Starting or resuming: open the plan whose `Status:` is `in progress` and read its header, its `## Tasks` index, the task named in `Resume at` and its `## Blockers`, nothing more. Announce that step before changing anything.
 - Before handing control back after any change of state (code, decision, blocker), update the plan first: tick what is done with the date and the commit sha or `uncommitted`, set `Resume at`, append decisions (with their date and reason) and blockers. Then reply.
 - Do not commit. The owner commits.

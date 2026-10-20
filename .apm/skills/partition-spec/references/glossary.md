@@ -59,7 +59,7 @@ Two kinds of rules stand outside this hierarchy: rule files, which say how code 
 
 **Design** — What one feature will build, and why. Read once, then historical. _Synonyms:_ feature specification.
 
-**Plan** — The state of execution of one feature, and the dated record of why. The only place either lives.
+**Plan** — The state of execution of one feature in one bounded context, and the dated record of why. The only place either lives.
 
 **Derived document** — A README, a generated diagram: rebuilt from a source, never a source itself.
 
@@ -136,7 +136,7 @@ Dependencies point inward: an adapter knows the application; the application and
 
 **Architect** — The person who decides where a boundary goes: the owner, or the one the owner names for it. The assistant proposes or challenges when asked; it never decides (`partition-shape`, `references/boundary-decision.md`).
 
-**Feature** — An increment of delivery, with one design and one plan.
+**Feature** — An increment of delivery, with one design and one plan per bounded context it reaches.
 
 **Primitive** — What APM deploys: the instruction, the skills, the agent.
 

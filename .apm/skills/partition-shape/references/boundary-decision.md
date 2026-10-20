@@ -42,7 +42,7 @@ Criterion broken: the criterion of C1–C6 or the rule of R1–R6 the option kee
 
 Before the options are shown, check: the line above the table is written; each option's `Criterion broken` names a criterion or reads "None"; the recommended option reads "None".
 
-The recommended option is one the criteria C1–C6 and the rules R1–R6 leave. An option that keeps a point against a criterion may be shown; it is never the one recommended: keeping it is the architect's decision. Never invent an option to make up a number. The architect chooses one, combines them or rejects them all; an answer that asks for another split sends back to the decision step of the procedure.
+The recommended option is one the criteria C1–C6 and the rules R1–R6 leave. An option that keeps a point against a criterion may be shown; it is never the one recommended: keeping it is the architect's decision. Never invent an option to make up a number. The architect chooses one, combines them or rejects them all; an answer that asks for another split sends back to the decision step of the procedure. The choice, even validated by name, carries the proposal, never the plan: the procedure goes on to its plan, and nothing is written before the owner validates that plan.
 
 Each bounded context of an option carries the name the naming rule of `references/criteria.md` gives. That name is a proposal: the architect keeps it or chooses another when deciding the boundary.
 
