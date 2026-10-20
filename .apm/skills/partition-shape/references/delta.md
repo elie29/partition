@@ -49,7 +49,7 @@ The inputs are supplied by the user in their request.
 
 `base` exists only to **force** a base other than the recorded one: to replay a delta already applied, or to catch up several versions at once. In normal use, do not supply it: the base is carried by the documentation itself.
 
-`extend` exists only to **extend** the recorded scope. Its syntax is that of the `scope` input of `references/decompose.md` (_Scope syntax_); it is not redefined here. A scope is not narrowed by this procedure. In normal use, do not supply it: the scope is carried by the documentation itself.
+`extend` exists only to **extend** the recorded scope. Its syntax is that of the `scope` input of `references/decompose.md` (_Scope syntax_); it is not redefined here. A scope is not narrowed by this procedure, except by the owner's rewrite of a scope that a change of the source made stale (step 2, _Restrict the delta to the scope_). In normal use, do not supply it: the scope is carried by the documentation itself.
 
 ### Blocking preconditions
 
@@ -89,7 +89,7 @@ Compute what changed in the contract since the state the documentation comes fro
 0. **`source` and `area` are mandatory.** The blocking preconditions are evaluated first. Never infer a value nor substitute a default one.
 1. **The contract is the only source of truth.** Never invent an endpoint, a field, a type, a code. A piece of information that is absent is an **open question**.
 2. **The existing decomposition is a validated decision.** This procedure may **propose** to reopen it (new bounded context, merge, removal, move of an operation), never decide alone.
-3. **Never write before validation.** Step 6 is a hard stop.
+3. **Never write before validation.** Step 6 is a hard stop, a boundary already decided at step 4 included.
 4. **No deletion.** A bounded context emptied of its operations is _proposed for removal_, never deleted. No file is erased.
 5. **No hand-written or copied section is overwritten.** See the classes of sections of step 7: derived from the source, copied from the source, semi-derived, hand-written.
 6. **No change to the code, no build, no test.** Step 5 reads the code to observe an impact; it does not correct it.
@@ -163,6 +163,8 @@ Two situations make the recorded scope itself stale. Settle them **before** step
 | A `tag` of the recorded scope no longer exists in the current contract | Stop. Show the operations that carried it and ask how to rewrite the scope. |
 | An `operationId` of the recorded scope was renamed or removed | Classify it **breaking**, stop and ask how to rewrite the scope. Never follow the renaming silently. |
 
+The stale scope is rewritten only on the owner's answer naming the new scope, never deduced; that rewrite is validated by name at step 6, like a scope extension, and written at step 7.
+
 A `components` schema or an inline duplicated structure is analysed only if an operation in scope uses it. If an out-of-scope operation uses it too, mark it **coupling outside the scope**: it is reported, it does not widen the scope.
 
 An **orphan** schema, in the sense of step 2 of `references/decompose.md`, is listed without analysis: its addition, its modification or its removal are never breaking. A schema that becomes an orphan, or stops being one, is carried into `Gaps detected`.
@@ -228,7 +230,7 @@ Record the controller, the service and the adapter concerned, when they exist, a
 
 ## Step 6 — Present the plan and stop
 
-**Hard stop.** Display, before any writing:
+**Hard stop.** Read the current provenance again, as in step 1, never carried over from an earlier turn, then display, before any writing:
 
 ```text
 Contract           : <contracts>/<contract>
@@ -288,7 +290,7 @@ Decisions expected before writing:
 
 Markers: `+` creation, `≈` surgical patch, `!` proposal of removal, of merge or of move, `=` intact.
 
-Then **wait for an explicit validation**. No answer, no writing. An answer that asks for adjustments sends back to step 4. If the plan contains a proposal of a new bounded context, of a merge, of a removal or of a move of an operation, or a scope extension, that proposal must be validated **by name**: a global validation of the plan does not carry it.
+Then **wait for an explicit validation**. No answer, no writing. An answer that asks for adjustments sends back to step 4. If the plan contains a proposal of a new bounded context, of a merge, of a removal or of a move of an operation, a scope extension or the rewrite of a stale scope, that proposal must be validated **by name**: a global validation of the plan does not carry it. The other way round, a named validation given at step 4, before the plan is shown, carries the proposal, never the plan: the plan is still displayed, the proposal marked `!` with its `Decided by` line, and validated.
 
 ## Step 7 — Surgical writing
 
@@ -298,7 +300,7 @@ After validation only, and exactly according to the validated plan.
 
 | Class | Sections | Treatment |
 | --- | --- | --- |
-| **Derived from the source** | `Source parts owned` | Regenerated from the current source: one line per unit owned, with its link; nothing the source holds is copied |
+| **Derived from the source** | `Source parts owned` | Regenerated from the current source: one line per unit owned, then one line per part that is not a unit and bears on them, each with its link; nothing the source holds is copied |
 | **Copied from the source** | the "from source" lines of `Business rules`, `Decisions` | **Addition only.** A rule or decision the source newly states is added word for word with its anchor; one the source changed or removed is reported, never rewritten: a person confirmed it |
 | **Semi-derived** | `Persistence` | **Lines are added only.** A piece of data newly introduced by the contract receives its mapping line if `<schemas>/` documents one; otherwise it joins "Data without a documented place". The existing lines are neither rewritten nor deleted: a mapping that became false is reported. |
 | **Hand-written** | `Business objective`, `Scope`, `Language`, `Business rules`, `External dependencies`, `Contracts with neighbours`, `Applicable area rules and invariants`, `Open questions` | **Addition only.** Never replaced, never rewritten, never reordered; a "TO FILL" banner is removed only when the first rule the source states replaces it with "TO VALIDATE" (absolute rule 10). A new piece of information is added to them; a piece of information that became false is reported to the user, not corrected. |
@@ -325,7 +327,7 @@ Special case of `Business rules`. A contract change can make a rule already writ
 
    **Validated** by name — a merge, a removal or a move is carried out by the `partition-reshape` skill, in the specs and in the code. Stop and tell the user to run it with the validated proposal; never chain into it yourself. Not validated: the proposal stays under its banner and is listed at closing.
 
-4. **`bounded-contexts.md`** — update `Source version`, `Provenance`, `Units covered` (`<n> / <N>`) and the whole `## Coverage` table, out-of-scope operations included with the mention "out of scope". The `Scope` line is rewritten, in `bounded-contexts.md` and in every spec, **only** if an extension was validated by name; it is added if it was absent. The tables `Bounded contexts retained`, `Decisions not to split` and `Alternatives rejected` are touched **only** if the decomposition moved, and only according to what was validated by name. The `Gaps detected` section is updated at each delta: the new gaps, couplings outside the scope included, are added to it; a gap that the current contract resolves is not erased, its line is marked "resolved on YYYY-MM-DD (version <x.y.z>)"; the gaps still open stay as they are. When the delta carried a decision on a boundary, the `Decided` line is replaced by it, and the `History` line of the delta names its way and who decided; `Kept against the criteria` gains a line for each proposal kept by the architect, and loses none.
+4. **`bounded-contexts.md`** — update `Source version`, `Provenance`, `Units covered` (`<n> / <N>`) and the whole `## Coverage` table, out-of-scope operations included with the mention "out of scope". The `Scope` line is rewritten, in `bounded-contexts.md` and in every spec, **only** if an extension was validated by name, or a stale scope rewritten on the owner's answer validated by name (step 2); it is added if it was absent. The tables `Bounded contexts retained`, `Decisions not to split` and `Alternatives rejected` are touched **only** if the decomposition moved, and only according to what was validated by name. The `Gaps detected` section is updated at each delta: the new gaps, couplings outside the scope included, are added to it; a gap that the current contract resolves is not erased, its line is marked "resolved on YYYY-MM-DD (version <x.y.z>)"; the gaps still open stay as they are. When the delta carried a decision on a boundary, the `Decided` line is replaced by it, and the `History` line of the delta names its way and who decided; `Kept against the criteria` gains a line for each proposal kept by the architect, and loses none.
 5. **History** — add a line to the `## History` section of `bounded-contexts.md`, creating the section if it is absent:
 
    ```markdown
@@ -338,7 +340,7 @@ Special case of `Business rules`. A contract change can make a rule already writ
 
    It is the only place where the dated _why_ of a change is recorded; the specs carry only the current state.
 
-   The `Nature` column takes the value `scope extension` for a validated extension, in addition to the nature of the contract delta where there is one (`additive, scope extension`). The `Detail` then quotes the entries added to the scope.
+   The `Nature` column takes the value `scope extension` for a validated extension, in addition to the nature of the contract delta where there is one (`additive, scope extension`). The `Detail` then quotes the entries added to the scope. For the rewrite of a stale scope, the `Detail` quotes the former scope and names who decided.
 
    A merge, a removal or a move gets its own `History` line, written by `partition-reshape` when it carries it out.
 
@@ -388,5 +390,5 @@ Closing report, at the end of the answer:
 | Analyse an out-of-scope operation | List it as "out of scope" and update only its `Coverage` line |
 | Widen the scope to follow a shared schema or a new out-of-scope operation | Report the coupling; extend only through `extend`, validated by name |
 | Follow silently the renaming of an `operationId` of the scope | Classify it breaking, stop, ask for the scope to be rewritten |
-| Narrow the recorded scope | Out of the reach of this procedure: report it to the user |
+| Narrow the recorded scope | Out of the reach of this procedure: report it to the user. Only a scope the source made stale is rewritten, on the owner's answer validated by name |
 | Pass a scope extension through a global validation of the plan | Require a named validation |

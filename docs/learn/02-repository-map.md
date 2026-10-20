@@ -19,7 +19,7 @@ docs/
 ├── contracts/                     you fill            API contracts, by default, under stable names
 ├── sources/                       you fill            PRDs, described contexts, workshop results, by default
 ├── designs/                       you fill            one per feature: what it builds
-├── plans/                         Partition creates   one per feature: its state
+├── plans/                         Partition creates   one per feature and bounded context: its state
 ├── legacy/                        you fill            a spec written before Partition, read where it lives (the guide's example)
 ├── architecture/model.yml         Partition creates   the C4, as text
 ├── architecture/patterns-grid.md  Partition creates   your rulings on patterns
@@ -38,7 +38,7 @@ The folders under `paths:` in `docs/partition.yml` are yours to change. The othe
 | `specs` | `docs/specs` | one durable spec per bounded context, by area |
 | `invariants` | `<specs>/invariants.md` | what spans areas or layers |
 | `designs` | `docs/designs` | one per feature: what it builds |
-| `plans` | `docs/plans` | one per feature: its state and its decisions |
+| `plans` | `docs/plans` | one per feature and bounded context: its state and its decisions |
 | `contracts` | `docs/contracts` | where an API contract pasted or read from a URL is saved; one elsewhere in the repository is read where it lives |
 | `sources` | `docs/sources` | where a source pasted or described in the chat is saved; one elsewhere, an old spec included, is read where it lives |
 | `schemas` | none: declare it only if you document your persistence | the schema documents of your persistence |
@@ -75,7 +75,7 @@ These are the documents a person brings.
 - **What it holds.** A specification written before Partition: one large file with sections of its own, often a history of rulings at the end. It cannot be used as is: it is a source like any other. It stays where it lives, whatever the folder (the guide puts it in `docs/legacy/`, an example, not a convention); it is not moved under `docs/sources/`, and no key declares it.
 - **Who puts a document there.** The person who owns it: in the guide, the business analyst. They validate it as the source: it still describes what the system must do.
 - **When.** Committed alone, where it lives, before you ask the assistant to decompose it.
-- **Who reads it.** `partition-shape`, as it reads any document: _"Decompose `docs/legacy/<file>.md` into bounded contexts, area `<area>`."_ The decomposition records the file at its path and the sha of its commit. A history of rulings is read ruling by ruling, each anchored by its heading and its date; a section on how code is written is reported as a candidate for a rule file. The file is never changed: no line is added at its top, no annex is written.
+- **Who reads it.** `partition-shape`, as it reads any document: _"Decompose `docs/legacy/<file>.md` into bounded contexts, area `<area>`."_ The decomposition records the file at its path and the sha of its commit. A history of rulings is read ruling by ruling, each anchored by its heading and its date; a section on how code is written is reported as a candidate for a rule file; a convention a caller can observe is put to you as two readings, rule file or business rule, neither proposed. The file is never changed: no line is added at its top, no annex is written.
 
 ### Persistence schema documents (optional)
 
@@ -124,7 +124,7 @@ A skill writes these documents. A person still decides what goes into them: the 
 
 ### `docs/plans/`: the state of the work
 
-- **What it holds.** One plan per feature: a header (`Status`, `Resume at`, `Last updated`), a task index, each task with its verification command and its expected result, then `## Decisions` and `## Blockers`. Once closed, it stays as the dated record of why.
+- **What it holds.** One plan per feature and bounded context: a header (`Status`, `Resume at`, `Last updated`), a task index, each task with its verification command and its expected result, then `## Decisions` and `## Blockers`. Once closed, it stays as the dated record of why.
 - **Who puts it there.** `partition-plan` opens it from its template. The assistant writes it before every reply: what is done, where to resume, every decision, every blocker. It does not commit; you do. With `bridge: superpowers`, the plugin writes the body, in the same folder, and Partition adds its header, its index and its two sections.
 - **When.** When planned work starts, at every turn, and at the closing, which runs `partition-gate` and sends what the work established to its level, each entry validated by you.
 - **Who reads it.** The assistant, on _"Resume."_: the header, the task index, the task named in `Resume at` and the blockers, nothing more. A `done` plan is not read. `partition-budget` measures each plan in progress against what a resume reads.
@@ -161,7 +161,7 @@ A skill writes these documents. A person still decides what goes into them: the 
 
 - **What it holds.** Your rules: how code is written in this project, one topic per file, `<profile>-<topic>.instructions.md`, each with a `description` and an `applyTo` that names the files it concerns. The package ships no rule, only the skeletons of a backend and a frontend profile, as questions.
 - **Who puts it there.** `partition-rules`, from two sources only: the code as it is, and your answers. When it migrates rules you already have, it proposes the files and their scope and waits for your validation, then moves the text without rewriting it.
-- **When.** At setup, when you migrate the rules your assistant loads in every session. Then whenever you add or change a rule, and whenever a decomposition or the closing of a plan finds a statement about how code is written: a section of a source on how code is written is reported as a candidate, and written only on your word.
+- **When.** At setup, when you migrate the rules your assistant loads in every session. Then whenever you add or change a rule, and whenever a decomposition or the closing of a plan finds a statement about how code is written: a section of a source on how code is written is reported as a candidate, and written only on your word; a convention a caller can observe is put to you as two readings, rule file or business rule, neither proposed.
 - **Who reads it.** `apm install` deploys each rule to every assistant in its own format; never edit the deployed copies. The assistant then loads a rule only when a file of its scope is in play. Only the entry file of your project stays unscoped. `partition-budget` counts the rules that match the code of each bounded context in its gauge, and lists any rule without a scope as the first thing to fix.
 
 ## Go deeper

@@ -1,6 +1,7 @@
 name: pages
 
-# Publishes the getting-started series (docs/learn/) on GitHub Pages, from the public repository only.
+# Publishes the getting-started series (docs/learn/) on GitHub Pages, from the public repository only:
+# every job is skipped while elie29/partition is private, and runs on the first push once it is public.
 # The site is built from a staged tree that mirrors docs/learn/ and assets/, so the relative links of the
 # articles (03-set-up.md, ../../assets/x.svg) work on the site as they do on GitHub.
 # Turning Pages on (Settings > Pages > Source: GitHub Actions) is the owner's act, once the repository is public.
@@ -18,7 +19,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.repository == 'elie29/partition'
+    if: github.repository == 'elie29/partition' && github.event.repository.visibility == 'public'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -50,7 +51,7 @@ jobs:
           path: _site
 
   deploy:
-    if: github.repository == 'elie29/partition'
+    if: github.repository == 'elie29/partition' && github.event.repository.visibility == 'public'
     needs: build
     runs-on: ubuntu-latest
     permissions:

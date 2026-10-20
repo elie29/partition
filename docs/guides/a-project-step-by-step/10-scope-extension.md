@@ -1,105 +1,53 @@
-# Step 10 — The scope extends: `discount` joins `catalog`
+# Step 10 — The discounts → `discount`
 
-> **Session:** 📌 open a **fresh session.** You phrase the request as a new decomposition, as a newcomer would: the skill must notice the decomposition that exists.
+## The situation
 
-## The problem
+At step 08 the decomposition of the catalog contract kept the scope `tag:Product; tag:PriceList`: `createDiscount` and `getDiscount` were left "out of scope" in its `Coverage`, and the coupling through `Money` was reported as outside it. Now the scope extends to them. You phrase the request as a newcomer would, as if no decomposition existed.
 
-`createDiscount` and `getDiscount` were left out of scope at step 08. The scope now extends to them.
+## What you bring
 
-## Before
+- [BA] The rule of `discount`: _a discount is between 1 and 90 percent._
+- [architect] The form, thin: its only rule checks an input, and a discount has no state that changes.
+- [architect] The reason to retain `discount`, should the proposal recommend otherwise: _a discount is its own aggregate, created and read by its own operations; no price list holds it._
+- [architect] AR-1 of `catalog/area.md` binds `discount` too: its errors carry the same envelope.
+- [TL] The code path, `src/main/java/com/commerce/discount/**`, and how a member the contract does not mark nullable is written without a value: left out, never `null`.
 
-Your `partition-commerce` project should be at the commit of step 08 (step 09 changed no file). `catalog/bounded-contexts.md` records the scope `tag:Product; tag:PriceList` at the sha of catalog 1.0.0; `createDiscount` and `getDiscount` are "out of scope" in its `Coverage`.
+The assistant asks other questions along the way (the bounds of a percent, what `minimumOrder` accepts, two discounts that overlap). You answer them as the role would.
 
-## Provided
+## What you ask
 
-`[BA]` gives you the rule of `discount`, when the assistant asks: _A discount is between 1 and 90 percent._
-
-`[TL]` gives you the code path `src/main/java/com/commerce/discount/**`.
-
-`[architect]` gives you the form, thin: its only rule checks an input, and a discount has no state that changes.
-
-`[architect]` gives you the reason to retain `discount`, should the proposal recommend otherwise: _a discount is its own aggregate, created and read by its own operations; no price list holds it._
-
-`[architect]` gives you the answer on AR-1 of `catalog/area.md`: _it binds `discount` too: its errors carry the same envelope._
-
-The answers to the plan's questions on the discounts, when the assistant asks:
-
-| Question | Answer |
-| --- | --- |
-| A percent of 1 or 90; a percent outside | `[BA]` Both bounds accepted; outside, `400`, nothing created |
-| `period`: kept? An end before its start | `[BA]` Accepted, not kept: it governs nothing in this version, as the validity of a price list |
-| `minimumOrder`: its currency, a negative amount, zero | `[BA]` A known ISO 4217 code, as in `price-list`; a negative amount refused, `400`; zero allowed; kept and returned |
-| Two discounts that overlap | `[BA]` Allowed: `createDiscount` never answers `409` in this version |
-| What `discount` needs of an order | `[architect]` Nothing: it stores and returns discounts |
-| Anyone creates a discount | `[PO]` Accepted for this version: the demo runs without a login |
-| A member the contract does not mark nullable, without a value | `[TL]` Left out, never `null`: a line added to `backend-api-contract.instructions.md`, deployed |
-
-## Prompt
-
-**10.a** — 📌 in a fresh session, type:
+In a fresh session, so that the skill has to notice the decomposition that exists:
 
 > Find the bounded contexts of `docs/contracts/catalog.openapi.json`, area `catalog`, scope `tag:Product; tag:PriceList; tag:Discount`.
 
-**10.b** — when the assistant asks, answer:
+When the assistant asks what to do with the recorded scope:
 
 > Extend the recorded scope with `tag:Discount`.
 
-When it asks the way for `discount`, answer:
+When it asks the way for `discount`:
 
 > A proposal.
 
-Validate the extension and the new bounded context `discount`, each by name. Then commit:
-
-```bash
-git add docs && git commit -m "docs(catalog): the scope extends to tag:Discount; discount retained"
-```
-
-**10.c** — type:
+You validate the extension and the new bounded context `discount`, each by name. Then:
 
 > Plan and build the discounts of the catalog API.
 
-Once the plan is `done`, deploy the rule its answers changed and commit:
+Once the plan is `done`, `apm install` deploys the rule file its answers changed.
 
-```bash
-apm install
-git add -A && git commit -m "feat(catalog): discounts"
-```
+## What partition does
 
-## Expected
+1. **It stops instead of overwriting.** `partition-shape` finds `bounded-contexts.md` with a sha and a recorded scope different from the one asked. It asks you: extend the recorded scope through the delta, or choose another target folder. A decomposition validated on another scope is never overwritten nor merged.
+2. **A delta that is only an extension.** The contract has not changed since the recorded sha, so the contract delta is empty and only the two operations brought by the extension are classified. They act on `discounts`, a root aggregate of their own, with their own words: R1 holds against `product` and `price-list`. The `Money` coupling of step 08 is now inside the scope, marked resolved.
+3. **A new bounded context is a boundary: it asks the way.** With a proposal, it numbers two options, one recommended with why: `discount` on its own, or attached to `price-list`, which would then hold two root aggregates. You choose `discount`; the option not chosen goes to `Alternatives rejected` with your reason.
+4. **Validated by name.** The writing plan shows the scope, coverage and history patched, `discount/spec.md` created and `docs/partition.yml` declaring it. A general "go ahead" carries neither the extension nor the new bounded context.
+5. **The levels above, named.** `discount/spec.md` opens with `Business rules` "to fill"; it names INV-DATA-001, since a discount holds a minimum order amount, without repeating it. AR-1 binding `discount` is proposed to you, and `catalog/area.md` gains `discount` once the architect agrees.
+6. **The rule from a person.** `partition-spec` writes the BA's rule and removes the banner.
+7. **A side channel goes to a rule file.** That a member without a value is left out is how code is written: `partition-rules` shows you the line, its file `backend-api-contract.instructions.md` and its scope, and writes it once you validate.
+8. **Thin, still with its ports.** `partition-hexagon` makes `discount` thin, with its reason: inbound, application and outbound layers, no domain layer. The use case calls the database through a port, never directly. Then the code, the next free migration, the C4 component, the closing.
 
-### 10.a — It stops instead of overwriting
+**Why it works this way.** A scope is a decision the owner validated; the skill extends it on your word, never by inference, and a delta leaves the rest of the decomposition intact. Thin is not permission to skip the ports: a use case that calls the database directly, because "there is no domain anyway", is the shortcut that destroys the architecture.
 
-You should see `partition-shape` (_Which procedure_) find `bounded-contexts.md` with a sha, and a scope asked that differs from the scope recorded. It **stops and asks** you: extend the recorded scope through the delta, or choose another target folder. It never overwrites nor merges a decomposition validated on another scope.
-
-### 10.b — A delta that is only an extension
-
-You should see the delta run with `extend = tag:Discount`. The contract has not changed since the recorded sha: the base equals the current sha, so the contract delta is empty and only the extension is handled (`delta.md`, _Step 1_).
-
-```text
-Contract           : docs/contracts/catalog.openapi.json
-Version            : 1.0.0 -> 1.0.0
-Scope              : tag:Product; tag:PriceList  [+ extension: tag:Discount]
-Delta:
-  Brought by extension   : 2   createDiscount, getDiscount
-Decomposition:
-  Unchanged              : no
-  Proposals              : new bounded context discount
-Writing plan:
-  ≈ docs/specs/catalog/bounded-contexts.md      (patch: scope, coverage, retained, history)
-  + docs/specs/catalog/discount/spec.md         (creation: new bounded context)
-  ≈ docs/partition.yml                          (declares discount: area catalog, code paths to ask)
-  = all the other files                         (intact)
-```
-
-`createDiscount` and `getDiscount` act on `discounts`, a root aggregate of their own (C2), with their own words (C3): R1 holds against `product` and `price-list`. The coupling through `Money`, reported at step 08 as outside the scope, is now inside it: the gap is marked resolved. `discount` is a new bounded context, so a boundary moves: before it shows the proposal, the assistant asks you the way (`references/boundary-decision.md`, BR-33). With _a proposal_, two or three options, numbered, each with the criteria it satisfies, what it costs and what it brings, one recommended with why: `discount` on its own, or attached to `price-list` (C2 and R3 fail: `price-list` would hold two root aggregates, `price-lists` and `discounts`). The decision is the architect's: you choose `discount`, with the reason of **Provided**; the option not chosen goes to `Alternatives rejected`, with that reason. You validate the extension and the new bounded context **by name**; a general "go ahead" does not carry them.
-
-After writing: the `Scope` line reads `tag:Product; tag:PriceList; tag:Discount`, `9 / 9`; `discount/spec.md` with `Business rules` under "TO FILL"; `Applicable area rules and invariants`: INV-DATA-001 — a discount holds a minimum order amount, so the invariant binds it, and it is named there, not repeated. AR-1 of `catalog/area.md` binding `discount` too is proposed to you, as at step 07, and its `Bounded contexts` gains `discount` once the `[architect]` agrees: the area file stays paid by its own area only.
-
-### 10.c — A thin hexagon, still with its ports
-
-You should see the BA's rule written and the banner removed; `partition-hexagon` makes it thin, with its reason, inbound, application and outbound layers and no domain layer. The use case calls the database through a port, never directly. The code, a migration `V9__discount.sql`, the next free number after step 08's, the C4 component `discount`, the closing.
-
-### The shape after
+## The shape after
 
 ```mermaid
 flowchart LR
@@ -149,23 +97,3 @@ flowchart LR
 **New:** `discount`, thin, with its migration `V9__discount.sql`; the scope of `catalog` is the whole contract, 9 / 9.
 
 **Cost:** one more bounded context that loads the register.
-
-## Verdict
-
-- [ ] 10.a — `partition-shape` finds `bounded-contexts.md` with a sha and a recorded scope different from the one asked
-- [ ] 10.a — It stops and asks: extend the recorded scope through the delta, or choose another target folder
-- [ ] 10.a — It neither overwrites nor merges the decomposition validated on the other scope
-- [ ] 10.b — The delta runs with `extend = tag:Discount`; the base equals the current sha, the contract delta is empty
-- [ ] 10.b — The plan matches the block shown: `1.0.0 -> 1.0.0`, 2 brought by extension, new bounded context `discount`, the three files to write
-- [ ] 10.b — `discounts` is a root aggregate of its own (C2), with its own words (C3); R1 holds against `product` and `price-list`
-- [ ] 10.b — The `Money` coupling reported at step 08 is marked resolved
-- [ ] 10.b — It asks the way for `discount`; with a proposal, two or three options, numbered, one recommended with why
-- [ ] 10.b — `discount` is retained on your choice; the option not chosen goes to `Alternatives rejected` with your reason
-- [ ] 10.b — The extension and `discount` are each validated by name; a general "go ahead" does not carry them
-- [ ] 10.b — The `Scope` line reads `tag:Product; tag:PriceList; tag:Discount`, `9 / 9`
-- [ ] 10.b — `discount/spec.md`: `Business rules` under "TO FILL"; INV-DATA-001 named under `Applicable area rules and invariants`, not repeated
-- [ ] 10.b — AR-1 binding `discount` is proposed; `catalog/area.md`'s `Bounded contexts` gains `discount` once the `[architect]` agrees
-- [ ] 10.c — The BA's rule written, the banner removed
-- [ ] 10.c — `discount` thin with its reason: inbound, application and outbound layers, no domain layer
-- [ ] 10.c — The use case calls the database through a port, never directly
-- [ ] 10.c — The code, a migration `V9__discount.sql`, the next free number after step 08's, the C4 component `discount`, the closing

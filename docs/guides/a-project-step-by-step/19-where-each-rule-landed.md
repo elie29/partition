@@ -1,30 +1,27 @@
-# Step 19 — Where each rule landed, against [where a rule lives](../where-a-rule-lives.md)
+# Step 19 — Where did each rule land → the final figure
 
-> **Session:** 📌 open a **fresh session.** You ask the question of the files, not of a memory of the run.
+## The situation
 
-## The problem
+The story is over. [Where a rule lives](../where-a-rule-lives.md) placed four rules, A to D, on paper; twenty steps later the project has placed them for real. You ask the files where each one landed, not your memory of the run.
 
-The story is over. You ask the files, not your memory of the run, where each of the four rules landed.
+## What you bring
 
-## Before
+Nothing new: every input was given in the steps before.
 
-Your `partition-commerce` project should be at the commit of step 18.
+## What you ask
 
-## Provided
-
-Nothing. You gave every input in the steps before.
-
-## Prompt
-
-Type:
+In a fresh session, so that the answer comes from the files, not from a memory of the build:
 
 > For Rules A, B, C and D of `docs/guides/where-a-rule-lives.md` in the Partition repository, say where each lives in this project, and which bounded contexts load it.
 
 Paste the four rules if the session cannot read the Partition repository.
 
-## Expected
+## What partition does
 
-You should get an answer read from the files of `partition-commerce`, each with its path.
+1. **It reads the levels.** The instruction knows where a rule can live: a spec, an area file, the invariant register. The answer is read from the files of `partition-commerce`, each rule with its path.
+2. **It reads who loads what.** `docs/partition.yml` says, for each bounded context, its spec and its area; the register is loaded by all.
+
+The answer, and why it differs from the paper example:
 
 | Rule | In [where a rule lives](../where-a-rule-lives.md) | In `partition-commerce` | Why it differs |
 | --- | --- | --- | --- |
@@ -41,9 +38,9 @@ You should get an answer read from the files of `partition-commerce`, each with 
 
 What did not change through twenty steps: a rule was never written twice, but a copy a source states, which changes only through its source (Rule B in `payment`, step 16), never deduced, never moved by the assistant where a person had to move it, and never settled by editing the higher level.
 
-Once this step is checked, the index of the guide is `done`, and its table of cases has a verdict on every row.
+**Why it works this way.** Each rule went where the set of bounded contexts that needs it says, and moved only when that set changed, on a person's decision.
 
-### The shape after
+## The shape after
 
 ```mermaid
 flowchart LR
@@ -72,7 +69,7 @@ flowchart LR
   end
   subgraph app_payment["payment-app"]
     subgraph area_billing_payment["billing"]
-      payment["payment · rich<br/>Rule D: reversed<br/>≈ — tok"]
+      payment["payment · rich<br/>Rule B: from the source · Rule D: reversed<br/>≈ — tok"]
     end
   end
   db["H2 database"]
@@ -97,17 +94,4 @@ flowchart LR
 
 **New:** nothing: the figure is the recap.
 
-**Cost:** what each bounded context loads, as the table of the step says.
-
-## Verdict
-
-- [ ] The answer is read from the files of `partition-commerce`, each rule with its path
-- [ ] Rule A: `billing/invoice/spec.md`, BR-3
-- [ ] Rule B: `customer/fraud/spec.md`, BR-3; `payment` consumes `CustomerStatus` and keeps its copy, a business rule from REQ-4, REQ-6, reported as a duplicate until that source is amended
-- [ ] Rule C: `invariants.md`, INV-DATA-001, from source
-- [ ] Rule D: `Language` of `invoice/spec.md` and `payment/spec.md`
-- [ ] `invoice`, `payment` load the register, `billing/area.md` and their spec
-- [ ] `product` loads the register and its spec; no `catalog/area.md`
-- [ ] `customer`, `fraud` load the register and their spec; no `customer/area.md`
-- [ ] No rule written twice but a copy a source states, none deduced, moved by the assistant where a person had to, or settled at the higher level
-- [ ] The index of the guide is `done`, and its table of cases has a verdict on every row
+**Cost:** what each bounded context loads, as the table above says.

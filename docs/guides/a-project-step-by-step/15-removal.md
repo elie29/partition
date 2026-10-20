@@ -1,104 +1,55 @@
-# Step 15 — Catalog contract v2: `discount` is removed
+# Step 15 — Catalog 2.0.0 → `discount` removed
 
-> **Session:** 📌 open a **fresh session** at 15.a for the delta; stay in that session for the removal.
+## The situation
 
-## The problem
+Area `catalog` now holds `product`, with the prices, and `discount`; `catalog/area.md` holds AR-1, binding both. The decomposition of `catalog` records the scope `tag:Product; tag:PriceList; tag:Discount`. Catalog 2.0.0 moves the discounts to another system, out of this project.
 
-Catalog 2.0.0: the discounts move to another system, out of this project.
+## What you bring
 
-## Before
+- [architect] Catalog 2.0.0, [`docs/contracts/catalog.openapi.json`](15-provided/docs/contracts/catalog.openapi.json), in [`15-provided/`](15-provided/): `createDiscount`, `getDiscount`, the tag `Discount` and its schema are gone; the build fails until the code of `discount` goes.
+- [architect] The new scope, when asked: `tag:Product; tag:PriceList`. And the way to decide the removal: _a proposal_.
+- [PO] The ruling on the code of `discount`, when asked: _delete it._
+- [BA] Once the removal is done: AR-1 and the words only `product` uses brought down to `product/spec.md`, `catalog/area.md`, left empty, deleted, and the folder of `discount` deleted.
 
-Your `partition-commerce` project should be at the commit of step 14. Area `catalog`: `product` (with the prices) and `discount`; `catalog/area.md` holds AR-1, binding both. The recorded scope of `catalog/bounded-contexts.md` is `tag:Product; tag:PriceList; tag:Discount`.
+The assistant asks other questions along the way. You answer them as the role would.
 
-## Provided
+## What you ask
 
-`[architect]` gives you catalog 2.0.0, [`docs/contracts/catalog.openapi.json`](15-provided/docs/contracts/catalog.openapi.json): the discounts move to another system, out of this project. `createDiscount`, `getDiscount`, the tag `Discount` and the schema `Discount` are removed from the contract; `info.version` becomes `2.0.0`. In the excerpt of step 08, as it reads at 1.1.0 after step 11:
-
-```diff
--    "version": "1.1.0",
-+    "version": "2.0.0",
--    "/price-lists/{priceListId}/prices/{productId}": { "put": { "operationId": "setPrice", "tags": ["PriceList"] } },
--    "/discounts": { "post": { "operationId": "createDiscount", "tags": ["Discount"] } },
--    "/discounts/{discountId}": { "get": { "operationId": "getDiscount", "tags": ["Discount"] } }
-+    "/price-lists/{priceListId}/prices/{productId}": { "put": { "operationId": "setPrice", "tags": ["PriceList"] } }
-```
-
-`[PO]` gives you the ruling on the code of `discount`, when the assistant asks: _delete it._
-
-## Prompt
-
-**15.a** — copy the contract of [`15-provided/`](15-provided/) over the old one, at the root of `partition-commerce`, and commit it alone. The build fails from this commit until the code of `discount` goes: its generator finds no `Discount` tag. The file is 1.1.0 of step 11 with the discounts removed: no step changes the contract in between (step 12 adds no operation). If a plan of yours has changed it all the same, remove the two operations, the tag and the schema by hand instead, as the diff shows.
-
-```bash
-git add docs/contracts/catalog.openapi.json && git commit -m "docs(contracts): catalog 1.1.0 -> 2.0.0"
-```
-
-📌 In a fresh session, type:
+Copy the contract over the old one and commit it alone before the prompt that reads it: its sha is what the delta starts from. Then, in a fresh session:
 
 > The catalog contract changed to 2.0.0. Bring the specs in step with it.
 
-When the assistant asks how to rewrite the scope, answer `tag:Product; tag:PriceList`. When it asks how to decide on the removal, answer:
+When it asks how to rewrite the scope, you give the new one; when it asks how to decide the removal:
 
 > A proposal.
 
-Validate the removal of `discount` by name. Then commit the specs:
-
-```bash
-git add docs && git commit -m "docs(catalog): catalog 2.0.0 in the specs; the removal of discount validated"
-```
-
-**15.b** — type:
+You validate the removal of `discount` by name, then, in the same session:
 
 > Carry out the removal of `discount`.
 
-When the assistant asks whether to delete the code, give the PO's ruling. Once the plan is `done`, commit: the frozen spec of `discount`, its folder and `catalog/area.md` are in this commit, as the removal leaves them.
-
-```bash
-git add -A && git commit -m "refactor(catalog): discount removed"
-```
-
-**15.c** — when the closing lists what is left to a person, have the business analyst bring AR-1 and the words only `product` uses down to `product/spec.md`, delete `catalog/area.md`, left empty, and delete `docs/specs/catalog/discount/`, then type:
+Once the business analyst has done their part:
 
 > AR-1 and the words are in `product`, `catalog/area.md` is deleted, and the folder of `discount` is deleted.
 
-Then commit:
+## What partition does
 
-```bash
-git add -A && git commit -m "docs(catalog): discount's folder deleted; AR-1 down into product"
-```
+1. **A stale scope stops the delta.** `partition-shape` restricts the delta to the recorded scope before classifying anything, and finds that `Discount`, a tag of that scope, no longer exists. It **stops**, shows the operations that carried it, and asks how to rewrite the scope. A delta never narrows a scope on its own: only your answer does.
+2. **The scope rewritten on your word.** Your answer names the new scope; the rewrite is a proposal like a scope extension, validated by name. Once validated, the `Scope` line changes in `bounded-contexts.md` and in every spec, and the `History` line of the delta quotes the former scope and names you.
+3. **The change classified.** Two operations removed: **breaking**, reported loudly. They are searched in the code: both are implemented in `discount`, a divergence, reported and left as it is.
+4. **A removal proposed, never executed.** `discount` loses every operation it owned. A removal moves a boundary, so the assistant asks the way. With _a proposal_, it says the criteria leave a single option: no unit is left, so no other split exists, and it invents none. You validate the removal by name; the closing hands it to `partition-reshape`.
+5. **The preconditions.** `partition-reshape` shows, by a search of the contract and the code with its real output, that nothing calls `discount` any more, and that its units left the contract.
+6. **Frozen first.** `discount/spec.md` gets a "removed on" banner, its hand-written sections intact; its folder is kept, since deleting it is a person's decision. `discount` leaves `Bounded contexts retained`, with a `History` line of nature `removal`.
+7. **The code only on the product owner's word.** The assistant asks before deleting anything. On the answer "delete it", a task of its own deletes the package, its tests and its generated interface; a new migration drops its table, and no merged migration is edited.
+8. **What the area file is left with.** AR-1 now binds `product` alone. Nothing moves yet: the closing lists the sections of `discount` to archive or reassign, and AR-1 and the words to bring down to `product`, each for a person.
+9. **After the person.** The assistant takes `discount` out of `docs/partition.yml`, checks that `product/spec.md` holds AR-1 as a business rule rather than an applicable area rule, and measures again: `product` loads no area file.
 
-## Expected
+**Why it works this way.** A recorded scope is a decision someone made; when the source makes it stale, the assistant cannot guess the new one, so it stops and the owner rewrites it, with the former scope kept in `History`. And a removal deletes in order of reversibility: the spec is frozen, the code goes only on the owner's word, and the hand-written text is left to a person.
 
-### 15.a — A stale scope stops the delta first
+## Worth noticing
 
-You should see `partition-shape` run the delta. Before classifying anything (`delta.md`, _Restrict the delta to the scope_): `Discount`, a tag of the recorded scope, no longer exists in the contract. It **stops**, shows the operations that carried it (`createDiscount`, `getDiscount`), and asks you how to rewrite the scope.
+- `discount` does not enter `Decisions not to split`: that table speaks of units kept together. A removal leaves its trace in `History`.
 
-With your answer: two operations removed, **breaking**, loudly reported; step 5 confronts them with the code — both are implemented in `discount`: a divergence, reported, read-only. `discount` loses **all** its operations: **removal proposed, never executed**. A removal moves a boundary: the assistant asks you the way. With _a proposal_, it says the criteria leave a **single option**: `discount` has no unit left, so no other split exists, and it invents none. The plan marks its spec as a removal proposed, deleting nothing. A proposal still unanswered when the delta writes gets the "removal proposed" banner; once you validate it by name, it goes to `partition-reshape` as it is, with no banner, and the closing hands it over.
-
-### 15.b — Frozen first, deleted only on your word
-
-You should see `partition-reshape` check the preconditions of a removal: **nothing calls `discount` any more**, shown by a search of its contract and of its code, with the command and its real output; its units were removed from the contract.
-
-`references/specs.md`, _Removal_:
-
-- `discount/spec.md` is **frozen first**: the "removal proposed" banner replaced by "removed on YYYY-MM-DD — no unit is attached to it any more", its hand-written sections intact, to be archived or reassigned by a person.
-- Its folder is **kept**: deleting it is a person's decision.
-- `bounded-contexts.md`: `discount` leaves `Bounded contexts retained`; it does **not** enter `Decisions not to split`, which speaks only of units kept together; the trace is the `History` line, nature `removal`.
-- The code is deleted **only after you rule on it, in a step of its own**: it asks, you give the PO's answer "delete it", and that task deletes `com.commerce.discount`, its tests and its generated interface. A new migration drops its table; `V9__discount.sql` is never edited.
-- The C4 model loses the component; the budget is measured again; `discount` stays in `docs/partition.yml` while its spec folder exists.
-- What `catalog/area.md` holds now binds `product` alone (`references/specs.md`, _The area file_): AR-1 and the words only `product` uses are to come down, by a person; nothing moves yet.
-
-The closing lists the removal carried out: the hand-written sections to archive or reassign, then the folder to delete by hand; AR-1 and the words to bring down to `product`, then `catalog/area.md`, left empty, to delete by hand.
-
-### 15.c — After the person
-
-The business analyst has brought AR-1 down to `product/spec.md`'s `Business rules` and the words only `product` uses to its `Language`, deleted `catalog/area.md`, left empty, and deleted the folder of `discount`. You should see the assistant take `discount` out of `docs/partition.yml` now that its folder is gone, check that `product/spec.md` no longer lists AR-1 under `Applicable area rules and invariants` but holds it as a business rule, and measure the budget again: `product` loads no area file. It moves nothing a person had to move.
-
-### Watch
-
-The delta "never narrows a scope", yet the tag it names is gone and your answer narrows it. Which procedure writes the new `Scope` line, and whether the old one is kept in `History`, is for the run to show.
-
-### The shape after
+## The shape after
 
 ```mermaid
 flowchart LR
@@ -139,33 +90,6 @@ flowchart LR
   product -- "SQL" --> db
 ```
 
-**New:** `discount` is removed: its spec frozen, its code deleted once `[PO]` rules; AR-1 comes down to `product`, and `catalog/area.md`, left empty, is deleted by a person.
+**New:** `discount` is removed: its spec frozen, its code deleted on the product owner's word; the scope rewritten, the former one kept in `History`; AR-1 comes down to `product`, and `catalog/area.md`, left empty, is deleted by a person.
 
 **Cost:** none inside the project; what discounts do is now another system's.
-
-## Verdict
-
-- [ ] 15.a — `partition-shape` stops before classifying anything: the tag `Discount` is gone from the contract
-- [ ] 15.a — It shows `createDiscount` and `getDiscount`, and asks how to rewrite the scope
-- [ ] 15.a — Two operations removed, **breaking**, loudly reported
-- [ ] 15.a — Step 5 reports a divergence, read-only: both operations are implemented in `discount`
-- [ ] 15.a — It asks the way; with a proposal, a single option, said so: no unit is left, no other split exists
-- [ ] 15.a — **Removal proposed, never executed**: the plan deletes nothing of `discount`
-- [ ] 15.a — A banner "removal proposed" only while unanswered; validated by name, no banner
-- [ ] 15.a — The closing hands the validated removal to `partition-reshape`
-- [ ] 15.b — Precondition: a search of its contract and code shows nothing calls `discount`, command and real output
-- [ ] 15.b — Precondition: the units of `discount` were removed from the contract
-- [ ] 15.b — `discount/spec.md` frozen first: "removed on YYYY-MM-DD — no unit is attached to it any more" banner, hand-written sections intact
-- [ ] 15.b — The folder of `discount` is kept
-- [ ] 15.b — `bounded-contexts.md`: `discount` leaves `Bounded contexts retained`, not in `Decisions not to split`; a `History` line, nature `removal`
-- [ ] 15.b — It asks before deleting the code, and deletes it only after the PO's "delete it", in a step of its own
-- [ ] 15.b — That task deletes `com.commerce.discount`, its tests and its generated interface
-- [ ] 15.b — A new migration drops its table; `V9__discount.sql` is not edited
-- [ ] 15.b — The C4 model loses the component; the budget is measured again
-- [ ] 15.b — `discount` stays in `docs/partition.yml` while its spec folder exists
-- [ ] 15.b — The closing lists the hand-written sections to archive or reassign, then the folder to delete by hand
-- [ ] 15.b — The closing lists AR-1 and the words left to `product` to bring down to its spec, then `catalog/area.md`, left empty, to delete by hand
-- [ ] 15.c — `discount` leaves `docs/partition.yml` once its folder is gone
-- [ ] 15.c — `product/spec.md` holds AR-1 as a business rule and the words in `Language`, carried by a person; no `catalog/area.md`
-- [ ] 15.c — The budget measured again: `product` loads no area file
-- [ ] Watch — Which procedure writes the new `Scope` line, and whether the old one is kept in `History`, is recorded

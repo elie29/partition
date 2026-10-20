@@ -34,9 +34,10 @@ One meaning per word, no synonyms. A word that changes meaning in a neighbour ma
 
 What this bounded context owns in its source. The source says what each part holds; this spec does not repeat it.
 
-| Unit                                     | Where                              | What it is for |
-| ---------------------------------------- | ---------------------------------- | -------------- |
-| <operationId, or requirement or section> | <link to its anchor in the source> | <one line>     |
+| Unit                                     | Where                              | What it is for              |
+| ---------------------------------------- | ---------------------------------- | --------------------------- |
+| <operationId, or requirement or section> | <link to its anchor in the source> | <one line>                  |
+| <part that is not a unit, by its anchor> | <link to its anchor in the source> | <what it holds, not copied> |
 
 ## Business rules
 

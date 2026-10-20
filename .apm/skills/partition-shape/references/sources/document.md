@@ -53,7 +53,7 @@ A spec written before Partition may hold three more kinds of part. None is copie
 | Part | How it is read |
 | --- | --- |
 | A ruling history, or a decision log | Ruling by ruling, each anchored by its heading and its date. A ruling with its reason is a decision the source states: it goes to `Decisions`. A ruling that states a rule is a business rule the source states: it goes to `Business rules`, marked "from source", under the "TO VALIDATE" banner. A ruling that states a rule and gives its reason goes to both, each entry anchored to the same ruling. Any other ruling is pointed to, as a choice without its reason is. No annex is written: the source stays as it is. |
-| A section on how code is written | Not a unit and not a business rule. It is reported as a candidate for a rule file, which `partition-rules` writes on the owner's word, scoped to the code it binds. Never an area rule. |
+| A section on how code is written | Not a unit and not a business rule. It is reported as a candidate for a rule file, which `partition-rules` writes on the owner's word, scoped to the code it binds. Never an area rule. A statement of it that a caller also observes at the contract is put to the owner as two readings, a candidate for a rule file or a business rule, neither proposed; nothing of it is written before the owner's answer, which sends it to `partition-rules` or to `Business rules`. |
 | A file of invariants | Entry by entry: each entry is an invariant the source states, and goes through the admission test as above. |
 
 When the source marks its rules, a marked sentence is the whole rule (a sentence after `Rule:`, an item of a list of rules): the sentences around it are not copied with it.
@@ -62,7 +62,7 @@ Everything else is pointed to from `Source parts owned`, the sentences a source 
 
 ## Provenance and changes
 
-A source in the repository is recorded by the sha of its last commit (`git log -1 --format=%H -- <file>`); modified and not committed, `uncommitted`. The delta compares the recorded sha with the current file by `git diff <sha> -- <file>` and lists the units added, removed, renamed (anchor changed) and modified, by anchor. They are classified as in step 3 of `references/delta.md`, read for a document:
+A source in the repository is recorded by the sha of its last commit, read from git (`git log -1 --format=%H -- <file>`, and `git status --porcelain -- <file>` for uncommitted changes) when step 1 records it and again when the hard stop displays it, never carried over from an earlier turn. It is `uncommitted` only when that read shows the file never committed or changed since its last commit; a read that could not be run is reported as such, never recorded as `uncommitted`. The delta compares the recorded sha with the current file by `git diff <sha> -- <file>` and lists the units added, removed, renamed (anchor changed) and modified, by anchor. They are classified as in step 3 of `references/delta.md`, read for a document:
 
 | Change | Nature |
 | --- | --- |

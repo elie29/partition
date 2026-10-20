@@ -2,7 +2,7 @@
 
 A walk through one example, step by step: four rules, and the file each one lands in. The words used here are explained in the [glossary](../../.apm/skills/partition-spec/references/glossary.md); the rule that decides is the table _Where a statement belongs_ of the `partition-spec` skill.
 
-The same example is built from an empty folder, skill by skill, in [a project step by step](a-project-step-by-step/README.md); its step 08 reaches the state described here.
+The same example is built from an empty folder, skill by skill, in [a project step by step](a-project-step-by-step/README.md); its step 08 reaches a state close to this one; step 19 lists where each rule landed.
 
 ## The project
 

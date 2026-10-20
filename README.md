@@ -50,7 +50,7 @@ A session can be cleared at any moment. What exists only in the chat is lost, so
 - **What it holds:** `partition-plan` opens it from its template: a header (`Status`, `Resume at`, `Last updated`), a task index with a checkbox per task, each task with its verification command and expected result, then `## Decisions` and `## Blockers`. With `bridge: superpowers` the plugin writes the body and `partition-plan` adds the header, the index and the two sections.
 - **Every turn:** before it replies, the assistant writes the plan: what is done (with the date and the commit sha, or `uncommitted`), where to resume, every decision made in the conversation, every blocker. It does not commit; you do.
 - **Resume:** _"Resume."_ The assistant reads the header, the task index, the one task named in `Resume at` and `## Blockers`, nothing more, and announces where it restarts.
-- **Close:** when the last task is ticked, in this order: a `partition-gate` verdict on the plan's changes (HOLD keeps the plan open; each reason of a HOLD and each condition becomes a task, or a blocker when only a person can act); what the work established goes to the durable spec, the area file or the invariant register, each entry validated by you; the README is realigned with `partition-readme` when what users install, run or configure changed; then `done`.
+- **Close:** when the last task is ticked, in this order: a `partition-gate` verdict on the plan's changes (HOLD keeps the plan open; each reason of a HOLD and each condition becomes a task, or a blocker when only a person can act); what the work established goes to the durable spec, the area file, the invariant register or a rule file, each entry and each line validated by you; the README is realigned with `partition-readme` when what users install, run or configure changed, users including the people who build and maintain the project; then `done`.
 
 Skill: `partition-plan`, with `partition-gate` and `partition-readme` at closing. The optional [reminder hook](#the-reminder-hook-optional-claude-code) catches a plan closed without those steps.
 
@@ -204,7 +204,7 @@ Closing a plan is the step people forget. What the work established for good has
 
 | When | What happens |
 | --- | --- |
-| A plan file is written with `Status: done` | A reminder is put into the session: close the plan as `partition-plan` says. First a `partition-gate` verdict on its changes; HOLD keeps the plan in progress. Then move what is true for one bounded context into its durable spec and what the bounded contexts of one area share into its area file, run the rest through the admission test of the invariant register, write no entry before the owner validates it, then report the entries touched and the candidates rejected. Last, realign the README with `partition-readme` when users see the change. |
+| A plan file is written with `Status: done` | A reminder is put into the session: close the plan as `partition-plan` says. First a `partition-gate` verdict on its changes; HOLD keeps the plan in progress. Then move what is true for one bounded context into its durable spec and what the bounded contexts of one area share into its area file, run the rest through the admission test of the invariant register, write no entry before the owner validates it, then report the entries touched and the candidates rejected. Last, realign the README with `partition-readme` when what users install, run or configure changed, the people who build and maintain the project included. |
 | A `git commit` is about to run | The same reminder. |
 | Anything else | Nothing. The hook stays silent. |
 
@@ -236,7 +236,7 @@ docs/
 │       └── <bounded-context>/spec.md   the durable spec of one bounded context
 ├── contracts/                     by default, API contracts pasted or read from a URL
 ├── sources/                       by default, PRDs and contexts pasted or described in the chat, and workshop results
-├── designs/  plans/               one per feature: the input, and the state
+├── designs/  plans/               one per feature, a plan per bounded context: the input, and the state
 ├── architecture/model.yml         the C4, as text
 ├── architecture/patterns-grid.md  your rulings on patterns
 ├── architecture/reshapes/         one record per split, merge, removal, move or promotion
@@ -250,7 +250,7 @@ The folders under `paths:` in `docs/partition.yml` are yours to change: specs, t
 | `specs` | `docs/specs` | one durable spec per bounded context, by area | [Durable spec](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `invariants` | `<specs>/invariants.md` | what spans areas or layers | [Invariant register](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `designs` | `docs/designs` | one per feature: what it builds | [Design](.apm/skills/partition-spec/references/glossary.md#documents) |
-| `plans` | `docs/plans` | one per feature: its state and its decisions | [Plan](.apm/skills/partition-spec/references/glossary.md#documents) |
+| `plans` | `docs/plans` | one per feature and bounded context: its state and its decisions | [Plan](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `contracts` | `docs/contracts` | where an API contract pasted or read from a URL is saved; one elsewhere in the repository is read where it lives | [Contract](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `sources` | `docs/sources` | where a source pasted or described in the chat is saved; one elsewhere, an old spec included, is read where it lives | [Source](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `schemas` | none: declare it only if you document your persistence | the schema documents of your persistence | schema documents |

@@ -19,9 +19,11 @@ The durable spec of a bounded context is the source of truth; the code implement
 | Shared by the bounded contexts of one area, with no owner among them | the area file of that area |
 | True for every feature, spanning at least two areas or layers, a defect when broken | the invariant register |
 | What one feature must do, checked once at delivery | the design of that feature |
-| Progress, a task, a blocker, the dated reason for a choice | the plan of that feature |
-| How code is written here, however many bounded contexts it reaches | a rule file of the project, scoped to the code it binds; never an area rule |
+| Progress, a task, a blocker, the dated reason for a choice | its plan |
+| How code is written here, however many bounded contexts it reaches | a rule file of the project, scoped to the code it binds, written through `partition-rules`; never an area rule |
 | What a source says beyond its rules, invariants and decisions | the source, pointed to from `Source parts owned` |
+
+A statement that fails the admission test is placed by its object. What a bounded context holds or shows (the meaning, unit or form of its data, its observable behaviour, its contract) goes to its spec or its area file; the form of its stored data goes to `Persistence`, after "No schema documents are declared for this project" when the project declares none. How its code is shaped and what it does beside that behaviour (names, layout, configuration, framework, logs and other side channels) is a line of a rule file, even when a breach is a defect. How code is written that a caller also observes at the contract is put to the owner as two readings, a rule file or a business rule, neither proposed; nothing of it is written before the owner's answer.
 
 A statement goes to the lowest level that holds it all, and a lower level never contradicts a higher one: the hierarchy of rules in `references/glossary.md`. An acceptance criterion never enters a durable spec. What survives the feature does: a business rule, a word of the language, a contract with a neighbour.
 
@@ -41,7 +43,7 @@ When a behaviour must change, or when the code and the spec disagree:
 
 1. Say which side is wrong and why. A spec can be incomplete, outdated or ambiguous; the code can be a bug. When you cannot tell, ask. Do not edit the spec to match the code because the code is what runs. A rule copied from a source changes only through its source. When the source contradicts itself, say so, ask the owner of the source which requirement holds, and propose no wording for the copied rule: once the source is amended, a person rewrites it.
 2. If the spec is wrong, correct the spec, show the change, and get it validated.
-3. Only then realign the code, through the plan of the feature.
+3. Only then realign the code, through its plan.
 4. Put the dated reason in `## Decisions` of the plan in progress. The spec keeps the result, not the story.
 
 If the work contradicts a line of the area file or of the invariant register, stop and flag it before writing code. It is a bug in the work or the reversal of a decision; both need the owner. A rule is reversed the way any behaviour changes: one copied from a source through its source, whose owner amends it before the delta of `partition-shape` carries it; one written by a person through this section, the owner validating the change.

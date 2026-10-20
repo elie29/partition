@@ -10,7 +10,7 @@ An entry belongs in the register only if:
 2. It spans at least two areas or layers. A statement spans layers when it binds the same layers in every hexagon of the project. A statement local to one area goes to its area file; local to one bounded context, to its durable spec. A rule one bounded context owns is local to it, even when bounded contexts of other areas consume its result through its contract.
 3. Violating it would be a defect, not a divergence of style.
 
-If any of the three fails, the statement belongs elsewhere: the area file of an area, the durable spec of a bounded context, a rule file of the project, an API contract, a schema document, or the plan (progress, tasks, blockers).
+If any of the three fails, the statement is placed by its object, as `SKILL.md` says (_Where a statement belongs_).
 
 ## What the register does not carry
 

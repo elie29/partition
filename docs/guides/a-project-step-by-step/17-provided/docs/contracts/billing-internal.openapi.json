@@ -40,7 +40,7 @@
         "parameters": [{ "$ref": "#/components/parameters/InvoiceId" }],
         "responses": {
           "200": {
-            "description": "The payment is recorded: the invoice is paid; never its lines, its amount or its order",
+            "description": "The payment is recorded: the invoice, now paid",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Invoice" } } }
           },
           "409": { "description": "The invoice is no longer issued: nothing is recorded" }

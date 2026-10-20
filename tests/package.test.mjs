@@ -407,6 +407,15 @@ test('at closing, a HOLD reason the assistant can fix becomes a task; a blocker 
   assert.match(br27, /becomes a task/);
 });
 
+test('at closing, the README is realigned for the people who build and maintain the project too', () => {
+  const close = read(`${skillsDir}/partition-plan/SKILL.md`).split('## Close')[1].split('\n## ')[0];
+  const maintainers =
+    /Users include the people who build and maintain the project[^.]*a command, a script or a configuration file/;
+  assert.match(close, maintainers);
+  const br27 = read('docs/specs/partition/spec.md').split('| BR-27 |')[1].split('\n')[0];
+  assert.match(br27, maintainers);
+});
+
 test('the hook is enabled in order: Python found first, then the file copied; the team is warned', () => {
   const hook = read(`${skillsDir}/partition-plan/SKILL.md`).split('## Reminder hook')[1];
   assert.ok(
@@ -451,6 +460,45 @@ test('a persistence mapping is not a copy of the source, in the spec and in the 
   assert.match(row, /not a copy/);
 });
 
+test('a line of a rule file is shown and written only after the owner validates it (BR-23)', () => {
+  const br23 = read('docs/specs/partition/spec.md')
+    .split(/\| BR-23 +\|/)[1]
+    .split('\n')[0];
+  assert.match(br23, /is shown with its file and its scope and written only after the owner validates it/);
+  assert.match(
+    read(`${skillsDir}/partition-rules/SKILL.md`).replace(/\s+/g, ' '),
+    /Every line of a rule file, added, changed or removed, by any procedure below or of another skill, is shown with its file and its scope and written only after the owner validates it/,
+  );
+  assert.match(
+    read(`${skillsDir}/partition-plan/SKILL.md`).replace(/\s+/g, ' '),
+    /before the owner validates it, nor a line of a rule file, shown as `partition-rules` says/,
+  );
+});
+
+test('a statement that fails the admission test is placed by its object: spec or rule file (BR-9)', () => {
+  const br9 = read('docs/specs/partition/spec.md')
+    .split(/\| BR-9 +\|/)[1]
+    .split('\n')[0];
+  assert.match(br9, /fails the admission test \(BR-12\) is placed by its object/);
+  assert.match(br9, /to the spec's `Persistence` even when no schema documents are declared, after that sentence/);
+  assert.match(br9, /logs and other side channels, is a line of a rule file, even when a breach is a defect/);
+  const spec = read(`${skillsDir}/partition-spec/SKILL.md`).replace(/\s+/g, ' ');
+  assert.match(spec, /fails the admission test is placed by its object/);
+  assert.match(spec, /goes to `Persistence`, after "No schema documents are declared for this project"/);
+  assert.match(spec, /logs and other side channels\) is a line of a rule file, even when a breach is a defect/);
+  assert.match(
+    read(`${skillsDir}/partition-rules/SKILL.md`).replace(/\s+/g, ' '),
+    /one that fails its admission test stays a line here when it says how code is shaped/,
+  );
+  const row = read(`${skillsDir}/partition-shape/references/decompose.md`)
+    .split('\n')
+    .find((l) => /^\| `Persistence` +\|/.test(l));
+  assert.match(
+    row,
+    /and nothing else from the source; a statement a person gives later on the form of the stored data goes after that sentence/,
+  );
+});
+
 test('the documents quote the always-loaded budget within 5 %', () => {
   const { alwaysTokens } = measurePackage(repo, 2000, 3000);
   const quoted = (text, re) => Number(text.match(re)?.[1].replace(/\s/g, ''));
@@ -482,6 +530,14 @@ test('the instruction and partition-plan close a plan through the gate and the R
   assert.ok(close.includes('`partition-readme`'));
   const level = /already\s+written\s+into\s+a\s+spec\s+during\s+the\s+work[^.]*level/;
   assert.match(close, level, 'a statement written early still has its level checked at closing');
+  const steps = close.split(/\n\d+\. /);
+  const gateAgain = steps.findIndex((s) => /`partition-gate` again[^.]*writes included/.test(s));
+  assert.ok(gateAgain > 0, 'the closing writes are gated again (BR-27)');
+  assert.ok(
+    steps.findIndex((s) => /`partition-c4`/.test(s)) < gateAgain &&
+      gateAgain < steps.findIndex((s) => /Set `Status:` to `done`/.test(s)),
+    'the gate runs again after the closing writes and before done',
+  );
   assert.match(read('docs/specs/partition/spec.md'), level, 'BR-27 says it');
 });
 
@@ -604,6 +660,11 @@ test('a boundary is reached by a workshop or a proposal, and a workshop result i
   );
   assert.match(proposal.replace(/\s+/g, ' '), /Above the table, one line: how many splits the criteria leave/);
   assert.match(proposal.replace(/\s+/g, ' '), /Before the options are shown, check:/);
+  assert.match(
+    proposal.replace(/\s+/g, ' '),
+    /even validated by name, carries the proposal, never the plan[^.]*nothing is written before the owner validates that plan/,
+    'a chosen option does not stand for the plan (BR-19)',
+  );
 
   const shape = (f) => read(`${skillsDir}/partition-shape/${f}`);
   for (const f of ['SKILL.md', 'references/decompose.md', 'references/delta.md'])
@@ -611,6 +672,23 @@ test('a boundary is reached by a workshop or a proposal, and a workshop result i
   assert.match(
     shape('references/delta.md'),
     /listed under `Kept against the criteria`[\s\S]{0,80}unless the\s+delta changes, for its units, the criterion/,
+  );
+  const delta = shape('references/delta.md').replace(/\s+/g, ' ');
+  assert.match(delta, /Step 6 is a hard stop, a boundary already decided at step 4 included/);
+  assert.match(
+    delta,
+    /a named validation given at step 4, before the plan is shown, carries the proposal, never the plan: the plan is still displayed, the proposal marked `!` with its `Decided by` line, and validated/,
+  );
+  assert.match(
+    delta,
+    /The stale scope is rewritten only on the owner's answer naming the new scope, never deduced; that rewrite is validated by name at step 6/,
+  );
+  assert.match(delta, /or a stale scope rewritten on the owner's answer validated by name \(step 2\)/);
+  assert.match(delta, /For the rewrite of a stale scope, the `Detail` quotes the former scope and names who decided/);
+  assert.match(
+    read(`${skillsDir}/partition-shape/assets/bounded-contexts.md`),
+    /scope extension has been validated, or when the owner rewrites a scope that a change of the source made stale/,
+    'the template states both rewrites of the Scope line (BR-19)',
   );
 
   const reshape = read(`${skillsDir}/partition-reshape/SKILL.md`);
@@ -684,6 +762,35 @@ test('a unit is what asks for a behaviour: a decision or a glossary is not one',
   assert.doesNotMatch(flat(`${skillsDir}/partition-shape/SKILL.md`), /requirement, story or section under its anchor/);
 });
 
+test('a part that is not a unit is pointed to from Source parts owned, on a line of its own', () => {
+  const flat = (rel) => read(rel).replace(/\s+/g, ' ');
+  const notAUnitLine = /one line per part that is not a unit/i;
+  assert.match(flat(`${skillsDir}/partition-shape/references/decompose.md`), notAUnitLine);
+  assert.match(flat(`${skillsDir}/partition-shape/references/delta.md`), notAUnitLine);
+  const t = read(`${skillsDir}/partition-spec/assets/spec.md`);
+  const owned = t.slice(t.indexOf('## Source parts owned'), t.indexOf('## Business rules'));
+  assert.match(owned, /^\| <part that is not a unit/m);
+});
+
+test('the provenance of a source in the repository is read from git when recorded and at the hard stop, never carried over', () => {
+  const flat = (rel) => read(rel).replace(/\s+/g, ' ');
+  const notCarried = /never carried over from an earlier turn/i;
+  const unread = /a read that could not be run is reported as such, never recorded as `uncommitted`/i;
+  assert.match(flat('docs/specs/partition/spec.md'), notCarried);
+  const decompose = flat(`${skillsDir}/partition-shape/references/decompose.md`);
+  assert.match(decompose, notCarried);
+  assert.match(decompose, unread);
+  assert.match(decompose, /\*\*Hard stop\.\*\* Read the provenance again/);
+  assert.match(
+    flat(`${skillsDir}/partition-shape/references/delta.md`),
+    /\*\*Hard stop\.\*\* Read the current provenance again/,
+  );
+  const document = flat(`${skillsDir}/partition-shape/references/sources/document.md`);
+  assert.match(document, /`git status --porcelain -- <file>`/);
+  assert.match(document, notCarried);
+  assert.match(document, unread);
+});
+
 test('a source that marks its rules gives the bounds of each: a sentence it does not mark is not copied', () => {
   const flat = (rel) => read(rel).replace(/\s+/g, ' ');
   const bounds = /when the source marks its rules, a marked sentence is the whole rule/i;
@@ -694,6 +801,13 @@ test('a source that marks its rules gives the bounds of each: a sentence it does
 test('the copied reminder hook is copied again after a package update', () => {
   const plan = read(`${skillsDir}/partition-plan/SKILL.md`).replace(/\s+/g, ' ');
   assert.match(plan, /a package update does not refresh the copy: copy `assets\/hook\/partition-reminder\.py` again/);
+});
+
+test('a change reaching several bounded contexts opens one plan per bounded context', () => {
+  const perContext =
+    /a change that reaches several bounded contexts opens one plan per bounded context, and a plan relies on a neighbour's contract only once that contract is written in the neighbour's spec/;
+  assert.match(read('docs/specs/partition/spec.md').replace(/\s+/g, ' '), perContext);
+  assert.match(read(`${skillsDir}/partition-plan/SKILL.md`).replace(/\s+/g, ' '), perContext);
 });
 
 test('a decomposition declares a bounded context without its spec folder when it is the default', () => {
@@ -941,6 +1055,10 @@ test('the reminder hook stays silent unless a plan is marked done or a commit is
   assert.match(run(edit('docs/plans/p.md', '> **Status:** done')), /back to in progress/);
   assert.match(run(edit('docs/plans/p.md', '> **Status:** done')), /even when none was admitted/);
   assert.doesNotMatch(run(edit('docs/plans/p.md', '> **Status:** done')), /say nothing about the register/);
+  assert.match(
+    run(edit('docs/plans/p.md', '> **Status:** done')),
+    /When what users install, run or configure changed, those who build and maintain the project included, realign the README/,
+  );
   assert.equal(run(edit('docs/plans/p.md', '> **Status:** in progress')), '');
   assert.equal(run(edit('src/a.js', 'status: done')), '');
   assert.equal(run('not json'), '');

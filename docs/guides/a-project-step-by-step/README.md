@@ -1,14 +1,14 @@
 # A project step by step
 
-The example of [where a rule lives](../where-a-rule-lives.md), built for real: two areas, `billing` and `catalog`, and the four rules A–D, grown from an empty folder to the end in a project named `partition-commerce`. Each step says what is expected before it runs, then ticks each expectation the run meets. Together the steps exercise every case of every `partition-*` skill: the guide is also the validation scenario of the package. A gap found in a step is corrected directly, in the step itself or in this repository, spec first, and the step is replayed.
+The example of [where a rule lives](../where-a-rule-lives.md), built for real: two areas, `billing` and `catalog`, and the four rules A–D, grown from an empty folder to the end in a project named `partition-commerce`. The guide is a demonstration, meant to be read: it shows how, when and why `partition` takes part. The answers in it are the authors'; on your project they are yours. It gives the essential moves, and leaves the thinking in between to you.
 
 The words used here are explained in the [glossary](../../../.apm/skills/partition-spec/references/glossary.md).
 
 ## The project
 
-`partition-commerce` sells products from price lists and bills them. It lives in its own private repository, beside this one. The code is deliberately minimal: it is there for the skills to work on, not to be read.
+`partition-commerce` sells products from price lists and bills them. The code is deliberately minimal: it is there for the skills to work on, not to be read.
 
-> **N.B.** `partition-commerce` is the name of the project, not a skill: the skills of the package are the `partition-*` names listed in [the cases](#the-cases).
+> **N.B.** `partition-commerce` is the name of the project, not a skill: the skills of the package are the `partition-*` names listed in [where each skill shows](#where-each-skill-shows).
 
 | What          | Choice                                                                                        |
 | ------------- | --------------------------------------------------------------------------------------------- |
@@ -22,38 +22,35 @@ The words used here are explained in the [glossary](../../../.apm/skills/partiti
 
 ## How to read a step
 
-Every step file has the same parts, in this order:
+Every step has the same parts, in this order; **Worth noticing** is optional:
 
 | Part | Holds |
 | --- | --- |
-| **Session** | `fresh session` or `same session`, with the reason. A fresh session is the better start whenever the step tests what a cold start must do by itself: it is pinned at the top |
-| **The problem** | why this step now: the pressure it answers, in one or two sentences, taken from what **Before** and **Provided** say |
-| **Before** | the state of `partition-commerce` the step starts from, by commit |
-| **Provided** | what a person supplies, as an example tagged `[PO]`, `[BA]`, `[architect]` or `[TL]`: copy it, or replace it with your own. A step's whole files are in its `NN-provided/` folder, copied by one `cp` command or pasted in the chat |
-| **Prompt** | what you type |
-| **Expected** | the skill that fires, where it stops, the files it changes, the commands and their output. Written before the run. It ends on **The shape after**: the figure of the project once the step has run, what is **New**, and what it **Costs** |
-| **Verdict** | one box per expectation: ticked when the run meets it, otherwise left unticked and marked **KO** with the error |
+| **The situation** | where the project stands, and why this step happens now |
+| **What you bring** | what the people supply, by role: only what you could not invent. Files are in the step's `NN-provided/` folder; the assistant asks more, and you answer as the role would |
+| **What you ask** | the prompts, word for word, and when a fresh session matters |
+| **What partition does** | which skill acts, what it reads, where it stops and asks you, what it writes; then why it works this way |
+| **Worth noticing** | optional: what the step shows that is easy to miss |
+| **The shape after** | the figure once the step is done, what is **New**, what it **Costs** |
 
-A source or a contract is always **committed alone before the prompt that reads it**: the sha of that commit is what the next delta starts from. [Step 02](02-first-bounded-context.md) says why. A workshop's result is not one of them: the assistant saves it under `docs/sources/` during the reshape it decides, no delta starts from it, and it is committed with that reshape.
+`[PO]` is the product owner, `[BA]` the business analyst, `[architect]` the architect, `[TL]` the tech lead or a developer. Nothing they provide is written by the assistant.
 
-`[PO]` is the product owner, `[BA]` the business analyst, `[architect]` the architect, `[TL]` the tech lead or a developer. The architect gives the solution and the diagrams; the tech lead gives the code. Nothing they provide is written by the assistant: in this guide the examples were drafted, then validated by the owner, as a real project would have them written.
+A source or a contract is committed alone before the prompt that reads it: that commit is what the next delta starts from ([step 02](02-first-bounded-context.md) says why).
 
 ### Reading a figure
 
-- The outer boxes are the deployables: one jar, `commerce-app` from step 03, joined by `payment-app` at step 17. Inside: the areas, then their bounded contexts.
-- A bounded context reads _name · form_, then the rules A–D it holds, then its gauge: the tokens any task of it loads before reading code (BR-16).
-- A cylinder is a file of rules: an area file or the invariant register. A slanted box is a document the project receives: a source or a contract, with its version when the guide gives one, or a workshop record. A rounded box is a system outside the project. A plain box outside an area is a part of the project that is not a bounded context: a database, `application.yaml`, a configuration file, a budget record.
-- An unlabelled arrow from a document feeds what it points to. A labelled arrow is a call, named by its port or by what it does (`SQL`, `charges, reverses`); `· HTTP` marks a call between deployables. A dotted arrow is a call named but not built (step 02) or leaving in this step (step 11).
-- A thick border is new in this step. A dashed border leaves in this step and is gone from the next figure.
-- From step 02 on, a figure leaves out the setup of steps 00–01 (the package, `CLAUDE.md`, the rule files, `docs/partition.yml`, the budget records): it stays as step 01 left it.
-
-A gauge reads `—` until the step is run. When you check the step, run `node .claude/skills/partition-budget/scripts/budget.mjs` in `partition-commerce` at its commit and copy each bounded context's _Always_. At this size no gauge comes near its threshold, 32 000: what reshapes this project is language, new sources and workshops, not load. A gauge over its threshold is a case this guide does not cover.
+- The outer boxes are the deployables, then the areas, then their bounded contexts.
+- A bounded context reads _name · form_, the rules A–D it holds, and its gauge: the tokens any task of it loads before reading code. The guide leaves it `—`: at this size none nears its threshold, and what reshapes this project is language, sources and workshops, not load.
+- A cylinder is a file of rules: an area file or the register. A slanted box is a document received: a source, a contract, a workshop record. A rounded box is an outside system.
+- An unlabelled arrow feeds; a labelled arrow is a call, `· HTTP` between deployables; a dotted one is not built yet or leaving.
+- A thick border is new in this step; a dashed border leaves in it.
+- From step 02 on, a figure leaves out the setup of steps 00–01.
 
 ## The story
 
-Read only the problems and the figures, and the guide is the story of one project growing, then settling.
+Read only the titles and the figures, and the guide is the story of one project growing, then settling.
 
-Steps 02, 06, 07, 08, 10, 11, 13, 14, 15 and 16 carry the boundary decision of BR-33: the assistant asks how the architect decides, then proposes or challenges. Their replay is the condition set before BR-33 shipped.
+Steps 02, 06, 07, 08, 10, 11, 13, 14, 15 and 16 carry a boundary decision: the assistant asks how the architect decides, unless your request names a workshop.
 
 **Setting up**
 
@@ -66,17 +63,17 @@ Steps 02, 06, 07, 08, 10, 11, 13, 14, 15 and 16 carry the boundary decision of B
 - [**03**](03-architecture.md#the-shape-after) — Plain boxes → the C4 model; `invoice` is rich
 - [**04**](04-first-feature.md#the-shape-after) — The first feature → code, a contract; Rule C in the spec
 - [**05**](05-spec-moves-first.md#the-shape-after) — Code and PRD disagree → the spec moves first
-- [**06**](06-fission.md#the-shape-after) — Paying, and "Cancelled" means two things → `payment` splits out; Rule C to the area file
+- [**06**](06-fission.md#the-shape-after) — Paying, and "Cancelled" means two things → `payment` splits out
 - [**07**](07-new-bounded-context.md#the-shape-after) — PRD 1.1 → `refund`; Rule B an area rule
 - [**08**](08-second-area.md#the-shape-after) — The catalog contract → a second area; Rule C to the register
-- [**09**](09-contradiction.md#the-shape-after) — A request against Rule B → stopped before code; nothing changes
+- [**09**](09-contradiction.md#the-shape-after) — A request against Rule B → stopped before code
 - [**10**](10-scope-extension.md#the-shape-after) — The discounts → `discount`
 - [**11**](11-move.md#the-shape-after) — Catalog 1.1.0 → a unit moves; a call disappears
 - [**12**](12-thin-to-rich.md#the-shape-after) — A status rule → `product` becomes rich
 
 **Consolidate: merges and a removal**
 
-- [**13**](13-merge-with-area-file.md#the-shape-after) — Refund is the reverse of payment → one bounded context; Rule B comes down
+- [**13**](13-merge-with-area-file.md#the-shape-after) — Refund is the reverse of payment → one bounded context
 - [**14**](14-merge-without-area-file.md#the-shape-after) — A price belongs to its product → one bounded context
 - [**15**](15-removal.md#the-shape-after) — Catalog 2.0.0 → `discount` removed
 
@@ -103,74 +100,23 @@ Steps 02, 06, 07, 08, 10, 11, 13, 14, 15 and 16 carry the boundary decision of B
 
 Rule B goes the other way: an area rule of `billing` at step 07, a business rule of `payment` when the two bounded contexts that shared it merge at step 13, and a rule of `fraud`, its owner, at step 16.
 
-## The cases
+## Where each skill shows
 
-Every case of every skill, and the step that exercises it. A case without a step would show here as a gap.
+Each line names the steps that show the skill best, not every step it takes part in.
 
-| Skill | Case | Step |
-| --- | --- | --- |
-| instruction | in context when a session starts | 00 |
-| instruction | work inside one bounded context; a neighbour through its contract only | 06 |
-| `partition-plan` | no plans folder declared, a project instruction names one: use it, record in `docs/partition.yml` | 01 |
-| `partition-plan` | nothing names the plans folder and none or both exist: ask once, record the answer | - |
-| `partition-plan` | open a plan | 04 |
-| `partition-plan` | resume after a cleared session; reconcile `uncommitted` | 04 |
-| `partition-plan` | close: gate, durable statements to their level, README | 04 |
-| `partition-plan` | the optional reminder hook | 01 |
-| `partition-rules` | migrate an unscoped rules file to scoped rules | 01 |
-| `partition-rules` | add one rule to the file whose topic and scope fit | 04 |
-| `partition-budget` | create `docs/partition.yml`; measure; the record of the day | 01 |
-| `partition-budget` | measure after a split | 06 |
-| `partition-budget` | an area file paid only by its own area | 08 |
-| `partition-budget` | the scheduled assessment: features, warning signs, options, decision | 18 |
-| `partition-shape` | a source pasted in the chat is saved to a file and validated first | 02 |
-| `partition-shape` | `source` or `area` missing: stop and ask, never inferred | 02 |
-| `partition-shape` | initial decomposition of a document: one bounded context, the split justified as not needed | 02 |
-| `partition-shape` | delta of a document: a new bounded context | 07 |
-| `partition-shape` | delta of a document: a rule copied from it changed, reported and not rewritten | 05 |
-| `partition-shape` | a rule a source states for several bounded contexts of one area goes once to the area file | 07 |
-| `partition-shape` | initial decomposition of an API contract, with a scope (`contract.mjs`) | 08 |
-| `partition-shape` | an invariant a source states: a candidate, through the admission test | 08 |
-| `partition-shape` | the scope asked differs from the scope recorded: stop, then extend | 10 |
-| `partition-shape` | delta of a contract: a move proposed | 11 |
-| `partition-shape` | delta of a contract: a removal proposed | 15 |
-| `partition-shape` | a tag of the recorded scope no longer exists: stop and ask | 15 |
-| `partition-shape` | a spec written before Partition, read where it lives: its ruling history read ruling by ruling, each anchored by its heading and its date; a ruling that states a rule copied as a business rule | 16 |
-| `partition-shape` | a section on how code is written, reported as a candidate for a rule file of `partition-rules` | 16 |
-| `partition-shape` | a rule a spec of another area already holds: quoted as a candidate and reported; its owner named by a person, then written by `partition-spec` | 16 |
-| `partition-spec` | a business rule from source, under "TO VALIDATE", confirmed by a person | 02 |
-| `partition-spec` | an admission test that fails | 04 |
-| `partition-spec` | the spec moves first | 05 |
-| `partition-spec` | a word with two meanings, recorded in both specs | 06 |
-| `partition-spec` | the area file created the first time a rule is shared | 06 |
-| `partition-spec` | an admission test that passes | 08 |
-| `partition-spec` | a contradiction with a higher level stops the work | 09 |
-| `partition-spec` | one home: a deployable points to the spec, never copies it | 17 |
-| `partition-reshape` | prepare the decision; the record; the preconditions; prove it was a move | 06 |
-| `partition-reshape` | fission, raised by a word with two meanings in one bounded context | 06 |
-| `partition-reshape` | move | 11 |
-| `partition-reshape` | merge in an area with an area file: the shared rule comes down | 13 |
-| `partition-reshape` | merge kept against the criteria | 14 |
-| `partition-reshape` | removal: spec frozen, code deleted only after the owner rules | 15 |
-| `partition-reshape` | promotion of a component to a container | 17 |
-| `partition-hexagon` | the form cannot be chosen while the rules carry a banner | 02 |
-| `partition-hexagon` | rich form; the layer map; a build check proposed | 03 |
-| `partition-hexagon` | the build check, generated from the map | 04 |
-| `partition-hexagon` | thin form | 08 |
-| `partition-hexagon` | thin promoted to rich | 12 |
-| `partition-hexagon` | check the dependencies against the map | 18 |
-| `partition-c4` | a hand-drawn draw.io file becomes the model | 03 |
-| `partition-c4` | a sequence diagram, printed as Mermaid | 04 |
-| `partition-c4` | a change of the model, regenerated; a relation between contexts is a contract | 06 |
-| `partition-c4` | an element changes kind and parent | 17 |
-| `partition-patterns` | a ruling, "no pattern" among the candidates | 03 |
-| `partition-patterns` | the audit | 18 |
-| `partition-attack` | attack a spec or a design before planning | 04 |
-| `partition-gate` | the verdict at the closing of a plan | 04 |
-| `partition-readme` | realign the README at closing | 04 |
-| `spec-auditor` agent | audit the code of one bounded context against its spec | 18 |
-| `partition-shape` | a document at a URL: read as is, recorded `external` with its version or date; at a delta the owner says what changed, or saves the new version as a file | not covered: every source of this guide is a file of the repository, committed alone |
-| `partition-shape` | a bootstrap over a `bounded-contexts.md` without a usable sha | not covered: avoided by committing each source alone before it is read ([02](02-first-bounded-context.md)) |
-| `partition-shape` | an API contract given for a bounded context that exists, whose decomposition records another source: recorded in its `Contracts with neighbours`, never a second source | 04 |
-| `partition-shape` | the API contract of a system a bounded context only calls: recorded in that bounded context's `Contracts with neighbours`, never decomposed | not covered: CardPay, the only system called, comes with no contract |
-| `partition-shape` | a context described in the chat: saved as a source, validated, then decomposed | not covered: every source of this guide is a PRD, a contract or a spec written before Partition |
+| Skill | Where it shows |
+| --- | --- |
+| the instruction | in every session from [00](00-empty-folder.md); one bounded context at a time, a neighbour through its contract, [06](06-fission.md); a contradiction stops the work, [09](09-contradiction.md) |
+| `partition-shape` | a first decomposition, [02](02-first-bounded-context.md) and [08](08-second-area.md); deltas of a source, [05](05-spec-moves-first.md), [07](07-new-bounded-context.md), [10](10-scope-extension.md), [11](11-move.md), [15](15-removal.md); a spec written before Partition, [16](16-old-spec-as-source.md) |
+| `partition-spec` | rules from a source, [02](02-first-bounded-context.md); the admission test, [04](04-first-feature.md) and [08](08-second-area.md); the spec moves first, [05](05-spec-moves-first.md); a word with two meanings and the first area file, [06](06-fission.md); one home, [17](17-promotion.md) |
+| `partition-plan` | where plans live, [01](01-configuration-and-rules.md); open, resume and close a plan, [04](04-first-feature.md) |
+| `partition-rules` | scoped rules, [01](01-configuration-and-rules.md); one rule added, [04](04-first-feature.md); a source's conventions as a candidate, [16](16-old-spec-as-source.md) |
+| `partition-attack` | a spec or a design attacked before planning, [04](04-first-feature.md) |
+| `partition-gate` | the verdict at closing, [04](04-first-feature.md) |
+| `partition-readme` | the README realigned at closing, [04](04-first-feature.md) |
+| `partition-reshape` | fission, [06](06-fission.md); move, [11](11-move.md); merges, [13](13-merge-with-area-file.md) and [14](14-merge-without-area-file.md); removal, [15](15-removal.md); promotion, [17](17-promotion.md) |
+| `partition-hexagon` | the form, the map and the build check, [02](02-first-bounded-context.md)–[04](04-first-feature.md); thin, [08](08-second-area.md), then rich, [12](12-thin-to-rich.md); the check, [18](18-assessment.md) |
+| `partition-c4` | a drawing becomes the model, [03](03-architecture.md); a sequence, [04](04-first-feature.md); a new relation, [06](06-fission.md); a component becomes a container, [17](17-promotion.md) |
+| `partition-patterns` | a ruling, [03](03-architecture.md); the audit, [18](18-assessment.md) |
+| `partition-budget` | the configuration and a first measure, [01](01-configuration-and-rules.md); after a split, [06](06-fission.md); an area file paid by its area, [08](08-second-area.md); the assessment, [18](18-assessment.md) |
+| `spec-auditor` agent | one bounded context audited against its spec, [18](18-assessment.md) |

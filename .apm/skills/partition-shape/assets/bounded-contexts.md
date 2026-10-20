@@ -12,7 +12,7 @@
 >
 > **Decided:** YYYY-MM-DD · <names> · <proposal: option n | workshop: <path of the result under paths.sources>>
 
-The **Scope** line fixes the units analysed; the others appear in the `Coverage` table with the mention "out of scope". Change it only when a scope extension has been validated.
+The **Scope** line fixes the units analysed; the others appear in the `Coverage` table with the mention "out of scope". Change it only when a scope extension has been validated, or when the owner rewrites a scope that a change of the source made stale.
 
 The **Provenance** line is the anchor of every later update: it fixes the exact state of the source this decomposition comes from. Never delete it; change it only together with the content it dates.
 
