@@ -258,6 +258,8 @@ The folders under `paths:` in `docs/partition.yml` are yours to change: specs, t
 | `sources` | `docs/sources` | where a source pasted or described in the chat is saved; one elsewhere, an old spec included, is read where it lives | [Source](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `schemas` | none: declare it only if you document your persistence | the schema documents of your persistence | schema documents |
 
+Partition has no file for your technical stack and never picks one. Your rule files, the README, the C4 model, your schema documents and the `Persistence` section of each spec hold what follows from it: see [where your stack is written](docs/learn/02-repository-map.md#where-your-stack-is-written).
+
 ## It keeps its own budget
 
 A package about budget that ignored its own would not be believed. Every session of a project that installs Partition pays for the instruction and for the name and description of each skill, whether they are used or not: about **1 700 tokens**. The tests fail above 2 000, and above 3 000 for any single skill file.

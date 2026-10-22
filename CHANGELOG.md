@@ -4,9 +4,13 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+### Added
+
+- The getting-started series and the README say where a project's technical stack is written: Partition has no file for it and never picks one.
+
 ### Changed
 
-- The getting-started site lists the series in a left sidebar, the current article marked.
+- The getting-started site lists the series in a left sidebar, the current article marked, and names the author in its footer.
 
 ## [1.0.0] - 2026-10-22
 

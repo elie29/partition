@@ -182,7 +182,18 @@ test("the site's layout draws the series sidebar", () => {
   assert.match(layout, /<nav [^>]*aria-label="[^"]+"/);
   const hrefs = [...layout.matchAll(/href="(\{\{.*?\}\})"/g)].map((m) => m[1]);
   assert.ok(hrefs.length >= 3);
-  for (const href of hrefs) assert.match(href, /\| relative_url \}\}$|site\.github/, href);
+  for (const href of hrefs) assert.match(href, /\| relative_url \}\}$|site\.github|site\.author\.url/, href);
+});
+
+test("the site's footer names the author on every page", () => {
+  const config = fs.readFileSync(path.join(learnDir, '_config.yml'), 'utf8');
+  assert.match(config, /^author:\n {2}name: Elie Nehme\n {2}url: https:\/\/elienehme\.fr$/m);
+  const layout = fs.readFileSync(layoutFile, 'utf8');
+  const footer = layout.match(/<footer[^>]*>([\s\S]*?)<\/footer>/);
+  assert.ok(footer, 'the layout has no <footer>');
+  const author = footer[1].split('{% if')[0];
+  for (const part of ['{{ site.author.name }}', 'href="{{ site.author.url }}"', '{{ site.time | date: "%Y" }}'])
+    assert.ok(author.includes(part), `the footer lacks ${part} outside any condition`);
 });
 
 test('the Pages workflow puts the series layout at the site root', () => {

@@ -47,11 +47,12 @@
       <main class="series-content markdown-body">
         {{ content }}
 
-        {% if site.github.private != true and site.github.license %}
-        <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
-          This site is open source. {% github_edit_link "Improve this page" %}.
-        </div>
-        {% endif %}
+        <footer class="footer border-top border-gray-light mt-5 pt-3 d-flex flex-wrap flex-justify-between text-gray">
+          <span>© {{ site.time | date: "%Y" }} {{ site.author.name }} · <a href="{{ site.author.url }}">elienehme.fr</a></span>
+          {% if site.github.private != true and site.github.license %}
+          <span>This site is open source. {% github_edit_link "Improve this page" %}.</span>
+          {% endif %}
+        </footer>
       </main>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
