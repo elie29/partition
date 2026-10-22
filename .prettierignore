@@ -12,4 +12,7 @@ docs/budget/
 # A guide's provided files are what a role hands over, kept as written.
 docs/guides/*/*-provided/
 
+# The site's layout holds Liquid inside HTML, which Prettier's HTML parser would reflow.
+docs/learn/_layouts/
+
 package-lock.json

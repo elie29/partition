@@ -4,6 +4,7 @@ name: pages
 # every job is skipped while elie29/partition is private, and runs on the first push once it is public.
 # The site is built from a staged tree that mirrors docs/learn/ and assets/, so the relative links of the
 # articles (03-set-up.md, ../../assets/x.svg) work on the site as they do on GitHub.
+# Its _config.yml and _layouts/ (the sidebar of the series over the Primer theme) move to the site root.
 # Turning Pages on (Settings > Pages > Source: GitHub Actions) is the owner's act, once the repository is public.
 on:
   push:
@@ -34,6 +35,7 @@ jobs:
           cp -R docs/learn _site_src/docs/learn
           cp -R assets/. _site_src/assets/
           mv _site_src/docs/learn/_config.yml _site_src/_config.yml
+          mv _site_src/docs/learn/_layouts _site_src/_layouts
           cat > _site_src/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">
