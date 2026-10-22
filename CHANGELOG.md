@@ -4,6 +4,10 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+### Changed
+
+- The getting-started site lists the series in a left sidebar, the current article marked.
+
 ## [1.0.0] - 2026-10-22
 
 First version.

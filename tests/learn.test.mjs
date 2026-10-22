@@ -164,3 +164,27 @@ test('every uses: of the Pages workflow is pinned by a sha', () => {
   assert.ok(uses.length >= 5);
   for (const u of uses) assert.match(u, /^[\w.-]+\/[\w.-]+@[0-9a-f]{40} # v\d+\.\d+\.\d+$/, u);
 });
+
+const layoutFile = path.join(learnDir, '_layouts/default.html');
+
+test("the site's layout draws the series sidebar", () => {
+  assert.ok(fs.existsSync(layoutFile), 'no docs/learn/_layouts/default.html');
+  const layout = fs.readFileSync(layoutFile, 'utf8');
+  for (const part of [
+    '{% seo %}',
+    '/assets/css/style.css',
+    '{{ content }}',
+    `p.dir == '/docs/learn/'`,
+    'sort: "name"',
+    'aria-current="page"',
+  ])
+    assert.ok(layout.includes(part), `the layout lacks ${part}`);
+  assert.match(layout, /<nav [^>]*aria-label="[^"]+"/);
+  const hrefs = [...layout.matchAll(/href="(\{\{.*?\}\})"/g)].map((m) => m[1]);
+  assert.ok(hrefs.length >= 3);
+  for (const href of hrefs) assert.match(href, /\| relative_url \}\}$|site\.github/, href);
+});
+
+test('the Pages workflow puts the series layout at the site root', () => {
+  assert.match(pagesWorkflow, /^ +mv _site_src\/docs\/learn\/_layouts _site_src\/_layouts$/m);
+});

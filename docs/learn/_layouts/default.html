@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- Primer's default layout (pages-themes/primer), with a sidebar listing the series beside the content.
+     The list is read from the pages of docs/learn/, sorted by file name: the landing page, then 01- to 09-.
+     docs/designs/getting-started-series.md, Publication, Navigation. -->
+<html lang="{{ page.lang | default: site.lang | default: "en-US" }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% seo %}
+    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    {% include head-custom.html %}
+    <style>
+      .series { display: flex; gap: 2.5rem; align-items: flex-start; }
+      .series-nav { flex: 0 0 15rem; position: sticky; top: 1.5rem; max-height: calc(100vh - 3rem); overflow-y: auto; font-size: 14px; line-height: 1.5; }
+      .series-nav .series-title { display: block; font-size: 16px; font-weight: 600; color: #24292e; margin-bottom: 0.75rem; }
+      .series-nav ol { margin: 0 0 1rem; padding-left: 1.5rem; }
+      .series-nav li { margin: 0.35rem 0; }
+      .series-nav a[aria-current="page"] { font-weight: 600; color: #24292e; }
+      .series-nav .series-repo { border-top: 1px solid #e1e4e8; padding-top: 0.75rem; }
+      .series-content { flex: 1 1 auto; min-width: 0; }
+      @media (max-width: 767px) {
+        .series { display: block; }
+        .series-nav { position: static; max-height: none; margin-bottom: 2rem; border-bottom: 1px solid #e1e4e8; padding-bottom: 1rem; }
+      }
+    </style>
+  </head>
+  <body>
+    {% assign series = site.pages | where_exp: "p", "p.dir == '/docs/learn/'" | sort: "name" %}
+    {% assign landing = series | where: "name", "README.md" | first %}
+    <div class="container-xl px-3 my-5 series">
+      <nav class="series-nav" aria-label="Getting started series">
+        {% if landing %}
+        <a class="series-title" href="{{ landing.url | relative_url }}"{% if landing.url == page.url %} aria-current="page"{% endif %}>{{ site.title }}</a>
+        {% endif %}
+        <ol>
+          {% for p in series %}{% unless p.name == "README.md" %}
+          <li><a href="{{ p.url | relative_url }}"{% if p.url == page.url %} aria-current="page"{% endif %}>{{ p.title | default: p.name }}</a></li>
+          {% endunless %}{% endfor %}
+        </ol>
+        {% if site.github.repository_url %}
+        <p class="series-repo"><a href="{{ site.github.repository_url }}">Partition on GitHub</a></p>
+        {% endif %}
+      </nav>
+
+      <main class="series-content markdown-body">
+        {{ content }}
+
+        {% if site.github.private != true and site.github.license %}
+        <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+          This site is open source. {% github_edit_link "Improve this page" %}.
+        </div>
+        {% endif %}
+      </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>
