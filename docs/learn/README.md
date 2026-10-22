@@ -15,7 +15,7 @@ You are a tech lead deciding whether to adopt Partition for a repository, or abo
 ## Reading order
 
 1. [Why Partition](01-why-partition.md): why an assistant loses accuracy as a project grows, the three practices that answer it, the Context Budget, and what Partition is not.
-2. [The repository map](02-repository-map.md): every folder and file of a project using Partition, what it holds, who puts a document there, when, and who reads it; what you fill, and what Partition creates.
+2. [The repository map](02-repository-map.md): every folder and file of a project using Partition, what it holds, who puts a document there, when, and who reads it; what you fill, what Partition creates, and where your technical stack is written.
 3. [Set up a project](03-set-up.md): install the package, let Partition write `docs/partition.yml` with you, take the first measure of the Context Budget, and give each rule a scope.
 4. [Create a bounded context](04-create-a-bounded-context.md): from a source to one durable spec per bounded context, the boundary decided by the architect, the business rules confirmed by a person, the architecture as a C4 model, the spec attacked before planning, and a spec written before Partition read as a source like any other.
 5. [Deliver through a plan](05-deliver-through-a-plan.md): one plan per feature and bounded context as the state of the work, the plan written before every reply, a resume from the plan alone after a cleared session, and the closing through the gate, the spec and the README.

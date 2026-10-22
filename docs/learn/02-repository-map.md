@@ -163,6 +163,22 @@ A skill writes these documents. A person still decides what goes into them: the 
 - **When.** At setup, when you migrate the rules your assistant loads in every session. Then whenever you add or change a rule, and whenever a decomposition or the closing of a plan finds a statement about how code is written: a section of a source on how code is written is reported as a candidate, and written only on your word; a convention a caller can observe is put to you as two readings, rule file or business rule, neither proposed.
 - **Who reads it.** `apm install` deploys each rule to every assistant in its own format; never edit the deployed copies. The assistant then loads a rule only when a file of its scope is in play. Only the entry file of your project stays unscoped. `partition-budget` counts the rules that match the code of each bounded context in its gauge, and lists any rule without a scope as the first thing to fix.
 
+## Where your stack is written
+
+Partition has no file for your technical stack, and it has no skill that picks one. Its skills name no language, framework or vendor. A generic rule produces generic code, so the package ships none. The stack is chosen before Partition, or beside it. What follows from the choice lands in files you already have:
+
+| What you look for | Where it is written |
+| --- | --- |
+| Framework, code conventions, layers, configuration, logs | your rule files in `.apm/instructions/`, each scoped by `applyTo` to the code it binds, written by `partition-rules` from the code and your answers |
+| Commands to build, run and test, CI | the README of the project, kept in step with the code by `partition-readme` |
+| The technical architecture | the C4 model, `docs/architecture/model.yml`: each container carries an optional `technology` |
+| The tool that checks dependencies between layers | the one your project already has, otherwise one you choose from the [build checks](https://github.com/elie29/partition/blob/main/.apm/skills/partition-hexagon/references/build-checks.md) of `partition-hexagon` (ArchUnit, Deptrac, dependency-cruiser…), its rules generated from the layer map of `docs/partition.yml` |
+| The form of the stored data | your [persistence schema documents](#persistence-schema-documents-optional), when you declare `paths.schemas` (`docs/schema`, for example), read by `partition-shape` as the only source of truth on persistence; otherwise the `Persistence` section of the durable spec of the bounded context |
+
+The step-by-step guide shows it: [step 00](https://github.com/elie29/partition/blob/main/docs/guides/a-project-step-by-step/00-empty-folder.md) hands over a Spring Boot skeleton built with Maven, together with the team's rules. [Step 01](https://github.com/elie29/partition/blob/main/docs/guides/a-project-step-by-step/01-configuration-and-rules.md) turns those rules into scoped rule files. Partition writes down the stack it finds. It never chooses it.
+
+A document that records why the stack was chosen, such as a technical architecture shared across projects, is yours to keep. It lives outside what Partition writes.
+
 ## Go deeper
 
 - [Step 01](https://github.com/elie29/partition/blob/main/docs/guides/a-project-step-by-step/01-configuration-and-rules.md#the-shape-after): `docs/partition.yml`, the plans folder, the rules migrated and scoped, the first budget record.
