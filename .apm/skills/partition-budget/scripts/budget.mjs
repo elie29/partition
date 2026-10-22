@@ -10,7 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 // ---------------------------------------------------------------- YAML subset
 // Block maps, block lists, one-line flow lists of scalars, quoted and plain scalars,
@@ -482,7 +482,7 @@ const asList0 = (v) => (Array.isArray(v) ? v : []);
 
 // A plan is resumed from its header, its task index and the task named in "Resume at".
 function measurePlans(root, cfg, tok, limits) {
-  const dir = cfg.paths?.plans ?? (cfg.bridge === 'superpowers' ? 'docs/superpowers/plans' : 'docs/plans');
+  const dir = cfg.paths?.plans ?? 'docs/plans';
   let names = [];
   try {
     names = fs.readdirSync(path.resolve(root, dir)).filter((n) => n.endsWith('.md'));
@@ -739,5 +739,13 @@ function main(argv) {
   }
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)
-  process.exit(main(process.argv.slice(2)));
+// Run as a command, not when imported. Node resolves links for import.meta.url, not for argv[1].
+const isMain = () => {
+  try {
+    return fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+};
+
+if (process.argv[1] && isMain()) process.exit(main(process.argv.slice(2)));

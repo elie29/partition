@@ -23,7 +23,7 @@ Scripts ship inside the skills, and each runs only when a skill tells the assist
 
 None of them opens a network connection, and none needs a dependency installed.
 
-The reminder hook for Claude Code (`partition-plan/assets/hook/`) is optional and is not enabled by installing the package. When you enable it, it reads the hook input, prints one message and touches nothing.
+The reminder hook for Claude Code (`partition-plan/assets/hook/`) is optional and is not enabled by installing the package. Enabling it copies `partition-reminder.py` to `.claude/hooks/` and adds two entries to `.claude/settings.json`, with the Python 3 interpreter found on your machine; nothing else is changed, and removing the two entries disables it. Once enabled, it reads the hook input, prints one message and touches nothing.
 
 ## What to keep in mind
 

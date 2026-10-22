@@ -15,7 +15,7 @@
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 import zlib from 'node:zlib';
 
 // ---------------------------------------------------------------- YAML subset
@@ -1162,5 +1162,13 @@ function main(argv) {
   }
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)
-  process.exit(main(process.argv.slice(2)));
+// Run as a command, not when imported. Node resolves links for import.meta.url, not for argv[1].
+const isMain = () => {
+  try {
+    return fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+};
+
+if (process.argv[1] && isMain()) process.exit(main(process.argv.slice(2)));

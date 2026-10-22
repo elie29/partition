@@ -2,10 +2,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
-import { repo, budgetPath, c4Path, tmp } from './helpers.mjs';
+import { repo, budgetPath, c4Path, contractPath, tmp } from './helpers.mjs';
 
 const { measurePackage, parseYaml, validate, SCHEMA_KEYWORDS } = await import(budgetPath);
 const read = (rel) => fs.readFileSync(path.join(repo, rel), 'utf8');
@@ -315,7 +315,8 @@ test('the area file has its template, and the register writes nothing the owner 
   assert.match(area, /TO VALIDATE BEFORE THIS AREA IS USED/);
   assert.match(area, /^\| # +\| Rule +\| Trigger +\| Expected effect +\| Binds +\| Source +\|$/m);
   assert.match(area, /^\| AR-1 +\|/m);
-  const spec = read(`${skillsDir}/partition-spec/SKILL.md`);
+  const spec = read(`${skillsDir}/partition-spec/references/area.md`);
+  assert.match(read(`${skillsDir}/partition-spec/SKILL.md`), /LOAD `references\/area\.md`/);
   assert.match(spec, /`assets\/area\.md` when its first entry is validated/);
   assert.match(spec, /show the owner each rule and each word you would write, and write it only\s+once validated/);
   assert.match(spec, /A rule a person states is the source of its entry, not its\s+validation/);
@@ -417,7 +418,7 @@ test('at closing, the README is realigned for the people who build and maintain 
 });
 
 test('the hook is enabled in order: Python found first, then the file copied; the team is warned', () => {
-  const hook = read(`${skillsDir}/partition-plan/SKILL.md`).split('## Reminder hook')[1];
+  const hook = read(`${skillsDir}/partition-plan/references/hook.md`);
   assert.ok(
     hook.indexOf('Find Python 3') < hook.indexOf('Copy `assets/hook/partition-reminder.py`'),
     'find before copy',
@@ -799,7 +800,7 @@ test('a source that marks its rules gives the bounds of each: a sentence it does
 });
 
 test('the copied reminder hook is copied again after a package update', () => {
-  const plan = read(`${skillsDir}/partition-plan/SKILL.md`).replace(/\s+/g, ' ');
+  const plan = read(`${skillsDir}/partition-plan/references/hook.md`).replace(/\s+/g, ' ');
   assert.match(plan, /a package update does not refresh the copy: copy `assets\/hook\/partition-reminder\.py` again/);
 });
 
@@ -919,7 +920,7 @@ test('the first line of partition.yml points the editor at the schema', () => {
   const own = link('docs/partition.yml');
   assert.ok(own && fs.existsSync(path.join(repo, 'docs', own)), `docs/partition.yml: ${own}`);
   assert.match(read(`${skillsDir}/partition-budget/SKILL.md`), /first line[\s\S]*second line/);
-  assert.match(read(`${skillsDir}/partition-plan/SKILL.md`), /first line[^.]*target[^.]*second line/);
+  assert.match(read(`${skillsDir}/partition-plan/references/plans-folder.md`), /first line[^.]*target[^.]*second line/);
 });
 
 test('docs/partition.yml keeps every template key the answers leave alone, at its value and with its comment', () => {
@@ -1027,7 +1028,7 @@ test('the hook settings name no interpreter: the one found on the machine replac
       c,
       /^<python> "\$\{CLAUDE_PROJECT_DIR\}\/\.claude\/hooks\/partition-reminder\.py" (Pre|Post)ToolUse \|\| true$/,
     );
-  const skill = read(`${skillsDir}/partition-plan/SKILL.md`);
+  const skill = read(`${skillsDir}/partition-plan/references/hook.md`);
   for (const p of ['`python3 --version`', '`python --version`', '`py -3 --version`']) assert.ok(skill.includes(p), p);
 });
 
@@ -1199,4 +1200,22 @@ test('the pull request template proves a change with the repository commands', (
     [],
     'bold used as a heading',
   );
+});
+
+// Node resolves links for import.meta.url, not for argv[1]: a script reached through a link must still run.
+test('every script runs the same when reached through a link to its folder', () => {
+  const cwd = tmp();
+  for (const url of [budgetPath, c4Path, contractPath]) {
+    const file = fileURLToPath(url);
+    const link = path.join(tmp(), 'linked');
+    fs.symlinkSync(path.dirname(file), link, 'junction');
+    const run = (target) => spawnSync(process.execPath, [target], { cwd, encoding: 'utf8' });
+    const direct = run(file);
+    const linked = run(path.join(link, path.basename(file)));
+    assert.deepEqual(
+      [linked.status, linked.stdout, linked.stderr],
+      [direct.status, direct.stdout, direct.stderr],
+      path.basename(file),
+    );
+  }
 });

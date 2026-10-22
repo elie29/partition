@@ -21,7 +21,7 @@ You have a repository, and an assistant that reads the same rule file in every s
 | The budget threshold | `[architect]` | the default, 32 000 tokens, until the first real assessment corrects it |
 | When the assessment is held | `[architect]` | `quarterly`, or every six sprints |
 | Where the plans live, when the setup starts as a plan and nothing in the project names a folder | `[TL]` | `docs/plans/`; otherwise the template's default, which you may change |
-| The paths of specs, designs, contracts and sources | `[architect]` | the template's defaults, unless you have a reason |
+| The paths of specs, contracts and sources | `[architect]` | the template's defaults, unless you have a reason |
 
 No bounded context is asked at setup, and none is listed by hand: each comes from a source (a contract, a PRD, a spec written before Partition, a context you describe) in the next journey, where `partition-shape` declares each one it retains. A source is read where it lives, in any folder of the repository; only one pasted or described in the chat, or a contract read from a URL, is saved to a default folder, as [the repository map](02-repository-map.md#docssources-what-the-system-is-specified-by) says.
 
@@ -88,9 +88,9 @@ From now on, the descriptions of the package's skills load in every session. Tha
 
 When the setup starts as a plan, `partition-plan` first settles where plans live, and never guesses it again:
 
-1. `docs/partition.yml` declares it: `paths.plans`. That folder is used, even with `bridge: superpowers`, which only lets the Superpowers plugin write the plans' body.
+1. `docs/partition.yml` declares it: `paths.plans`. That folder is used, whatever `bridge` says: that key only names the tool that writes the plans' body.
 2. Nothing is declared there, but an instruction of your project names one folder: your team has decided, so the assistant uses it without asking, says which, and records it.
-3. Nothing names it: it looks for `docs/plans/` and `docs/superpowers/plans/`. One exists: it uses it and records it. Both, or neither: it asks you once, and records your answer.
+3. Nothing names it: it looks for `docs/plans/`. It exists: it uses it and records it. It does not: it asks you once, and records your answer. It never searches further: tools keep plans in folders of their own.
 
 When `docs/partition.yml` does not exist yet, this is the moment it is created, with that one key:
 
@@ -116,12 +116,11 @@ The plan opens from its template: the header (`Status`, `Resume at`, `Last updat
 
 version: 1
 target: claude # whose loading rules the gauges follow: claude | copilot
-bridge: none # none | superpowers (the plugin writes the plans' body; paths.plans keeps the folder)
+bridge: none # none, or the tool that writes the plans' body (superpowers, bmad, ...): information only
 
 paths:
   specs: docs/specs
   invariants: docs/specs/invariants.md
-  designs: docs/designs
   plans: docs/plans
   contracts: docs/contracts
   sources: docs/sources # PRDs and described contexts, decomposed by partition-shape

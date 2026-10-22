@@ -29,7 +29,7 @@ A statement goes to the lowest level that holds it all, and a lower level never 
 
 ## Write the spec of a new bounded context
 
-A new bounded context is created by the `partition-shape` skill, from a source, never started here; the one a fission creates is the `partition-reshape` skill's. A context with no document behind it is described: `partition-shape` saves it as a source, has it validated, then decomposes it. A request to start a bounded context goes to `partition-shape`. Once a bounded context is retained or created by a fission, its spec is written through these steps:
+A new bounded context is created by the `partition-shape` skill from a source, a described context included, never started here; the one a fission creates, by the `partition-reshape` skill. Once a bounded context is retained or created by a fission, its spec is written through these steps:
 
 1. Check the bounded context is declared in `docs/partition.yml` (`contexts:` with `id`, `spec`, `code`, and `area` when it belongs to one). Add it if not, as `partition-shape` or, for a fission, `partition-reshape` declares it; ask for the code paths rather than guessing them.
 2. Copy `assets/spec.md` to its path. `partition-shape` (or `partition-reshape`, for a fission) fills its five source lines and `Source parts owned`: which parts of the source the bounded context owns, and its provenance.
@@ -60,9 +60,7 @@ If the work contradicts a line of the area file or of the invariant register, st
 
 ## The area file
 
-`<specs>/<area>/area.md` holds the language and the area rules shared by the bounded contexts of one area. Create it from `assets/area.md` when its first entry is validated; a person deletes it once its last entry leaves. An area rule is written like a business rule: by a person or copied from a source that states it, under its banner, never deduced. Nothing is written to it before the owner validates it: show the owner each rule and each word you would write, and write it only once validated. Show it as it would be written, every column and the file it goes to; a validation given to an entry not shown that way is no validation. A rule a person states is the source of its entry, not its validation. Every bounded context of the area reads it: keep it small.
-
-Before writing a rule or a word to it, read the area files and specs of the other areas. One that the area file or a spec of another area also holds spans two areas: it goes to no area file but to the admission test of the invariant register, and you report the file and the identifier that hold it. Nothing is moved.
+`<specs>/<area>/area.md` holds the language and the area rules shared by the bounded contexts of one area. Every bounded context of the area reads it: keep it small. Before writing, changing or removing a rule or a word of it, LOAD `references/area.md`: how an entry is written and validated, and what another area already holds.
 
 ## The invariant register
 

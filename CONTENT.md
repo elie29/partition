@@ -22,7 +22,7 @@ Being deployed is not the same as being loaded. There are three levels.
 ### Loaded only when the skill is used
 
 - The body of the `SKILL.md`.
-- Its `references/`, read only when the skill points to them: the glossary of the method's words, the procedures for decomposing a source and for following its versions, one reader per kind of source, the criteria C1–C6 and the rules R1–R6, the admission test of the invariant register, the format of the C4 model, the build-time architecture checks, the rubric and the format of the regression verdict.
+- Its `references/`, read only when the skill points to them: the glossary of the method's words, the procedures for decomposing a source and for following its versions, one reader per kind of source, the criteria C1–C6 and the rules R1–R6, the admission test of the invariant register, how an area file is written, how the plans folder is found and the reminder hook enabled, the format of the C4 model, the build-time architecture checks, the rubric and the format of the regression verdict.
 - Its `assets/`, copied into the project only when the file does not exist yet: the templates of the durable spec, the area file, the invariant register, the plan, `partition.yml` and its schema, the budget record, the pattern grid, the C4 model, the decomposition record and the reshape record, and the twelve rule skeletons (backend and frontend).
 
 ### Never read, only executed
@@ -31,7 +31,7 @@ Being deployed is not the same as being loaded. There are three levels.
 - `c4-drawio.mjs`: the C4 text model to draw.io, and to Mermaid for a dynamic view.
 - `contract.mjs`: inventory, coupling matrix and semantic diff of an OpenAPI contract.
 - The three scripts of `partition-gate`: change context, detection of weakened tests, diff coverage.
-- The reminder hook: copied with `partition-plan`, inactive until someone asks to enable it.
+- The reminder hook: copied with `partition-plan`, inactive until the owner asks to enable it.
 
 ### The 12 skills
 
@@ -100,16 +100,17 @@ Most of them are not typed by hand. The assistant creates each one from its temp
 
 | File | Skill |
 | --- | --- |
-| `docs/partition.yml` | the first skill that needs it creates it from its template (`partition-plan` with the plans folder alone); `partition-budget` fills the rest with the owner: the threshold and the schedule of the assessment; the owner may adjust any key by hand; `contexts:` starts empty, and `partition-shape` declares each bounded context it retains, asking for its code paths (`partition-reshape` a fission's) |
+| `docs/partition.yml` | the first skill that needs it creates it from its template (`partition-plan` with the plans folder alone); `partition-budget` fills the rest with the owner: the threshold and the schedule of the assessment; the owner may adjust any key by hand; `contexts:` starts empty, and `partition-shape` declares each bounded context it retains, asking for its code paths (`partition-reshape` a fission's, `partition-spec` one still undeclared); `partition-hexagon` writes the form of each hexagon with its reason; after a merge or a removal, `partition-reshape` takes an entry out once a person has deleted its spec folder |
 | Specs: `docs/specs/<area>/<bounded-context>/spec.md` | `partition-shape`, from a source, through the steps of `partition-spec`; `partition-reshape` for a fission; `partition-spec` for every change |
 | The area file: `docs/specs/<area>/area.md` | `partition-spec`; `partition-shape` when a source states rules shared by several bounded contexts |
 | The decomposition record: `bounded-contexts.md` | `partition-shape`, once the owner validated the plan (bounded-contexts in plural); `partition-reshape` updates it after a reshape |
-| A source pasted or described in the chat | `partition-shape` saves it to a file, the owner validates it |
+| A source pasted or described in the chat, a contract read from a URL, a workshop's result | `partition-shape` saves it to a file; the owner validates it, and a workshop's result is challenged first |
 | The invariant register: `invariants.md` | `partition-spec`, through the admission test |
 | The rules: `.apm/instructions/` | `partition-rules`, from the code and the owner's answers; each line shown with its file and scope, written once the owner validates it |
-| The plans | `partition-plan`; with `bridge: superpowers`, the plugin writes the body |
-| The C4 model: `docs/architecture/model.yml` | `partition-c4`; once from a hand-drawn `.drawio` file, the owner answering what the drawing leaves open |
-| The pattern grid | `partition-patterns`, recording the owner's ruling |
+| The plans | `partition-plan`; when `bridge` names a tool, that tool writes the body |
+| The reminder hook: `.claude/hooks/partition-reminder.py`, its entries in `.claude/settings.json` | `partition-plan`, only when the owner asks |
+| The C4 model: `docs/architecture/model.yml` | `partition-c4`; once from a hand-drawn `.drawio` file, the owner answering what the drawing leaves open; it records a promotion `partition-reshape` prepared |
+| The pattern grid: `docs/architecture/patterns-grid.md` | `partition-patterns`, recording the owner's ruling, and each audit in its `## Audits` |
 | The reshape and promotion records | `partition-reshape` |
 | The budget records | `partition-budget` |
 | The findings on a spec or a design | `partition-attack` |
@@ -117,5 +118,5 @@ Most of them are not typed by hand. The assistant creates each one from its temp
 ### Generated, never edited by hand
 
 - The C4 diagrams, `docs/architecture/*.drawio`, by `c4-drawio.mjs`.
-- `Source parts owned` in each spec, by `partition-shape`.
+- `Source parts owned` in each spec, by `partition-shape`; by `partition-reshape` for a fission.
 - The gauges in each budget record, by `budget.mjs`, pasted unedited.

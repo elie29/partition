@@ -13,7 +13,7 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 const USAGE =
   'usage:\n  node contract.mjs provenance <contract>\n  node contract.mjs inventory  <contract> [--scope "<scope>"] [--json]\n  node contract.mjs diff       <contract> --base <git-ref> [--base-path <path-at-base>] [--scope "<scope>"] [--json]';
@@ -868,6 +868,14 @@ function main(argv) {
   }
 }
 
+// Run as a command, not when imported. Node resolves links for import.meta.url, not for argv[1].
+const isMain = () => {
+  try {
+    return fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
+  } catch {
+    return false;
+  }
+};
+
 // exitCode rather than exit(): a long report written to a pipe is flushed before the process ends.
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)
-  process.exitCode = main(process.argv.slice(2));
+if (process.argv[1] && isMain()) process.exitCode = main(process.argv.slice(2));

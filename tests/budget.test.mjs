@@ -196,13 +196,19 @@ test('budget: a plan in progress is measured whole and as read on resume; a done
   assert.ok(p.resume > 100, `resume ${p.resume}`);
   assert.equal(p.wholeOver, true);
 });
-test('budget: paths.plans decides the folder of the plans, even with bridge: superpowers', () => {
+test('budget: bridge only names the tool that writes the plans; the folder is paths.plans, docs/plans by default', () => {
   const plan = '# P\n\n> **Status:** in progress\n> **Resume at:** Task 1 — go\n\n## Tasks\n\n- [ ] Task 1 — a\n';
-  const dir = tmp({
-    'docs/partition.yml': 'bridge: superpowers\npaths:\n  plans: docs/plans\n',
-    'docs/plans/p.md': plan,
+  const declared = tmp({
+    'docs/partition.yml': 'bridge: superpowers\npaths:\n  plans: docs/work\n',
+    'docs/work/p.md': plan,
   });
-  assert.equal(measureProject(dir).plans.length, 1);
+  assert.equal(measureProject(declared).plans.length, 1);
+  const byDefault = tmp({ 'docs/partition.yml': 'bridge: superpowers\n', 'docs/plans/p.md': plan });
+  assert.equal(measureProject(byDefault).plans.length, 1);
+});
+test('schema: bridge takes any tool name, and designs is not a key', () => {
+  assert.equal(findings('bridge: bmad\n'), '');
+  assert.ok(findings('paths:\n  designs: docs/designs\n').includes('\n  - paths.designs: unknown key'));
 });
 test('budget: the copilot target reads its own files', () => {
   const dir = tmp({

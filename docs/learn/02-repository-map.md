@@ -37,7 +37,6 @@ The folders under `paths:` in `docs/partition.yml` are yours to change. The othe
 | --- | --- | --- |
 | `specs` | `docs/specs` | one durable spec per bounded context, by area |
 | `invariants` | `<specs>/invariants.md` | what spans areas or layers |
-| `designs` | `docs/designs` | one per feature: what it builds |
 | `plans` | `docs/plans` | one per feature and bounded context: its state and its decisions |
 | `contracts` | `docs/contracts` | where an API contract pasted or read from a URL is saved; one elsewhere in the repository is read where it lives |
 | `sources` | `docs/sources` | where a source pasted or described in the chat is saved; one elsewhere, an old spec included, is read where it lives |
@@ -125,7 +124,7 @@ A skill writes these documents. A person still decides what goes into them: the 
 ### `docs/plans/`: the state of the work
 
 - **What it holds.** One plan per feature and bounded context: a header (`Status`, `Resume at`, `Last updated`), a task index, each task with its verification command and its expected result, then `## Decisions` and `## Blockers`. Once closed, it stays as the dated record of why.
-- **Who puts it there.** `partition-plan` opens it from its template. The assistant writes it before every reply: what is done, where to resume, every decision, every blocker. It does not commit; you do. With `bridge: superpowers`, the plugin writes the body, in the same folder, and Partition adds its header, its index and its two sections.
+- **Who puts it there.** `partition-plan` opens it from its template. The assistant writes it before every reply: what is done, where to resume, every decision, every blocker. It does not commit; you do. When `bridge` names a tool (`superpowers`, `bmad`, another), that tool writes the body, in the same folder, and Partition adds its header, its index and its two sections.
 - **When.** When planned work starts, at every turn, and at the closing, which runs `partition-gate` and sends what the work established to its level, each entry validated by you.
 - **Who reads it.** The assistant, on _"Resume."_: the header, the task index, the task named in `Resume at` and the blockers, nothing more. A `done` plan is not read. `partition-budget` measures each plan in progress against what a resume reads.
 

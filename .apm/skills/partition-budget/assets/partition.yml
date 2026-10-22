@@ -6,12 +6,11 @@
 
 version: 1
 target: claude                # whose loading rules the gauges follow: claude | copilot
-bridge: none                  # none | superpowers (the plugin writes the plans' body; paths.plans keeps the folder)
+bridge: none                  # none, or the tool that writes the plans' body (superpowers, bmad, ...): information only
 
 paths:
   specs: docs/specs
   invariants: docs/specs/invariants.md
-  designs: docs/designs
   plans: docs/plans
   contracts: docs/contracts
   sources: docs/sources        # PRDs and described contexts, decomposed by partition-shape
