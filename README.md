@@ -4,7 +4,7 @@
 
 # Partition
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-0b78a0.svg)](LICENSE) ![Version](https://img.shields.io/badge/version-0.1.0-0b78a0.svg) ![Targets](https://img.shields.io/badge/targets-Claude%20Code%20%C2%B7%20GitHub%20Copilot-0b78a0.svg)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0b78a0.svg)](LICENSE) ![Version](https://img.shields.io/badge/version-1.0.0-0b78a0.svg) ![Targets](https://img.shields.io/badge/targets-Claude%20Code%20%C2%B7%20GitHub%20Copilot-0b78a0.svg)
 
 **The living specification and the Context Budget, as agent skills.**
 
@@ -79,14 +79,14 @@ From the root of your project:
 
 ```bash
 # Claude Code
-apm install elie29/partition#v0.1.0 --target claude
+apm install elie29/partition#v1.0.0 --target claude
 
 # GitHub Copilot
-apm install elie29/partition#v0.1.0 --target copilot
+apm install elie29/partition#v1.0.0 --target copilot
 apm compile
 
 # both
-apm install elie29/partition#v0.1.0 --target claude,copilot
+apm install elie29/partition#v1.0.0 --target claude,copilot
 apm compile
 ```
 

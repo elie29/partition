@@ -27,4 +27,4 @@ The reminder hook for Claude Code (`partition-plan/assets/hook/`) is optional an
 
 ## What to keep in mind
 
-Skills are instructions an AI assistant follows with the permissions you gave it. Read a skill before you install it, here as anywhere else, and pin a tag (`elie29/partition#v0.1.0`) rather than a branch.
+Skills are instructions an AI assistant follows with the permissions you gave it. Read a skill before you install it, here as anywhere else, and pin a tag (`elie29/partition#v1.0.0`) rather than a branch.

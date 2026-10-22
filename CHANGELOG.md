@@ -4,6 +4,8 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-22
+
 First version.
 
 ### Added
@@ -18,6 +20,7 @@ First version.
 - A convention a caller can observe is put to the owner as two readings, a rule file or a business rule, neither proposed.
 - A recorded scope made stale by a change of the source stops the delta; it is rewritten only on the owner's answer, validated by name, the former scope kept in the History.
 - A change across several bounded contexts opens one plan per bounded context.
+- Plans live in the folder `docs/partition.yml` declares (`paths.plans`), else the one an instruction of the project names, else `docs/plans/` when it exists; otherwise the assistant asks once and records the answer. `bridge` names the tool that writes a plan's body (`superpowers`, `bmad`, another), for the reader only: it never changes the folder.
 - A glossary explains each word of the method once; every other file points to it.
 - Closing a plan runs `partition-gate` first, and realigns the README with `partition-readme` when what users install, run or configure changed, the people who build and maintain the project included.
 - Optional reminder hook for Claude Code, enabled on request by `partition-plan`, with the Python 3 interpreter found on the machine.
