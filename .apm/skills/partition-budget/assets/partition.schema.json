@@ -8,8 +8,8 @@
     "version": { "description": "The version of this file's format.", "enum": [1] },
     "target": { "description": "Whose loading rules the gauges follow.", "enum": ["claude", "copilot"] },
     "bridge": {
-      "description": "none, or superpowers: the Superpowers plugin writes the body of each plan. The folder of the plans is paths.plans.",
-      "enum": ["none", "superpowers"]
+      "type": "string",
+      "description": "none, or the name of the tool that writes the body of each plan (superpowers, bmad, another). Information for the reader: nothing in Partition changes with it, and the folder of the plans stays paths.plans."
     },
     "paths": {
       "type": "object",
@@ -17,7 +17,6 @@
       "properties": {
         "specs": { "type": "string", "description": "The folder of the durable specs. Default docs/specs." },
         "invariants": { "type": "string", "description": "The invariant register. Default <specs>/invariants.md." },
-        "designs": { "type": "string", "description": "The folder of the designs." },
         "plans": { "type": "string", "description": "The folder of the plans. Default docs/plans." },
         "contracts": {
           "type": "string",

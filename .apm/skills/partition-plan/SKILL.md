@@ -8,18 +8,11 @@ license: MIT
 
 The plan file is the state of the work; the conversation is not. A session can be cleared at any moment, not only at the end of a step, and anything that exists only in the chat is lost with it.
 
-Plans are one file per feature, in one folder per project. A plan works inside one bounded context: a change that reaches several bounded contexts opens one plan per bounded context, and a plan relies on a neighbour's contract only once that contract is written in the neighbour's spec. With `bridge: superpowers` the plugin writes their body; the header, the task index and the two sections below are added on top of whatever it produces.
+Plans are one file per feature, in one folder per project. A plan works inside one bounded context: a change that reaches several bounded contexts opens one plan per bounded context, and a plan relies on a neighbour's contract only once that contract is written in the neighbour's spec. When `bridge` names a tool (`superpowers`, `bmad`, another), that tool writes their body; the header, the task index and the two sections below are added on top of whatever it produces.
 
 ## Where the plans are
 
-The folder is declared once, never guessed at each session:
-
-1. `docs/partition.yml` says it: `paths.plans`. Use it, even with `bridge: superpowers`, which only says the Superpowers plugin writes the plan's body.
-2. Nothing is declared there, but an instruction of the project names one folder: the team has decided. Use it, say which, and write it as `paths.plans` in `docs/partition.yml`.
-3. Nothing names it: look for `docs/plans/` and `docs/superpowers/plans/`.
-   - Exactly one exists: use it, say which, and write it as `paths.plans` in `docs/partition.yml`.
-   - Both exist, or neither: ask the owner once, then write the answer there. Never pick between two folders on your own: a plan opened in the wrong one is a second state of the work.
-4. If `docs/partition.yml` does not exist, create it with that one key under the first line of the template, which links the schema, rewritten for the project's target as its second line says (the full template is `partition-budget`'s `assets/partition.yml`); `partition-budget` fills the rest with the owner (its _Configuration_).
+The folder is declared once, never guessed at each session: `docs/partition.yml` says it, `paths.plans`. Use it, whatever `bridge` says: that key only names the tool that writes the plan's body. When it declares none, or `docs/partition.yml` does not exist, LOAD `references/plans-folder.md` before opening a plan.
 
 The user's own instructions, or another of the project, may name a different folder. What `docs/partition.yml` declares wins, then the project's instruction; say that they disagree so the owner can align them. The owner can change the folder at any time, in either place.
 
@@ -80,9 +73,4 @@ The plan stays in the repository. It is the dated record of why; nothing copies 
 
 ## Reminder hook (optional, Claude Code only)
 
-Closing is the step people forget. `assets/hook/` holds a hook that prints a reminder when a plan is marked `done`, or when a commit is about to be created. It reads the hook input, prints one message and touches nothing. It knows a plan by a `plans/` folder in its path: when `paths.plans` in `docs/partition.yml` names a folder otherwise, say that only the commit reminder fires. It is not installed with the package: enable it only when the owner asks.
-
-1. Find Python 3: run `python3 --version`, then `python --version`, then `py -3 --version`. The first that prints `Python 3.` is the interpreter. None does: say the hook cannot run here, and stop before copying anything.
-2. Copy `assets/hook/partition-reminder.py` to `.claude/hooks/partition-reminder.py`.
-3. Merge the two entries of `assets/hook/settings.json` into the `hooks` of `.claude/settings.json`, keeping whatever is already there, with `<python>` replaced by that interpreter.
-4. Say that removing those two entries disables it, and that the interpreter written is this machine's: a teammate on another system may need another one in their copy. Say too that a package update does not refresh the copy: copy `assets/hook/partition-reminder.py` again after each update.
+Closing is the step people forget. `assets/hook/` holds a hook that prints a reminder when a plan is marked `done`, or when a commit is about to be created. It is not installed with the package: enable it only when the owner asks, and LOAD `references/hook.md` to do it.

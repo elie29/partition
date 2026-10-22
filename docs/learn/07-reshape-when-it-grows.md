@@ -59,7 +59,7 @@ or, for a merge, _"Prepare a workshop on merging `<bounded-context-b>` into `<bo
 **To carry out a move the architect decided**, you name it and validate it by name, as the guide does:
 
 > Carry out the fission of `<bounded-context>`: `<new-bounded-context>` comes out. I validate the fission by name.
-
+>
 > Carry out the merge: `<bounded-context-a>` absorbs `<bounded-context-b>`. I validate the merge by name.
 
 or, from the README's _Day to day_, _"We decided to extract billing"_, _"merge refund into payment"_. When a plan of preconditions comes first and is `done`, you resume with _"Resume the fission."_
@@ -81,7 +81,7 @@ When the assistant asks how to decide, answer _"A proposal."_ or _"A workshop."_
 **To promote a component**, from a decision already taken:
 
 > Prepare the promotion of `<bounded-context>` from a component to a container.
-
+>
 > Carry out the promotion of `<bounded-context>` to `<container>`. I validate it by name.
 
 ## What comes back

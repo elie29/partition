@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-labelledby="t d">
+  <title id="t">Same loop, two loads</title>
+  <desc id="d">Two rows over the same timeline, feature 1 to feature 6, each feature the same loop: spec, plan, build, verify. In both rows the project grows feature after feature. Top row, without Partition: what the assistant loads for one task is the whole project, so the bar grows with it and passes the limit of the model from feature 4 on; the answers lose accuracy. Bottom row, with Partition: the same project, cut into bounded contexts; one task loads the always-on instruction, the rules that match, the spec of its context and that context alone, so the bar stays the same length at every feature. The project grows; the load of a task does not.</desc>
+  <defs>
+    <style>
+      .sans { font-family: 'IBM Plex Sans','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif; }
+    </style>
+    <pattern id="over" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="6" height="6" fill="#2a2416"/>
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#f5cd7a" stroke-width="2"/>
+    </pattern>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#7a8291"/>
+    </marker>
+  </defs>
+  <rect width="1280" height="720" rx="16" fill="#0f1218"/>
+  <rect x="1" y="1" width="1278" height="718" rx="15" fill="none" stroke="#5b6472" stroke-width="2"/>
+  <text x="40" y="66" class="sans" font-size="30" font-weight="600" fill="#eceef2">Same loop, two loads</text>
+  <text x="40" y="104" class="sans" font-size="18" fill="#aab0ba">The project grows with every feature. What one task loads is the choice.</text>
+  <text x="332.5" y="140" class="sans" font-size="17" font-weight="600" fill="#eceef2" text-anchor="middle">feature 1</text>
+  <text x="332.5" y="160" class="sans" font-size="12" font-weight="400" fill="#7a8291" text-anchor="middle">spec · plan · build · verify</text>
+  <text x="497.5" y="140" class="sans" font-size="17" font-weight="600" fill="#eceef2" text-anchor="middle">feature 2</text>
+  <text x="497.5" y="160" class="sans" font-size="12" font-weight="400" fill="#7a8291" text-anchor="middle">spec · plan · build · verify</text>
+  <text x="662.5" y="140" class="sans" font-size="17" font-weight="600" fill="#eceef2" text-anchor="middle">feature 3</text>
+  <text x="662.5" y="160" class="sans" font-size="12" font-weight="400" fill="#7a8291" text-anchor="middle">spec · plan · build · verify</text>
+  <text x="827.5" y="140" class="sans" font-size="17" font-weight="600" fill="#eceef2" text-anchor="middle">feature 4</text>
+  <text x="827.5" y="160" class="sans" font-size="12" font-weight="400" fill="#7a8291" text-anchor="middle">spec · plan · build · verify</text>
+  <text x="992.5" y="140" class="sans" font-size="17" font-weight="600" fill="#eceef2" text-anchor="middle">feature 5</text>
+  <text x="992.5" y="160" class="sans" font-size="12" font-weight="400" fill="#7a8291" text-anchor="middle">spec · plan · build · verify</text>
+  <text x="1157.5" y="140" class="sans" font-size="17" font-weight="600" fill="#eceef2" text-anchor="middle">feature 6</text>
+  <text x="1157.5" y="160" class="sans" font-size="12" font-weight="400" fill="#7a8291" text-anchor="middle">spec · plan · build · verify</text>
+  <line x1="250" y1="172" x2="1240" y2="172" stroke="#2a303a" stroke-width="2"/>
+  <rect x="312.5" y="200" width="40" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <rect x="308.5" y="196" width="48" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="357.5" y1="294" x2="357.5" y2="324" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="257.5" y="300" width="50" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="465.5" y="200" width="64" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <rect x="461.5" y="196" width="72" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="522.5" y1="294" x2="522.5" y2="324" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="422.5" y="300" width="70" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="618.5" y="200" width="88" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <rect x="614.5" y="196" width="96" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="687.5" y1="294" x2="687.5" y2="324" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="587.5" y="300" width="92" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="771.5" y="200" width="112" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <rect x="767.5" y="196" width="120" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="852.5" y1="294" x2="852.5" y2="324" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="752.5" y="300" width="100" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="852.5" y="300" width="16" height="18" rx="3" fill="url(#over)" stroke="#f5cd7a" stroke-width="1.5"/>
+  <rect x="924.5" y="200" width="136" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <rect x="920.5" y="196" width="144" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="1017.5" y1="294" x2="1017.5" y2="324" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="917.5" y="300" width="100" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="1017.5" y="300" width="40" height="18" rx="3" fill="url(#over)" stroke="#f5cd7a" stroke-width="1.5"/>
+  <rect x="1079.5" y="200" width="156" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <rect x="1075.5" y="196" width="164" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="1182.5" y1="294" x2="1182.5" y2="324" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="1082.5" y="300" width="100" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="1182.5" y="300" width="68" height="18" rx="3" fill="url(#over)" stroke="#f5cd7a" stroke-width="1.5"/>
+  <rect x="312.5" y="440" width="40" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <rect x="308.5" y="436" width="48" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="357.5" y1="534" x2="357.5" y2="564" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="257.5" y="540" width="46" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="465.5" y="440" width="64" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <rect x="461.5" y="436" width="72" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="522.5" y1="534" x2="522.5" y2="564" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="422.5" y="540" width="46" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="618.5" y="440" width="88" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <line x1="662.5" y1="440" x2="662.5" y2="496" stroke="#e8a93a" stroke-width="2"/>
+  <rect x="658.5" y="436" width="52" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="687.5" y1="534" x2="687.5" y2="564" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="587.5" y="540" width="46" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="771.5" y="440" width="112" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <line x1="808.8333333333334" y1="440" x2="808.8333333333334" y2="496" stroke="#e8a93a" stroke-width="2"/>
+  <line x1="846.1666666666666" y1="440" x2="846.1666666666666" y2="496" stroke="#e8a93a" stroke-width="2"/>
+  <rect x="842.1666666666666" y="436" width="45.333333333333336" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="852.5" y1="534" x2="852.5" y2="564" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="752.5" y="540" width="46" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="924.5" y="440" width="136" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <line x1="958.5" y1="440" x2="958.5" y2="496" stroke="#e8a93a" stroke-width="2"/>
+  <line x1="992.5" y1="440" x2="992.5" y2="496" stroke="#e8a93a" stroke-width="2"/>
+  <line x1="1026.5" y1="440" x2="1026.5" y2="496" stroke="#e8a93a" stroke-width="2"/>
+  <rect x="1022.5" y="436" width="42" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="1017.5" y1="534" x2="1017.5" y2="564" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="917.5" y="540" width="46" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <rect x="1079.5" y="440" width="156" height="56" rx="6" fill="#1f1a12" stroke="#e8a93a" stroke-width="2.5"/>
+  <line x1="1110.7" y1="440" x2="1110.7" y2="496" stroke="#e8a93a" stroke-width="2"/>
+  <line x1="1141.9" y1="440" x2="1141.9" y2="496" stroke="#e8a93a" stroke-width="2"/>
+  <line x1="1173.1" y1="440" x2="1173.1" y2="496" stroke="#e8a93a" stroke-width="2"/>
+  <line x1="1204.3" y1="440" x2="1204.3" y2="496" stroke="#e8a93a" stroke-width="2"/>
+  <rect x="1200.3" y="436" width="39.2" height="64" rx="5" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <line x1="1182.5" y1="534" x2="1182.5" y2="564" stroke="#7a8291" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <rect x="1082.5" y="540" width="46" height="18" rx="3" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <text x="40" y="232" class="sans" font-size="20" font-weight="600" fill="#eceef2" text-anchor="start">Without Partition</text>
+  <text x="40" y="256" class="sans" font-size="14" font-weight="400" fill="#aab0ba" text-anchor="start">one project, held whole</text>
+  <text x="40" y="314" class="sans" font-size="14" font-weight="400" fill="#4cc9f0" text-anchor="start">what one task loads</text>
+  <text x="40" y="333" class="sans" font-size="14" font-weight="400" fill="#aab0ba" text-anchor="start">grows with the project</text>
+  <text x="40" y="472" class="sans" font-size="20" font-weight="600" fill="#eceef2" text-anchor="start">With Partition</text>
+  <text x="40" y="496" class="sans" font-size="14" font-weight="400" fill="#aab0ba" text-anchor="start">the same project, in bounded contexts</text>
+  <text x="40" y="554" class="sans" font-size="14" font-weight="400" fill="#4cc9f0" text-anchor="start">what one task loads</text>
+  <text x="40" y="573" class="sans" font-size="14" font-weight="400" fill="#aab0ba" text-anchor="start">stays the same length</text>
+  <line x1="852.5" y1="290" x2="852.5" y2="278" stroke="#7a8291" stroke-width="1.5"/>
+  <text x="858.5" y="282" class="sans" font-size="13" font-weight="400" fill="#7a8291" text-anchor="start">the limit of the model</text>
+  <text x="1240" y="350" class="sans" font-size="13" font-weight="400" fill="#f5cd7a" text-anchor="end">the answers lose accuracy</text>
+  <text x="1240" y="590" class="sans" font-size="13" font-weight="400" fill="#f5cd7a" text-anchor="end">one task, one context, its contracts</text>
+  <line x1="250" y1="410" x2="1240" y2="410" stroke="#2a303a" stroke-width="2"/>
+  <text x="40" y="672" class="sans" font-size="17" font-weight="400" fill="#eceef2" text-anchor="start">Your project will grow. The attention of the assistant will not. Partition it, so that each task loads only what it needs.</text>
+  <rect x="40" y="690" width="14" height="10" rx="2" fill="#4cc9f0" stroke="none" stroke-width="2"/>
+  <text x="62" y="700" class="sans" font-size="13" font-weight="400" fill="#aab0ba" text-anchor="start">loaded by the task</text>
+  <rect x="200" y="690" width="14" height="10" rx="2" fill="url(#over)" stroke="#f5cd7a" stroke-width="1.5"/>
+  <text x="222" y="700" class="sans" font-size="13" font-weight="400" fill="#aab0ba" text-anchor="start">loaded beyond the limit of the model</text>
+  <rect x="500" y="686" width="16" height="16" rx="3" fill="#1f1a12" stroke="#e8a93a" stroke-width="2"/>
+  <text x="524" y="700" class="sans" font-size="13" font-weight="400" fill="#aab0ba" text-anchor="start">the project</text>
+  <rect x="620" y="686" width="16" height="16" rx="3" fill="none" stroke="#4cc9f0" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="644" y="700" class="sans" font-size="13" font-weight="400" fill="#aab0ba" text-anchor="start">what the task works on</text>
+</svg>

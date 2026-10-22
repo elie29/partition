@@ -65,7 +65,7 @@ When the assistant asks, answer:
 **When a context changes form**, you give the rule first, then the feature, in two prompts, as the guide does:
 
 > Add this business rule to `<bounded-context>`: (the rule).
-
+>
 > Plan and build (the behaviour that needs it).
 
 ## What comes back

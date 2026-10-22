@@ -62,7 +62,7 @@ The closing starts on its own with the last tick; if it did not, say, from the R
 
 ### The plan: one file, in the plans folder
 
-`partition-plan` opens the plan in the folder `docs/partition.yml` declares, `docs/plans/` by default, from its template. With `bridge: superpowers`, the Superpowers plugin writes the body, in that same folder, and `partition-plan` adds the header, the task index and the two closing sections on top of it. Either way, the plan has the same frame:
+`partition-plan` opens the plan in the folder `docs/partition.yml` declares, `docs/plans/` by default, from its template. When `bridge` names a tool (`superpowers`, `bmad`, another), that tool writes the body, in that same folder, and `partition-plan` adds the header, the task index and the two closing sections on top of it. Either way, the plan has the same frame:
 
 ```markdown
 # <Feature> — execution plan

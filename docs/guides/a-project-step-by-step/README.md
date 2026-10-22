@@ -52,12 +52,12 @@ Read only the titles and the figures, and the guide is the story of one project 
 
 Steps 02, 06, 07, 08, 10, 11, 13, 14, 15 and 16 carry a boundary decision: the assistant asks how the architect decides, unless your request names a workshop.
 
-**Setting up**
+### Setting up
 
 - [**00**](00-empty-folder.md#the-shape-after) — An empty folder → a jar and the package
 - [**01**](01-configuration-and-rules.md#the-shape-after) — Every rule loads in every session → scoped rules, a configuration, a first measure
 
-**Grow: one bounded context becomes two areas**
+### Grow: one bounded context becomes two areas
 
 - [**02**](02-first-bounded-context.md#the-shape-after) — The billing PRD → one bounded context, `invoice`; "Cancelled" parked
 - [**03**](03-architecture.md#the-shape-after) — Plain boxes → the C4 model; `invoice` is rich
@@ -71,18 +71,18 @@ Steps 02, 06, 07, 08, 10, 11, 13, 14, 15 and 16 carry a boundary decision: the a
 - [**11**](11-move.md#the-shape-after) — Catalog 1.1.0 → a unit moves; a call disappears
 - [**12**](12-thin-to-rich.md#the-shape-after) — A status rule → `product` becomes rich
 
-**Consolidate: merges and a removal**
+### Consolidate: merges and a removal
 
 - [**13**](13-merge-with-area-file.md#the-shape-after) — Refund is the reverse of payment → one bounded context
 - [**14**](14-merge-without-area-file.md#the-shape-after) — A price belongs to its product → one bounded context
 - [**15**](15-removal.md#the-shape-after) — Catalog 2.0.0 → `discount` removed
 
-**Inherit and release**
+### Inherit and release
 
 - [**16**](16-old-spec-as-source.md#the-shape-after) — The risk team's old spec, decomposed as a source → the area `customer`; `fraud` owns Rule B
 - [**17**](17-promotion.md#the-shape-after) — CardPay's own rhythm → `payment-app`
 
-**Looking back**
+### Looking back
 
 - [**18**](18-assessment.md#the-shape-after) — The quarter → the assessment; nothing changes
 - [**19**](19-where-each-rule-landed.md#the-shape-after) — Where did each rule land → the final figure

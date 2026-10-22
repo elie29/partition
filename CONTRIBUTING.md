@@ -40,7 +40,7 @@ Search the open and closed issues before opening one. An issue opens from a form
 
 They are the rules Partition gives to the projects that install it.
 
-1. **The spec moves first.** [`docs/specs/partition/spec.md`](docs/specs/partition/spec.md) is the source of truth of this package. A change of behaviour changes the spec in the same pull request, before the skill.
+1. **The spec moves first.** [`docs/specs/partition/spec.md`](docs/specs/partition/spec.md) is the source of truth of this package. A change of behaviour changes the spec in the same pull request, before the skill. The spec carries no provenance or status markers: a rule enters it only once the owner has validated it; its origin and reason go to `## Decisions` of the plan.
 2. **The package keeps its own budget.** The always-loaded surface stays under 2 000 tokens and each `SKILL.md` under 3 000. `npm test` checks both. Detail goes to `references/`, loaded on demand.
 3. **Nothing runs unasked, nothing needs installing.** No hook primitive, no MCP server, no dependency in what the package ships. A script is one file for Node 22 or later, the Python standard library or Bash. The repository's own tooling may take a `devDependency` only when nothing built into Node does the job. Open an issue first and say why; once accepted, it is locked by `package-lock.json`, which `npm test` requires.
 4. **No stack in a skill.** A `SKILL.md` names no language, framework or vendor. Per-ecosystem material goes to `references/`.

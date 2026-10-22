@@ -22,6 +22,10 @@ It has no workflow engine, no cast of role agents and no ceremony: it runs besid
 
 An AI assistant works wonders while it can hold the whole project. As the project grows, its answers lose accuracy. The model has not changed: what it has to hold has grown, and every request pays for it, in tokens, in review time, in regressions outside the scope asked, and in explaining the same context again. The pressure is the size of what the assistant holds, whatever the age of the project.
 
+<p align="center">
+  <img src="assets/same-loop-two-loads.svg" alt="Same loop, two loads: the same project grows feature after feature through spec, plan, build and verify; without Partition what one task loads grows with it and passes the limit of the model, with Partition the project is cut into bounded contexts and what one task loads stays the same length" width="100%">
+</p>
+
 Two things fix that, and neither is a prompt:
 
 - **A specification that stays true.** The spec is the source of truth, the code implements it, and when something breaks the spec moves first. Otherwise the next session reintroduces the old behaviour from the old document.
@@ -47,7 +51,7 @@ Skills: `partition-spec` to write or change a spec, `partition-attack` to challe
 A session can be cleared at any moment. What exists only in the chat is lost, so the plan of the feature is the only place the state of the work lives.
 
 - **Where:** the plans folder declared in `docs/partition.yml` (`docs/plans/` by default). When none is declared, `partition-plan` takes the folder a project instruction names, or finds it on disk, and records it there; it asks you when neither settles it.
-- **What it holds:** `partition-plan` opens it from its template: a header (`Status`, `Resume at`, `Last updated`), a task index with a checkbox per task, each task with its verification command and expected result, then `## Decisions` and `## Blockers`. With `bridge: superpowers` the plugin writes the body and `partition-plan` adds the header, the index and the two sections.
+- **What it holds:** `partition-plan` opens it from its template: a header (`Status`, `Resume at`, `Last updated`), a task index with a checkbox per task, each task with its verification command and expected result, then `## Decisions` and `## Blockers`. When `bridge` names a tool, that tool writes the body and `partition-plan` adds the header, the index and the two sections.
 - **Every turn:** before it replies, the assistant writes the plan: what is done (with the date and the commit sha, or `uncommitted`), where to resume, every decision made in the conversation, every blocker. It does not commit; you do.
 - **Resume:** _"Resume."_ The assistant reads the header, the task index, the one task named in `Resume at` and `## Blockers`, nothing more, and announces where it restarts.
 - **Close:** when the last task is ticked, in this order: a `partition-gate` verdict on the plan's changes (HOLD keeps the plan open; each reason of a HOLD and each condition becomes a task, or a blocker when only a person can act); what the work established goes to the durable spec, the area file, the invariant register or a rule file, each entry and each line validated by you; the README is realigned with `partition-readme` when what users install, run or configure changed, users including the people who build and maintain the project; then `done`.
@@ -214,7 +218,7 @@ It reads the hook input and prints one message. It opens no other file, writes n
 
 > Enable the Partition reminder hook.
 
-Explanation: `partition-plan` copies `partition-reminder.py` to `.claude/hooks/` and adds two entries to `.claude/settings.json`. Commit both if the whole team should have it. It needs Python 3 (`python3`, `python` or `py`); the skill writes the one it finds on your machine. That command is this machine's: a teammate on another machine may need `python3` where you have `py -3`, and the hook stays silent when its interpreter is missing. To turn it off, remove the two entries.
+It needs Python 3 (`python3`, `python` or `py`); the skill writes the one it finds on your machine. That command is this machine's: a teammate on another machine may need `python3` where you have `py -3`, and the hook stays silent when its interpreter is missing. Commit what the skill wrote if the whole team should have it. What it writes, and how to turn it off, is in [SECURITY.md](SECURITY.md).
 
 What it does not cover:
 
@@ -243,13 +247,12 @@ docs/
 └── budget/YYYY-MM-DD.md           one record per day of assessment
 ```
 
-The folders under `paths:` in `docs/partition.yml` are yours to change: specs, the invariant register, contracts, sources, designs, plans and, if you document it, your persistence schema. The file follows `partition.schema.json`, shipped with `partition-budget`: its first line points your editor at the schema, and the budget stops on a key it does not know, naming each key to fix.
+The folders under `paths:` in `docs/partition.yml` are yours to change: specs, the invariant register, contracts, sources, plans and, if you document it, your persistence schema. The file follows `partition.schema.json`, shipped with `partition-budget`: its first line points your editor at the schema, and the budget stops on a key it does not know, naming each key to fix.
 
 | Key | Default | What it holds | Kind |
 | --- | --- | --- | --- |
 | `specs` | `docs/specs` | one durable spec per bounded context, by area | [Durable spec](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `invariants` | `<specs>/invariants.md` | what spans areas or layers | [Invariant register](.apm/skills/partition-spec/references/glossary.md#documents) |
-| `designs` | `docs/designs` | one per feature: what it builds | [Design](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `plans` | `docs/plans` | one per feature and bounded context: its state and its decisions | [Plan](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `contracts` | `docs/contracts` | where an API contract pasted or read from a URL is saved; one elsewhere in the repository is read where it lives | [Contract](.apm/skills/partition-spec/references/glossary.md#documents) |
 | `sources` | `docs/sources` | where a source pasted or described in the chat is saved; one elsewhere, an old spec included, is read where it lives | [Source](.apm/skills/partition-spec/references/glossary.md#documents) |
@@ -263,9 +266,27 @@ A package about budget that ignored its own would not be believed. Every session
 npm run budget
 ```
 
+### What a session of your project loads
+
+The budget record gives two figures. The second contains the first, so they do not add up:
+
+```text
+Every session  = your entry file (CLAUDE.md, AGENTS.md, ...)
+               + about 1 700   (the Partition instruction and the skill and agent descriptions)
+               + every rule file without a scope
+               + the invariant register
+
+Always (per bounded context) = Every session
+                             + the spec of that bounded context
+                             + its area file
+                             + the rule files scoped to its code
+```
+
+For example, with a 1 000-token entry file and a 7 000-token spec, a session that touches no bounded context loads about 2 700 tokens. A task in that bounded context loads about 9 700, its [_Always_ gauge](.apm/skills/partition-spec/references/glossary.md#budget), compared with the threshold (32 000 by default). The body of each skill used comes on top, 800 to 2 600 tokens each, and only for the skills that run.
+
 ## Beside your process tools
 
-Partition does not brainstorm, plan a sprint or run a TDD loop. Use what you already use for that. With the Superpowers plugin for Claude Code, set `bridge: superpowers` in `docs/partition.yml`: the plugin writes the body of each plan and Partition adds its header and its closing on top of it. The plans stay in the folder `paths.plans` declares.
+Partition does not brainstorm, plan a sprint or run a TDD loop. Use what you already use for that. Name the tool that writes the body of your plans in `bridge` of `docs/partition.yml` (`superpowers` for the Superpowers plugin of Claude Code, `bmad`, another): it writes the body of each plan and Partition adds its header and its closing on top of it. The key is information for the reader; the plans stay in the folder `paths.plans` declares.
 
 ## The method
 

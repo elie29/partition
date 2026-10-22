@@ -70,6 +70,12 @@ When a gauge is over, Partition does not decide where the boundary goes. It meas
 
 The package keeps its own budget too: every session of a project that installs it pays about 1 700 tokens for the instruction and the skill descriptions, and its tests fail above 2 000.
 
+The [step-by-step guide](https://github.com/elie29/partition/blob/main/docs/guides/a-project-step-by-step/README.md) shows it on one project, from an empty folder to two deployables: a bounded context created, split, merged, removed, promoted. Four of its moments, side by side:
+
+![The demo project of the step-by-step guide after steps 04, 08, 15 and 17, side by side. After step 04: one deployable, one area, one bounded context. After step 08: two areas, five bounded contexts, two area files and the invariant register, once invoice was split, refund created and the catalog contract read. After step 15: two areas, three bounded contexts, no area file left, after a move, two merges and a removal. After step 17: two deployables, the area customer inherited from an old spec, payment promoted to its own app. Under each column, what one task of one bounded context loads: the instruction, the register once it exists, the area file while one exists, the spec of the context and its scoped rules. The structure grows across the columns; the slice a task loads keeps about the same length.](../../assets/project-grows-load-stays.svg)
+
+The structure grows; what one task loads does not. That is the whole bet: the assistant is not thrown away as the project grows, it is handed one bounded context at a time.
+
 ## The stance
 
 Three positions hold across the series.
