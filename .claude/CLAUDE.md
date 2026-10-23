@@ -44,5 +44,6 @@ npm run budget                                                     # the package
 npm run update-version minor                                       # at release time: patch, minor, major or X.Y.Z
 node --test tests/budget.test.mjs                                  # one file: budget, c4, contract, gate, guide, package or release
 node .apm/skills/partition-budget/scripts/budget.mjs               # the gauges of this repository
-apm install /path/to/this/repo --target claude,copilot             # trial install, in a throwaway project
+apm install /path/to/this/repo --target claude                     # trial install, in a throwaway project
+apm install /path/to/this/repo --target copilot                    # the other target, in a second throwaway project
 ```

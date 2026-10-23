@@ -4,13 +4,26 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-23
+
 ### Added
 
 - The getting-started series and the README say where a project's technical stack is written: Partition has no file for it and never picks one.
+- The README explains Claude Code's skill listing: Partition's descriptions take about 4 300 of the 8 000 characters a 200 000-token context gives every installed skill, and what to do when the listing is over budget.
+- The README shows how a project's CI can run the budget check on each pull request: the budget script of its target with `--check`, no agent and no token.
+- The four skills that run a script say what they need in `compatibility`: Node.js 22 or later for `partition-budget`, `partition-c4` and `partition-shape`; Git, Bash and Python 3 with its standard library for `partition-gate`.
 
 ### Changed
 
 - The getting-started site lists the series in a left sidebar, the current article marked, and names the author in its footer.
+- The install offers one target per project, `claude` or `copilot`, never both: two targets load the instruction two or three times. Copilot needs no `apm compile`, except once after updating from 1.0.0, to remove the `.github/copilot-instructions.md` APM generated for it. A project installed on both targets with 1.0.0 keeps one, as the README's _Update_ says.
+- The spec auditor holds no edit tool: `tools: Read, Grep, Glob, Bash`, which Claude Code reads as is and GitHub Copilot maps to read, search and execute. It still runs commands, so this is a restriction, not a sandbox.
+- The reminder hook states facts instead of giving orders, as Claude Code's hook documentation asks of `additionalContext`; the closing steps it recalls are the same.
+
+### Fixed
+
+- The always-on instruction carries `applyTo: '**'`. Since APM 0.34, a Copilot-only install left it without a scope in `.github/instructions/`, which VS Code's Local harness loads only on demand; it is now loaded at session start on both targets, deployed once, and Copilot needs no `apm compile`.
+- `partition-rules` no longer says `apm compile` gathers the rules into `AGENTS.md`: since APM 0.34 it does so only with `--force-instructions`. The heading rule it explains is unchanged.
 
 ## [1.0.0] - 2026-10-22
 

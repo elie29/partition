@@ -223,13 +223,19 @@ test('budget: the copilot target reads its own files', () => {
   assert.equal(r.contexts[0].scopedRules.length, 1);
 });
 test('budget: the deployed instruction counts in every session as the instruction, not as a rule without a scope', () => {
-  for (const [target, file, rest] of [
-    ['claude', '.claude/rules/partition.md', { 'CLAUDE.md': x(400) }],
-    ['copilot', '.github/instructions/partition.instructions.md', { '.github/copilot-instructions.md': x(400) }],
+  // scoped to every file, as APM deploys it (BR-6); 200 chars = 50
+  for (const [target, file, rest, body] of [
+    ['claude', '.claude/rules/partition.md', { 'CLAUDE.md': x(400) }, `---\npaths:\n  - "**"\n---\n${x(176)}`],
+    [
+      'copilot',
+      '.github/instructions/partition.instructions.md',
+      { '.github/copilot-instructions.md': x(400) },
+      `---\ndescription: d\napplyTo: '**'\n---\n${x(163)}`,
+    ],
   ]) {
     const dir = tmp({
       ...rest,
-      [file]: `---\ndescription: d\n---\n${x(177)}`, // 200 chars = 50, no scope (BR-6)
+      [file]: body,
       'docs/partition.yml': `target: ${target}\ncontexts:\n  - id: shelf\n    code:\n      - src/**\n`,
     });
     const r = measureProject(dir);

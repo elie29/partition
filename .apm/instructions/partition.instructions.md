@@ -1,5 +1,6 @@
 ---
 description: Partition - spec first, the plan is the state, done means real output
+applyTo: '**'
 ---
 
 ### Truth

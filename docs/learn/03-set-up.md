@@ -31,7 +31,7 @@ No bounded context is asked at setup, and none is listed by hand: each comes fro
 
 ## What you say
 
-**In a terminal, at the root of the project.** Pin a release tag:
+**In a terminal, at the root of the project.** Pin a release tag and pick one target per project:
 
 ```bash
 # Claude Code
@@ -39,11 +39,6 @@ apm install elie29/partition#<tag> --target claude
 
 # GitHub Copilot
 apm install elie29/partition#<tag> --target copilot
-apm compile
-
-# both
-apm install elie29/partition#<tag> --target claude,copilot
-apm compile
 ```
 
 **Then in a fresh session**, to check the install:
@@ -76,13 +71,13 @@ Inside that plan, answer each question it asks. When it stops without a question
 | --- | --- | --- |
 | 12 skills | `.claude/skills/partition-*/` | `.agents/skills/partition-*/` |
 | 1 agent | `.claude/agents/spec-auditor.md` | `.github/agents/spec-auditor.agent.md` |
-| 1 always-on instruction | `.claude/rules/partition.md` | `.github/instructions/partition.instructions.md`, and `AGENTS.md` after `apm compile` |
+| 1 always-on instruction | `.claude/rules/partition.md` | `.github/instructions/partition.instructions.md`, scoped to every file (`**`) |
 
-Plus `apm.yml` and `apm.lock.yaml`. With `--target claude`, your own files are untouched; for Copilot, `apm compile` also writes the instruction into `.github/copilot-instructions.md`, unless you wrote that file by hand: APM never overwrites a hand-authored one. There is no `docs/` folder, no `docs/partition.yml`, no plan: nothing runs unasked. Commit `apm.yml`, `apm.lock.yaml` and the deployed files, so every clone has them; `apm_modules/` is a download folder APM ignores for you.
+Plus `apm.yml` and `apm.lock.yaml`. Your own files are untouched: Partition writes no `AGENTS.md`, `CLAUDE.md` or `.github/copilot-instructions.md`, and needs no `apm compile`. There is no `docs/` folder, no `docs/partition.yml`, no plan: nothing runs unasked. Commit `apm.yml`, `apm.lock.yaml` and the deployed files, so every clone has them; `apm_modules/` is a download folder APM ignores for you.
 
 The instruction is loaded when a session starts, which is why the check needs a fresh session: one opened before the install never sees it. The assistant answers from the instruction, not from a skill: update the plan first (tick what is done, set `Resume at`, append the decisions and the blockers), then reply, and never commit, because you commit. If the answer does not say "plan first", the instruction is not loaded: stop there. To answer, it creates nothing.
 
-From now on, the descriptions of the package's skills load in every session. That is the first line of what the budget will measure.
+From now on, the descriptions of the package's skills load in every session. On Claude Code, they share one listing with every installed skill, within a budget the [README explains](https://github.com/elie29/partition/blob/main/README.md#what-a-session-of-your-project-loads). That is the first line of what the budget will measure.
 
 ### The plans folder, settled once
 
@@ -166,7 +161,7 @@ The output is pasted, unedited, into `docs/budget/YYYY-MM-DD.md`, made from the 
 
 6. The old lines stay in your entry file until you remove them, and it tells you so: while both exist, the rules load twice.
 7. `apm install` deploys each rule to every assistant in its own format, scoped by its `applyTo`. Never edit the deployed copies: edit the source and install again.
-8. The budget runs again and shows the every-session total before and after. Once you have removed the moved lines, the total goes down, and no rule is listed "without a scope"; the package's `.claude/rules/partition.md` is listed as `(instruction)`, unscoped by design.
+8. The budget runs again and shows the every-session total before and after. Once you have removed the moved lines, the total goes down, and no rule is listed "without a scope"; the package's `.claude/rules/partition.md` is listed as `(instruction)`, always on by design: its scope is every file, `**`.
 
 What stays in the entry file is a map: what the project is, the few rules that hold everywhere, where the rest lives.
 

@@ -56,6 +56,13 @@ test('every skill carries the license, since APM deploys the skill folder withou
   }
 });
 
+test('a skill that ships a script says what it needs to run it', () => {
+  for (const s of skills.filter((s) => fs.existsSync(path.join(repo, skillsDir, s, 'scripts')))) {
+    const c = frontmatter(read(`${skillsDir}/${s}/SKILL.md`)).compatibility;
+    assert.ok(c && c.length <= 500, `${s}: compatibility missing or over 500 characters`);
+  }
+});
+
 test('every asset, reference and script a skill cites exists in that skill', () => {
   const missing = [];
   for (const s of skills) {
@@ -292,8 +299,11 @@ test('a rule skeleton is not a rule: no file under the skills would be deployed 
   }
 });
 
-test('the always-on instruction carries no file scope', () => {
-  assert.equal(frontmatter(read('.apm/instructions/partition.instructions.md')).applyTo, undefined);
+test('the always-on instruction is scoped to every file, so both targets load it at session start (BR-6)', () => {
+  assert.match(
+    read('.apm/instructions/partition.instructions.md'),
+    /^---\ndescription: .+\napplyTo: (["'])\*\*\1\n---\n/,
+  );
 });
 
 test('the spec template points to its source and copies only rules, invariants and decisions', () => {
@@ -509,6 +519,24 @@ test('the documents quote the always-loaded budget within 5 %', () => {
   ]) {
     const n = quoted(read(file), re);
     assert.ok(Math.abs(n - alwaysTokens) <= alwaysTokens / 20, `${file}: ${n} quoted, ${alwaysTokens} measured`);
+  }
+});
+
+test('the README quotes the characters of the skill listing within 5 %', () => {
+  const lines = skills.map((s) => `- ${s}: ${frontmatter(read(`${skillsDir}/${s}/SKILL.md`)).description}`);
+  const chars = lines.join('\n').length;
+  const n = Number(
+    read('README.md')
+      .match(/take about \*\*([\d ]+) characters\*\*/)?.[1]
+      .replace(/\s/g, ''),
+  );
+  assert.ok(Math.abs(n - chars) <= chars / 20, `${n} quoted, ${chars} measured`);
+});
+
+test("the README's CI recipe names the budget script of both targets", () => {
+  const ci = read('README.md').split('### In your CI (optional)')[1]?.split('\n## ')[0] ?? '';
+  for (const dir of ['.claude', '.agents']) {
+    assert.ok(ci.includes(`${dir}/skills/partition-budget/scripts/budget.mjs --check`), dir);
   }
 });
 
@@ -864,6 +892,10 @@ test('every reader of a spec reads the area file, and the auditor no decision lo
   );
 });
 
+test('the spec auditor reads and runs commands, and holds no edit tool (BR-35)', () => {
+  assert.equal(frontmatter(read('.apm/agents/spec-auditor.agent.md')).tools, 'Read, Grep, Glob, Bash');
+});
+
 test('partition-attack writes its findings into a durable spec, under Open questions', () => {
   const skill = read(`${skillsDir}/partition-attack/SKILL.md`);
   assert.match(skill, /Attack a durable spec or a design/);
@@ -1051,14 +1083,14 @@ test('the reminder hook stays silent unless a plan is marked done or a commit is
   const edit = (file, text) => JSON.stringify({ tool_name: 'Write', tool_input: { file_path: file, content: text } });
   assert.match(run(edit('C:\\repo\\docs\\plans\\p.md', '# P\n\n> **Status:** done\n')), /invariant register/);
   assert.match(run(edit('docs/plans/p.md', '> **Status:** done')), /area file/);
-  assert.match(run(edit('docs/plans/p.md', '> **Status:** done')), /write it only once validated/);
+  assert.match(run(edit('docs/plans/p.md', '> **Status:** done')), /written only once validated/);
   assert.match(run(edit('docs/plans/p.md', '> **Status:** done')), /partition-gate/);
   assert.match(run(edit('docs/plans/p.md', '> **Status:** done')), /back to in progress/);
   assert.match(run(edit('docs/plans/p.md', '> **Status:** done')), /even when none was admitted/);
   assert.doesNotMatch(run(edit('docs/plans/p.md', '> **Status:** done')), /say nothing about the register/);
   assert.match(
     run(edit('docs/plans/p.md', '> **Status:** done')),
-    /When what users install, run or configure changed, those who build and maintain the project included, realign the README/,
+    /When what users install, run or configure changed, those who build and maintain the project included, the README is realigned/,
   );
   assert.equal(run(edit('docs/plans/p.md', '> **Status:** in progress')), '');
   assert.equal(run(edit('src/a.js', 'status: done')), '');

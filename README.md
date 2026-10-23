@@ -4,7 +4,7 @@
 
 # Partition
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-0b78a0.svg)](LICENSE) ![Version](https://img.shields.io/badge/version-1.0.0-0b78a0.svg) ![Targets](https://img.shields.io/badge/targets-Claude%20Code%20%C2%B7%20GitHub%20Copilot-0b78a0.svg)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0b78a0.svg)](LICENSE) ![Version](https://img.shields.io/badge/version-1.0.1-0b78a0.svg) ![Targets](https://img.shields.io/badge/targets-Claude%20Code%20%C2%B7%20GitHub%20Copilot-0b78a0.svg)
 
 **The living specification and the Context Budget, as agent skills.**
 
@@ -75,19 +75,14 @@ Skill: `partition-shape`. Once a boundary is decided, `partition-reshape` carrie
 
 You need the [APM CLI](https://microsoft.github.io/apm), Git and Node.js 22 or later. Python 3 and Bash are used by one skill (`partition-gate`) and by the optional hook.
 
-From the root of your project:
+From the root of your project, pick one target per project:
 
 ```bash
 # Claude Code
-apm install elie29/partition#v1.0.0 --target claude
+apm install elie29/partition#v1.0.1 --target claude
 
 # GitHub Copilot
-apm install elie29/partition#v1.0.0 --target copilot
-apm compile
-
-# both
-apm install elie29/partition#v1.0.0 --target claude,copilot
-apm compile
+apm install elie29/partition#v1.0.1 --target copilot
 ```
 
 While the repository is private, give APM a credential first: `apm auth github.com`.
@@ -98,11 +93,11 @@ What lands in your project:
 | --- | --- | --- |
 | 12 skills | `.claude/skills/partition-*/` | `.agents/skills/partition-*/` |
 | 1 agent | `.claude/agents/spec-auditor.md` | `.github/agents/spec-auditor.agent.md` |
-| 1 always-on instruction | `.claude/rules/partition.md` | `.github/instructions/partition.instructions.md`, and `AGENTS.md` after `apm compile` |
+| 1 always-on instruction | `.claude/rules/partition.md` | `.github/instructions/partition.instructions.md`, scoped to every file (`**`) |
 
-`apm compile` also writes the instruction into `.github/copilot-instructions.md`, unless you wrote that file by hand: APM never overwrites a hand-authored one, and tells you how to hand it over.
+Partition writes no `AGENTS.md`, `CLAUDE.md` or `.github/copilot-instructions.md`, and needs no `apm compile`.
 
-Commit `apm.yml`, `apm.lock.yaml` and the deployed files, so every clone has them. APM ignores `apm_modules/` for you; it is a download folder you can delete, and `apm install` recreates it from the lockfile. Run `apm install` again before `apm compile`, which reads the instruction from there.
+Commit `apm.yml`, `apm.lock.yaml` and the deployed files, so every clone has them. APM ignores `apm_modules/` for you; it is a download folder you can delete, and `apm install` recreates it from the lockfile.
 
 **Check the install.** Open a fresh session and ask what the assistant must do before it hands control back. It should answer from the instruction: update the plan first. If it does not, the instruction is not loaded.
 
@@ -113,10 +108,13 @@ Your project pins a tag. To move to a newer one:
 ```bash
 apm outdated                 # what is behind
 apm update                   # shows the plan, then applies it
-apm compile                  # Copilot only
 ```
 
 or change the tag in `apm.yml` and run `apm install`.
+
+On Copilot, after updating from 1.0.0, run `apm compile` once: it removes the `.github/copilot-instructions.md` APM generated for 1.0.0, which would load the instruction a second time. Delete that file by hand if it remains.
+
+A project that installed 1.0.0 on both targets keeps one: run `apm install` with `--target claude` or `--target copilot` alone, delete the other target's Partition files listed in [Install](#install), and delete the `AGENTS.md` that `apm compile` generated for 1.0.0, unless you wrote it by hand. Otherwise the instruction loads two or three times.
 
 An update replaces the skills, the agent and the instruction. It never touches what your project owns: your specs, your invariants, your plans, your rules, your `docs/partition.yml`, your C4 model. Templates are copied into your project only when the file does not exist yet. The install itself writes nothing under `docs/`: `docs/partition.yml` and the other files appear when a skill first needs them, starting with step 1 below. An update can still make the budget stop on a `docs/partition.yml` it used to accept, when the file carries a key the schema does not list (see [What your project owns](#what-your-project-owns)); the message names each key to fix.
 
@@ -208,7 +206,7 @@ Closing a plan is the step people forget. What the work established for good has
 
 | When | What happens |
 | --- | --- |
-| A plan file is written with `Status: done` | A reminder is put into the session: close the plan as `partition-plan` says. First a `partition-gate` verdict on its changes; HOLD keeps the plan in progress. Then move what is true for one bounded context into its durable spec and what the bounded contexts of one area share into its area file, run the rest through the admission test of the invariant register, write no entry before the owner validates it, then report the entries touched and the candidates rejected. Last, realign the README with `partition-readme` when what users install, run or configure changed, the people who build and maintain the project included. |
+| A plan file is written with `Status: done` | A reminder is put into the session, stated as facts: a plan closes as `partition-plan` describes, only after a `partition-gate` verdict on its changes, and HOLD keeps it in progress. What is true for one bounded context belongs in its durable spec, what the bounded contexts of one area share in its area file, and the rest goes through the admission test of the invariant register; no entry is written before the owner validates it, and the closing report names the entries touched and the candidates rejected. The README is realigned with `partition-readme` when what users install, run or configure changed, the people who build and maintain the project included. |
 | A `git commit` is about to run | The same reminder. |
 | Anything else | Nothing. The hook stays silent. |
 
@@ -285,6 +283,19 @@ Always (per bounded context) = Every session
 ```
 
 For example, with a 1 000-token entry file and a 7 000-token spec, a session that touches no bounded context loads about 2 700 tokens. A task in that bounded context loads about 9 700, its [_Always_ gauge](.apm/skills/partition-spec/references/glossary.md#budget), compared with the threshold (32 000 by default). The body of each skill used comes on top, 800 to 2 600 tokens each, and only for the skills that run.
+
+On Claude Code, the descriptions also share one skill listing with every other installed skill: Claude Code fits the name and description of each into 1 % of the context window, about 8 000 characters with a 200 000-token context. Partition's twelve lines take about **4 300 characters**. Past that budget, Claude Code keeps every name, drops the description of the least-used skills, and warns "Skill listing over budget". A skill without its description is no longer picked from what you say; the five skills the instruction names still are. If you see the warning, raise `skillListingBudgetFraction` in the settings, or disable the skills you do not use with `/skills`.
+
+### In your CI (optional)
+
+Between two assessments, your project's CI can check the gauges on each pull request. Add one step, with Node.js 22 or later, that runs the budget script of your target with `--check`:
+
+```bash
+node .claude/skills/partition-budget/scripts/budget.mjs --check    # Claude Code
+node .agents/skills/partition-budget/scripts/budget.mjs --check    # GitHub Copilot
+```
+
+It exits 1 when a gauge is over its threshold, and 2 when `docs/partition.yml` is missing or does not follow the schema. No agent runs and no token is spent. The step only checks the gauges: the dated assessment, with its people, its warning signs and its decision, stays the work of `partition-budget`.
 
 ## Beside your process tools
 

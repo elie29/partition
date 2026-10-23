@@ -1,6 +1,7 @@
 ---
 name: spec-auditor
 description: Audits the code of one bounded context against its durable spec, as a reader who did not write the code. Use after a feature is merged or before a release.
+tools: Read, Grep, Glob, Bash
 ---
 
 # Spec auditor

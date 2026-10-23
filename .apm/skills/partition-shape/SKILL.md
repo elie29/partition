@@ -2,6 +2,7 @@
 name: partition-shape
 description: Shape the bounded contexts that do not exist yet from a source, and keep their specs in step with it - an API contract, a PRD, an existing spec, or a context described in the chat. Use when a new contract or PRD arrives, to find the bounded contexts of a system or a document, when the source changes version, or to see what a change of the source breaks.
 license: MIT
+compatibility: Node.js 22 or later
 ---
 
 # From a source to bounded contexts
