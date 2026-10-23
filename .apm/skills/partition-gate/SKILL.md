@@ -2,6 +2,7 @@
 name: partition-gate
 description: Deep regression audit of a commit, staged change, working tree, PR or diff range, ending in an evidence-backed production-readiness verdict (SHIP / SHIP WITH CONDITIONS / HOLD). Use this skill whenever the user asks whether a change is safe to ship, deploy, merge or release, whether their last commit or modification introduced a regression, whether something is "production ready", or says things like "check my last commit", "did I break anything", "review this diff", "is this safe to deploy", "go/no-go on this PR", "audit these changes before release". Use it even when the request sounds casual or narrow, and even when no tests exist — in that case the skill's job is to say so loudly rather than to guess.
 license: MIT
+compatibility: Git, Bash and Python 3 with its standard library
 ---
 
 # Regression Gate

@@ -6,7 +6,7 @@ The repository holds two distinct things: what APM deploys into the projects tha
 
 | Content | In Claude Code | In GitHub Copilot |
 | --- | --- | --- |
-| `instructions/partition.instructions.md` | `.claude/rules/partition.md` | `.github/instructions/`, then `AGENTS.md` after `apm compile` |
+| `instructions/partition.instructions.md` | `.claude/rules/partition.md` | `.github/instructions/`, scoped to every file |
 | `agents/spec-auditor.agent.md` | `.claude/agents/` | `.github/agents/` |
 | `skills/partition-*/` (12 folders) | `.claude/skills/` | `.agents/skills/` |
 

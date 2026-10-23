@@ -2,6 +2,7 @@
 name: partition-budget
 description: Measure the Context Budget of each bounded context in tokens and record the assessment. Use for the scheduled review, when the assistant rereads too much, breaks things outside its scope or reinvents a rule, and after a split.
 license: MIT
+compatibility: Node.js 22 or later
 ---
 
 # Context Budget

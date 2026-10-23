@@ -22,15 +22,15 @@ PLAN_DONE = re.compile(r"^\s*>?\s*\*{0,2}\s*status\s*:?\s*\*{0,2}\s*:?\s*done\b"
 GIT_COMMIT = re.compile(r"(^|[\s;&|(])git(\s+-\S+(\s+[^\s-]\S*)?)*\s+commit\b")
 
 REMINDER = (
-    "%s Close it as the partition-plan skill says. First a partition-gate verdict on its changes: if the "
-    "plan records none, set its Status back to in progress and run the gate before anything else (HOLD "
-    "keeps the plan in progress). Then list the statements the work established, move those "
-    "that are true for one bounded context into its durable spec, those the bounded contexts of one area "
-    "share into its area file, and run the others through the admission test of the invariant register "
-    "(partition-spec, references/invariants.md). Show the owner every entry you would write in the area "
-    "file or the register, and write it only once validated; then report the identifiers touched and "
-    "the candidates rejected, even when none was admitted. When what users install, run or configure "
-    "changed, those who build and maintain the project included, realign the README with partition-readme."
+    "%s The partition-plan skill describes how a plan closes. A plan closes only after a partition-gate "
+    "verdict on its changes: a plan that records none goes back to in progress until the gate has run, and "
+    "HOLD keeps it in progress. The statements the work established then have a place: what is true for "
+    "one bounded context belongs in its durable spec, what the bounded contexts of one area share belongs "
+    "in its area file, and the others go through the admission test of the invariant register "
+    "(partition-spec, references/invariants.md). An entry in the area file or the register is shown to "
+    "the owner and written only once validated. The closing report names the identifiers touched and the "
+    "candidates rejected, even when none was admitted. When what users install, run or configure changed, "
+    "those who build and maintain the project included, the README is realigned with partition-readme."
 )
 
 

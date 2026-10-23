@@ -105,7 +105,7 @@ The script measures the first. The three others are asked of the people present,
 4. **The options, which the assistant does not choose**: scope or cut a rule (`partition-rules`), trim a spec of what the contract or the code already says (`partition-spec`), hold a workshop on a boundary and then prepare the move (`partition-reshape`), promote a component to a container or a container to a system (`partition-reshape`), or nothing, with the reason.
 5. **The decision**, with the names of those who took it, and the date of the next assessment.
 
-The record compares with the previous one and says what moved. In the guide, a quarter has passed: no gauge is over and none is expected at that size; one warning sign is observed with its evidence; the decision and the next date are recorded, and nothing else changes.
+The record compares with the previous one and says what moved. In the guide, a quarter has passed: no gauge is over and none is expected at that size; one warning sign is observed with its evidence; the decision and the next date are recorded, and nothing else changes. Between two assessments, a project's CI can run the budget check on each pull request, as the [README shows](https://github.com/elie29/partition/blob/main/README.md#in-your-ci-optional).
 
 The same quarter, the guide reads the project from cold three more times, each in a fresh session and none changing code: _"Audit the code against the pattern grid."_ (`partition-patterns` replays each ruling and adds a row to its audits), _"Check the hexagons against their layer maps."_ (`partition-hexagon`) and _"Audit `<bounded-context>` against its spec."_ (the `spec-auditor` agent). The last two change no file.
 

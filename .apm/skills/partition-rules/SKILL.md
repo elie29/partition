@@ -24,7 +24,7 @@ applyTo: 'src/main/**'
 ---
 ```
 
-A rule has no `#` or `##` heading: its sections start at `###`. `apm compile` gives each rule its own level-2 heading in `AGENTS.md`, and the `description` names it.
+A rule has no `#` or `##` heading: its sections start at `###`, so a tool that gathers the rules into one file (`apm compile --force-instructions` does) gives each its own level-2 heading, and the `description` names it.
 
 `apm install` deploys them to each assistant in its own format, with `applyTo` turned into that assistant's scope. Never edit the deployed copies: edit the source and run `apm install` again.
 

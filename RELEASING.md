@@ -40,14 +40,15 @@ A consuming project depends on three things: the keys of `docs/partition.yml`, t
    npm run budget
    ```
 
-3. **Try the install** in a throwaway project, from the local folder, before anyone else does:
+3. **Try the install** in two throwaway projects, one per target, from the local folder, before anyone else does:
 
    ```bash
-   apm install /path/to/partition --target claude,copilot
-   apm compile
+   apm install /path/to/partition --target claude    # first project
+   apm install /path/to/partition --target copilot   # second project
+   apm compile                                       # second project
    ```
 
-   Twelve skills, one agent and one instruction per target, and no error.
+   Claude: twelve skills in `.claude/skills/`, `.claude/agents/spec-auditor.md`, and `.claude/rules/partition.md` with `paths: ["**"]`. Copilot: twelve skills in `.agents/skills/`, `.github/agents/spec-auditor.agent.md`, `.github/instructions/partition.instructions.md` with `applyTo: '**'`, and after `apm compile` no `AGENTS.md` and no `.github/copilot-instructions.md`. No error.
 
 4. **Open the release pull request.** Commit the release on a branch of its own, push the branch, and open a pull request on this repository. Once its CI is green, squash-merge it: the release is one commit on `main`.
 

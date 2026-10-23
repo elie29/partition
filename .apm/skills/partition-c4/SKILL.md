@@ -2,6 +2,7 @@
 name: partition-c4
 description: Maintain the C4 architecture model as text and generate its draw.io views and sequence diagrams. Use to add or change a system, container, component or relation, to draw a context, container, component or dynamic view, or a sequence diagram, or to turn a hand-drawn draw.io file into the model.
 license: MIT
+compatibility: Node.js 22 or later
 ---
 
 # C4 as text
