@@ -15,6 +15,18 @@ const walk = (dir) =>
     .flatMap((e) => (e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`]));
 const skillsDir = '.apm/skills';
 const skills = fs.readdirSync(path.join(repo, skillsDir)).sort();
+// BR-37: the orders a text gives. A clause starts the text or follows `.`, `;`, `:`, `(`, `!` or `?`, then may take
+// one lead-in word; an order is that start followed by an order verb, in any case. After a comma, an order verb
+// counts only with its object ("…changed, realign the README"), so that "install, run or configure" stays a fact.
+const orderVerb = '(?:close|run|move|write|realign|set|list|show|report|update|tick|stop|do|make|read|keep|check|ask)';
+const orderAt = new RegExp(
+  [
+    `(?:^|[.;:(!?]\\s*)(?:(?:then|first|next|last|finally|and|also|now|so),?\\s+)?${orderVerb}\\b`,
+    `,\\s+(?:(?:so|then|and|also|now)\\s+)?${orderVerb}\\s+(?:the|a|an|it|its|this|that|these|those|each|every|them|all|any)\\b`,
+  ].join('|'),
+  'gi',
+);
+const ordersIn = (text) => [...text.matchAll(orderAt)].map((m) => m[0].replace(/^[\s,]+/, '').trim());
 const frontmatter = (text) => {
   const m = text.match(/^---\n([\s\S]*?)\n---\n/);
   const meta = {};
@@ -53,6 +65,13 @@ test('every skill carries the license, since APM deploys the skill folder withou
     assert.equal(frontmatter(read(`${skillsDir}/${s}/SKILL.md`)).license, 'MIT', s);
     assert.ok(fs.existsSync(path.join(repo, skillsDir, s, 'LICENSE')), `${s}: no LICENSE`);
     assert.equal(read(`${skillsDir}/${s}/LICENSE`), license, `${s}: LICENSE differs from the root one`);
+  }
+});
+
+test("a skill's frontmatter holds only keys of the Agent Skills specification (BR-36)", () => {
+  const keys = new Set(['name', 'description', 'license', 'compatibility', 'metadata', 'allowed-tools']);
+  for (const s of skills) {
+    for (const k of Object.keys(frontmatter(read(`${skillsDir}/${s}/SKILL.md`)))) assert.ok(keys.has(k), `${s}: ${k}`);
   }
 });
 
@@ -1064,6 +1083,28 @@ test('the hook settings name no interpreter: the one found on the machine replac
   for (const p of ['`python3 --version`', '`python --version`', '`py -3 --version`']) assert.ok(skill.includes(p), p);
 });
 
+test('ordersIn finds an order at any clause start, in any case (BR-37)', () => {
+  for (const order of [
+    'Then realign the README.',
+    'The plan is done. realign the README now.',
+    'A plan closes after the gate: run it first.',
+    'First, close the plan.',
+    'Close the plan.',
+    'When what users install, run or configure changed, those who build and maintain the project included, realign the README with partition-readme.',
+    'The gate has run, so realign the README.',
+    'HOLD keeps it in progress! Run the gate again.',
+    'Done? Realign the README.',
+  ]) {
+    assert.equal(ordersIn(order).length, 1, order);
+  }
+  for (const fact of [
+    'The partition-plan skill describes how a plan closes. A plan closes only after a partition-gate verdict on its changes: a plan that records none goes back to in progress until the gate has run, and HOLD keeps it in progress. The statements the work established then have a place: what is true for one bounded context belongs in its durable spec, what the bounded contexts of one area share belongs in its area file, and the others go through the admission test of the invariant register (partition-spec, references/invariants.md). An entry in the area file or the register is shown to the owner and written only once validated. The closing report names the identifiers touched and the candidates rejected, even when none was admitted. When what users install, run or configure changed, those who build and maintain the project included, the README is realigned with partition-readme.',
+    'A plan that records none goes back to in progress, and HOLD keeps it there.',
+  ]) {
+    assert.deepEqual(ordersIn(fact), [], fact);
+  }
+});
+
 test('the reminder hook stays silent unless a plan is marked done or a commit is about to be created', () => {
   const hook = path.join(repo, skillsDir, 'partition-plan/assets/hook/partition-reminder.py');
   let python = null;
@@ -1105,6 +1146,14 @@ test('the reminder hook stays silent unless a plan is marked done or a commit is
   );
   assert.equal(run(JSON.stringify({ tool_name: 'Bash', tool_input: { command: 'npx prettier --write a.md' } })), '');
   assert.equal(run(JSON.stringify({ tool_name: 'Bash', tool_input: { command: 'git status --short' } })), '');
+  // BR-37: the reminder states facts, for both events.
+  for (const payload of [
+    edit('docs/plans/p.md', '> **Status:** done'),
+    JSON.stringify({ tool_name: 'Bash', tool_input: { command: 'git commit -m x' } }),
+  ]) {
+    const reminder = JSON.parse(run(payload)).hookSpecificOutput.additionalContext;
+    assert.deepEqual(ordersIn(reminder), [], `orders in the reminder (BR-37): ${reminder}`);
+  }
 });
 
 const issueDir = '.github/ISSUE_TEMPLATE';
