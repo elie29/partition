@@ -4,6 +4,10 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+### Fixed
+
+- `partition-plan` says a plan opens with its title, then the status block, as its template does. It said the plan opened with the block, which could put the block above the title.
+
 ## [1.0.1] - 2026-10-23
 
 ### Added

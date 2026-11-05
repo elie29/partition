@@ -18,7 +18,7 @@ The user's own instructions, or another of the project, may name a different fol
 
 ## Shape
 
-Start from `assets/plan.md`. Every plan opens with this block, above the goal:
+Start from `assets/plan.md`. Every plan opens with its title, then this block, above the goal:
 
 ```text
 > **Status:** in progress | blocked | done
