@@ -77,7 +77,7 @@ A consuming project depends on three things: the keys of `docs/partition.yml`, t
    apm view elie29/partition versions      # the new tag is listed
    ```
 
-   then, in a project that uses the package, `apm outdated` and `apm update`.
+   then, in a project that uses the package, `apm outdated`, the new tag in its `apm.yml`, `apm install` and `apm compile`, as the README's _Update_ says: `apm update` does not move a pinned tag.
 
 Never move or delete a tag once it is pushed: the lockfile of every consuming project pins the commit behind it. A mistake is fixed by the next patch version.
 

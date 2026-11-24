@@ -4,6 +4,12 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+### Fixed
+
+- The README's _Update_ moves to a newer version by changing the tag in `apm.yml`, then `apm install` and `apm compile`: `apm update` does not move a pinned tag. It also says what to do when `apm install` fails with `Invalid local package path ''` on a lockfile written by an older APM: delete `apm.lock.yaml`, run `apm install --force` once, and on Claude Code delete the `.claude/rules/partition.md` the new lockfile no longer knows before `apm compile`.
+- The README and BR-6 say that the `CLAUDE.md` that keeps the instruction in `.claude/rules/partition.md` is the one at the root of the project. A `.claude/CLAUDE.md` does not count: APM generates the root `CLAUDE.md` beside it. To keep one file, move its text to a root `CLAUDE.md` holding the line `@AGENTS.md`.
+- The README's _Update_ is a list of steps for the consuming project: check APM and see what is behind, keep one `CLAUDE.md` on Claude Code before installing (a line `@AGENTS.md` added after `apm install` moves nothing), pin the new tag, install, compile, check with the budget and a fresh session, commit.
+
 ## [1.1.0] - 2026-11-24
 
 ### Changed
