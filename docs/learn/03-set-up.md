@@ -31,14 +31,16 @@ No bounded context is asked at setup, and none is listed by hand: each comes fro
 
 ## What you say
 
-**In a terminal, at the root of the project.** Pin a release tag and pick one target per project:
+**In a terminal, at the root of the project.** With APM 0.38 or later (`apm self-update` from an older one), pin a release tag, pick one target per project, then compile:
 
 ```bash
 # Claude Code
 apm install elie29/partition#<tag> --target claude
+apm compile
 
 # GitHub Copilot
 apm install elie29/partition#<tag> --target copilot
+apm compile
 ```
 
 **Then in a fresh session**, to check the install:
@@ -65,15 +67,15 @@ Inside that plan, answer each question it asks. When it stops without a question
 
 ### The install: the package, and nothing under `docs/`
 
-`apm install` adds what the package ships, and nothing else:
+`apm install` and `apm compile` add what the package ships, and nothing else:
 
 |  | Claude Code | GitHub Copilot |
 | --- | --- | --- |
 | 12 skills | `.claude/skills/partition-*/` | `.agents/skills/partition-*/` |
 | 1 agent | `.claude/agents/spec-auditor.md` | `.github/agents/spec-auditor.agent.md` |
-| 1 always-on instruction | `.claude/rules/partition.md` | `.github/instructions/partition.instructions.md`, scoped to every file (`**`) |
+| 1 always-on instruction | `AGENTS.md`, which `CLAUDE.md` imports | `.github/instructions/partition.instructions.md`, scoped to every file (`**`) |
 
-Plus `apm.yml` and `apm.lock.yaml`. Your own files are untouched: Partition writes no `AGENTS.md`, `CLAUDE.md` or `.github/copilot-instructions.md`, and needs no `apm compile`. There is no `docs/` folder, no `docs/partition.yml`, no plan: nothing runs unasked. Commit `apm.yml`, `apm.lock.yaml` and the deployed files, so every clone has them; `apm_modules/` is a download folder APM ignores for you.
+Plus `apm.yml` and `apm.lock.yaml`. On Claude Code, `apm compile` writes the instruction into `AGENTS.md` and a `CLAUDE.md` holding the line `@AGENTS.md`. Your own files are untouched: when your project already has a `CLAUDE.md` at its root, APM leaves it as it is and keeps the instruction in `.claude/rules/partition.md`, which Claude Code loads at session start. To use `AGENTS.md` instead, add the line `@AGENTS.md` to your `CLAUDE.md`, then install and compile again; your rules scoped to a folder move with it, into that folder's `AGENTS.md`. On Copilot, Partition writes no `AGENTS.md` and no `.github/copilot-instructions.md`. There is no `docs/` folder, no `docs/partition.yml`, no plan: nothing runs unasked. Commit `apm.yml`, `apm.lock.yaml` and the deployed files, so every clone has them; `apm_modules/` is a download folder APM ignores for you.
 
 The instruction is loaded when a session starts, which is why the check needs a fresh session: one opened before the install never sees it. The assistant answers from the instruction, not from a skill: update the plan first (tick what is done, set `Resume at`, append the decisions and the blockers), then reply, and never commit, because you commit. If the answer does not say "plan first", the instruction is not loaded: stop there. To answer, it creates nothing.
 
@@ -160,8 +162,8 @@ The output is pasted, unedited, into `docs/budget/YYYY-MM-DD.md`, made from the 
    ```
 
 6. The old lines stay in your entry file until you remove them, and it tells you so: while both exist, the rules load twice.
-7. `apm install` deploys each rule to every assistant in its own format, scoped by its `applyTo`. Never edit the deployed copies: edit the source and install again.
-8. The budget runs again and shows the every-session total before and after. Once you have removed the moved lines, the total goes down, and no rule is listed "without a scope"; the package's `.claude/rules/partition.md` is listed as `(instruction)`, always on by design: its scope is every file, `**`.
+7. `apm install` and `apm compile` deploy each rule to every assistant in its own format, scoped by its `applyTo`. On Claude Code with APM 0.38 or later, a rule scoped to a folder lands in that folder's `AGENTS.md`, imported by a `CLAUDE.md` beside it. Never edit the deployed copies: edit the source, install and compile again.
+8. The budget runs again and shows the every-session total before and after. Once you have removed the moved lines, the total goes down, and no rule is listed "without a scope"; the package's instruction is listed as `(instruction)` when it has a file of its own, `.claude/rules/partition.md`, always on by design: its scope is every file, `**`. When your `CLAUDE.md` imports `AGENTS.md`, the instruction is inside that file, listed as imported by `CLAUDE.md`.
 
 What stays in the entry file is a map: what the project is, the few rules that hold everywhere, where the rest lives.
 
