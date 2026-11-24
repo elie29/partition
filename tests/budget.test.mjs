@@ -247,6 +247,257 @@ test('budget: the deployed instruction counts in every session as the instructio
     assert.doesNotMatch(out, /without a scope/, target);
   }
 });
+// ------------------------------------------------------------------ Claude layouts of APM 0.38 and later (BR-16)
+const tk = (str) => Math.ceil(str.length / 4);
+const claudeYml =
+  'contexts:\n  - id: orders\n    code:\n      - src/orders/**\n  - id: billing\n    code:\n      - src/billing/**\n';
+const run = (dir) => execFileSync(process.execPath, [fileURLToPath(budgetPath), '--root', dir], { encoding: 'utf8' });
+
+test('budget, claude: the root CLAUDE.md counts with each file it imports by @path, followed once each', () => {
+  // Lines joined, not escaped: a letter n before an @ reads as an address to the scan of the sync.
+  const claude = ['# CLAUDE.md', 'see @README.md inline', '@AGENTS.md', '@missing.md', x(100), ''].join('\n');
+  const readme = x(40);
+  const agents = `# AGENTS.md\n@docs/extra.md\n${x(200)}\n`;
+  const extra = `@../AGENTS.md\n${x(40)}\n`; // relative to docs/, a cycle back to AGENTS.md
+  const dir = tmp({
+    'CLAUDE.md': claude,
+    'AGENTS.md': agents,
+    'docs/extra.md': extra,
+    'README.md': readme,
+    'docs/partition.yml': claudeYml,
+  });
+  const r = measureProject(dir);
+  assert.deepEqual(r.shared.entry, [
+    { file: 'CLAUDE.md', tokens: tk(claude) },
+    { file: 'README.md', tokens: tk(readme), importedBy: 'CLAUDE.md' },
+    { file: 'AGENTS.md', tokens: tk(agents), importedBy: 'CLAUDE.md' },
+    { file: 'docs/extra.md', tokens: tk(extra), importedBy: 'AGENTS.md' },
+  ]);
+  assert.deepEqual(r.shared.instruction, []);
+  assert.equal(r.shared.tokens, tk(claude) + tk(readme) + tk(agents) + tk(extra));
+  const out = run(dir);
+  assert.ok(out.includes(`| README.md (imported by CLAUDE.md) | ${tk(readme)} |`), out);
+  assert.ok(out.includes(`| AGENTS.md (imported by CLAUDE.md) | ${tk(agents)} |`), out);
+  assert.ok(out.includes(`| docs/extra.md (imported by AGENTS.md) | ${tk(extra)} |`), out);
+});
+
+test('budget, claude: an @path counts after a space, never in a code span, a fenced block, quotes or a word, nor with a trailing period', () => {
+  // As Claude Code reads it (code.claude.com/docs/en/memory, checked on 2.1.303): a backslash keeps a space in a
+  // path, a ``` line does not close a ~~~ block, a path wrapped in quotes is not imported. One line ends in CRLF.
+  const claude = [
+    '# CLAUDE.md',
+    '- git workflow @docs/git.md',
+    '- API conventions @Design\\ Docs/api.md\r',
+    'Literal `@docs/span.md` stays text.',
+    '"@docs/quoted.md" too.',
+    'mail x@docs/word.md',
+    'End @docs/end.md.',
+    'Home @~/notes.md and root @/etc/notes.md',
+    '~~~',
+    '```js',
+    '@docs/fence.md',
+    '~~~',
+    '@docs/after.md',
+    '',
+  ].join('\n');
+  const named = [
+    'docs/git.md',
+    'Design Docs/api.md',
+    'docs/span.md',
+    'docs/quoted.md',
+    'docs/word.md',
+    'docs/end.md',
+    'notes.md',
+    'etc/notes.md',
+    'docs/fence.md',
+    'docs/after.md',
+  ];
+  const dir = tmp({
+    'CLAUDE.md': claude,
+    ...Object.fromEntries(named.map((f) => [f, x(40)])),
+    'docs/partition.yml': claudeYml,
+  });
+  assert.deepEqual(
+    measureProject(dir).shared.entry.map((e) => e.file),
+    ['CLAUDE.md', 'docs/git.md', 'Design Docs/api.md', 'docs/after.md'],
+  );
+});
+
+test('budget, claude: imports stop after four hops', () => {
+  const dir = tmp({
+    'CLAUDE.md': '@docs/h1.md\n',
+    'docs/h1.md': '@h2.md\n',
+    'docs/h2.md': '@h3.md\n',
+    'docs/h3.md': '@h4.md\n',
+    'docs/h4.md': '@h5.md\n',
+    'docs/h5.md': x(40),
+    'docs/partition.yml': claudeYml,
+  });
+  assert.deepEqual(
+    measureProject(dir).shared.entry.map((e) => e.file),
+    ['CLAUDE.md', 'docs/h1.md', 'docs/h2.md', 'docs/h3.md', 'docs/h4.md'],
+  );
+});
+
+test('budget, claude: three backticks followed by a backtick on their line open no fence', () => {
+  // CommonMark: that line is an inline code span; the import after it is read.
+  const dir = tmp({
+    'CLAUDE.md': '```npm test``` runs the tests.\n@docs/after.md\n',
+    'docs/after.md': x(40),
+    'docs/partition.yml': claudeYml,
+  });
+  assert.deepEqual(
+    measureProject(dir).shared.entry.map((e) => e.file),
+    ['CLAUDE.md', 'docs/after.md'],
+  );
+});
+
+// The files every session counts, for a root CLAUDE.md and the files it may name.
+const entryFiles = (claude, named) =>
+  measureProject(
+    tmp({ 'CLAUDE.md': claude, ...Object.fromEntries(named.map((f) => [f, x(40)])), 'docs/partition.yml': claudeYml }),
+  ).shared.entry.map((e) => e.file);
+
+test('budget, claude: an import in an HTML comment, or in a fence inside a list, a quote or after a tab, is not read', () => {
+  // Claude Code strips HTML comments and skips these fences (checked on 2.1.303 by the closing gate).
+  const claude = [
+    '<!-- @docs/c1.md -->',
+    '<!--',
+    '@docs/c2.md',
+    '-->',
+    'See <!-- @docs/c3.md --> @docs/kept.md',
+    '- item',
+    '    ```',
+    '    @docs/l1.md',
+    '    ```',
+    '> ~~~',
+    '> @docs/q1.md',
+    '> ~~~',
+    '\t```',
+    '@docs/t1.md',
+    '\t```',
+    '@docs/after.md',
+    '',
+  ].join('\n');
+  const named = ['c1', 'c2', 'c3', 'kept', 'l1', 'q1', 't1', 'after'].map((n) => `docs/${n}.md`);
+  assert.deepEqual(entryFiles(claude, named), ['CLAUDE.md', 'docs/kept.md', 'docs/after.md']);
+});
+
+test('budget, claude: a #fragment is dropped from an import path', () => {
+  assert.deepEqual(entryFiles('See @docs/api.md#auth for the tokens.\n', ['docs/api.md']), [
+    'CLAUDE.md',
+    'docs/api.md',
+  ]);
+});
+
+test('budget, claude: a backtick run opens a code span only with a closing run of the same length', () => {
+  // CommonMark: neither line holds a code span, so both imports are read.
+  const claude = ['Odd ` @docs/c1.md `` span.', '``` a @docs/k1.md `', ''].join('\n');
+  assert.deepEqual(entryFiles(claude, ['docs/c1.md', 'docs/k1.md']), ['CLAUDE.md', 'docs/c1.md', 'docs/k1.md']);
+});
+
+test('budget, claude: a long line of backticks and letters is read in linear time', () => {
+  const claude = `a${'`'.repeat(10000)}${'b'.repeat(10000)} @docs/x.md\n`;
+  const start = performance.now();
+  const files = entryFiles(claude, ['docs/x.md']);
+  const ms = performance.now() - start;
+  assert.deepEqual(files, ['CLAUDE.md', 'docs/x.md']);
+  assert.ok(ms < 1000, `${Math.round(ms)} ms`);
+});
+
+test('budget, claude: a CLAUDE.md below the root counts no file every session already counts', () => {
+  const ordersNested = `@../../AGENTS.md\n${x(40)}\n`; // the root AGENTS.md, already in every session
+  const dir = tmp({
+    'CLAUDE.md': '@AGENTS.md\n@src/billing/CLAUDE.md\n',
+    'AGENTS.md': x(400),
+    'src/orders/CLAUDE.md': ordersNested,
+    'src/billing/CLAUDE.md': x(400), // imported by the root: already in every session
+    'src/orders/a.js': x(10),
+    'src/billing/b.js': x(10),
+    'docs/partition.yml': claudeYml,
+  });
+  const r = measureProject(dir);
+  assert.deepEqual(
+    r.shared.entry.map((e) => e.file),
+    ['CLAUDE.md', 'AGENTS.md', 'src/billing/CLAUDE.md'],
+  );
+  assert.deepEqual(r.contexts.find((c) => c.id === 'orders').scopedRules, [
+    { file: 'src/orders/CLAUDE.md', tokens: tk(ordersNested) },
+  ]);
+  assert.deepEqual(r.contexts.find((c) => c.id === 'billing').scopedRules, []);
+});
+
+test('budget, claude: .claude/CLAUDE.md imports relative to its own folder', () => {
+  const dir = tmp({
+    '.claude/CLAUDE.md': '@../AGENTS.md\n',
+    'AGENTS.md': x(200),
+    'docs/partition.yml': claudeYml,
+  });
+  assert.deepEqual(
+    measureProject(dir).shared.entry.map((e) => e.file),
+    ['.claude/CLAUDE.md', 'AGENTS.md'],
+  );
+});
+
+test('budget, claude: a CLAUDE.md below the root, with its imports, is a rule scoped to its folder', () => {
+  const nested = ['# CLAUDE.md', '', '@AGENTS.md', ''].join('\n');
+  const dir = tmp({
+    'CLAUDE.md': x(400), // 100
+    'src/orders/CLAUDE.md': nested,
+    'src/orders/AGENTS.md': x(400), // 100
+    'src/orders/a.js': x(10),
+    'src/billing/b.js': x(10),
+    'docs/partition.yml': claudeYml,
+  });
+  const r = measureProject(dir);
+  assert.equal(r.shared.tokens, 100, 'not in every session');
+  const orders = r.contexts.find((c) => c.id === 'orders');
+  assert.deepEqual(orders.scopedRules, [{ file: 'src/orders/CLAUDE.md', tokens: tk(nested) + 100 }]);
+  assert.equal(orders.always, 100 + tk(nested) + 100);
+  assert.deepEqual(r.contexts.find((c) => c.id === 'billing').scopedRules, []);
+});
+
+test('budget, claude: a project rule scoped to every file, compiled into the imported AGENTS.md, is named without a scope and counted once', () => {
+  const rule = `---\ndescription: naming\napplyTo: '**'\n---\n\n### Naming\n\n${x(400)}\n`;
+  const files = {
+    'CLAUDE.md': '@AGENTS.md\n',
+    'AGENTS.md': x(800), // 200: the instruction and the rule, compiled together
+    '.apm/instructions/backend-naming.instructions.md': rule,
+    '.apm/instructions/backend-orders.instructions.md': `---\ndescription: orders\napplyTo: 'src/orders/**'\n---\n${x(40)}\n`,
+    'docs/partition.yml': claudeYml,
+  };
+  const r = measureProject(tmp(files));
+  assert.deepEqual(r.shared.unscopedRules, [
+    { file: '.apm/instructions/backend-naming.instructions.md', tokens: tk(rule), countedIn: 'AGENTS.md' },
+  ]);
+  assert.equal(r.shared.tokens, tk('@AGENTS.md\n') + 200, 'the rule is inside AGENTS.md, not added again');
+  const out = run(tmp(files));
+  assert.ok(
+    out.includes(
+      '| .apm/instructions/backend-naming.instructions.md (rule without a scope, counted in AGENTS.md) | — |',
+    ),
+    out,
+  );
+
+  // Not compiled into an imported AGENTS.md: nothing loads it there, nothing is named.
+  const { 'CLAUDE.md': _, ...noImport } = files;
+  assert.deepEqual(measureProject(tmp({ ...noImport, 'CLAUDE.md': x(4) })).shared.unscopedRules, []);
+});
+
+test('budget, claude: a CLAUDE.md without @AGENTS.md keeps the rules in .claude/rules, each named once', () => {
+  const dir = tmp({
+    'CLAUDE.md': x(400), // 100, hand-written, no import
+    '.claude/rules/partition.md': `---\npaths:\n  - "**"\n---\n${x(176)}`, // 50, the instruction
+    '.claude/rules/backend-naming.md': `---\npaths:\n  - "**"\n---\n${x(176)}`, // 50, deployed from the source below
+    '.apm/instructions/backend-naming.instructions.md': `---\ndescription: naming\napplyTo: '**'\n---\n${x(100)}\n`,
+    'docs/partition.yml': claudeYml,
+  });
+  const r = measureProject(dir);
+  assert.deepEqual(r.shared.instruction, [{ file: '.claude/rules/partition.md', tokens: 50 }]);
+  assert.deepEqual(r.shared.unscopedRules, [{ file: '.claude/rules/backend-naming.md', tokens: 50 }]);
+  assert.equal(r.shared.tokens, 200);
+});
+
 test('budget: without docs/partition.yml the script says how to create it and exits 2', () => {
   try {
     execFileSync('node', [fileURLToPath(budgetPath), '--root', tmp({ 'a.txt': 'a' })], { stdio: 'pipe' });

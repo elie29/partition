@@ -29,7 +29,7 @@ Tokens are estimated as characters / 4. The figure is stable from one run to the
 
 ## Read the report
 
-- **Loaded by every session** — the entry file of the assistant, the instruction of the package, every rule file without a scope, the invariant register and the descriptions of the installed skills and agents. Paid before any work starts. A rule listed here "without a scope" is the first thing to fix: see `partition-rules`. The instruction carries no scope by design: it is not a rule file.
+- **Loaded by every session** — the entry file of the assistant with each file it imports, the instruction of the package, every rule file without a scope, the invariant register and the descriptions of the installed skills and agents. Paid before any work starts. A rule listed here "without a scope" is the first thing to fix: see `partition-rules`. The instruction carries no scope by design: it is not a rule file.
 - **Always**, per bounded context — the one gauge: the every-session total, plus the durable spec of the bounded context, plus the area file of its area, plus the scoped rules that match its code. It is what any task in that bounded context loads before reading a line of code. The code itself is not counted: no task reads all of it. Default threshold: 32 000.
 - **Plans in progress** — the whole file against what a resume reads. A plan is never read whole.
 - **Files touched per change** — the median over the last 30 commits against the 30 before: the first warning sign, measured.

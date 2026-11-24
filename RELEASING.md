@@ -45,10 +45,11 @@ A consuming project depends on three things: the keys of `docs/partition.yml`, t
    ```bash
    apm install /path/to/partition --target claude    # first project
    apm install /path/to/partition --target copilot   # second project
-   apm compile                                       # second project
+   rm -rf apm_modules/_local/*/.git                  # each project: a local install copies .git, compile skips it
+   apm compile                                       # each project
    ```
 
-   Claude: twelve skills in `.claude/skills/`, `.claude/agents/spec-auditor.md`, and `.claude/rules/partition.md` with `paths: ["**"]`. Copilot: twelve skills in `.agents/skills/`, `.github/agents/spec-auditor.agent.md`, `.github/instructions/partition.instructions.md` with `applyTo: '**'`, and after `apm compile` no `AGENTS.md` and no `.github/copilot-instructions.md`. No error.
+   APM 0.38 or later. Claude: twelve skills in `.claude/skills/`, `.claude/agents/spec-auditor.md`, `AGENTS.md` holding the instruction once, a `CLAUDE.md` with the line `@AGENTS.md`, and no `.claude/rules/partition.md`. Copilot: twelve skills in `.agents/skills/`, `.github/agents/spec-auditor.agent.md`, `.github/instructions/partition.instructions.md` with `applyTo: '**'`, and after `apm compile` no `AGENTS.md` and no `.github/copilot-instructions.md`. No error.
 
 4. **Open the release pull request.** Commit the release on a branch of its own, push the branch, and open a pull request on this repository. Once its CI is green, squash-merge it: the release is one commit on `main`.
 

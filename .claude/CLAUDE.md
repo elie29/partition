@@ -46,4 +46,5 @@ node --test tests/budget.test.mjs                                  # one file: b
 node .apm/skills/partition-budget/scripts/budget.mjs               # the gauges of this repository
 apm install /path/to/this/repo --target claude                     # trial install, in a throwaway project
 apm install /path/to/this/repo --target copilot                    # the other target, in a second throwaway project
+rm -rf apm_modules/_local/*/.git && apm compile                    # then in each: APM 0.38 or later; compile skips a nested .git
 ```

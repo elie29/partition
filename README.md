@@ -4,7 +4,7 @@
 
 # Partition
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-0b78a0.svg)](LICENSE) ![Version](https://img.shields.io/badge/version-1.0.1-0b78a0.svg) ![Targets](https://img.shields.io/badge/targets-Claude%20Code%20%C2%B7%20GitHub%20Copilot-0b78a0.svg)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0b78a0.svg)](LICENSE) ![Version](https://img.shields.io/badge/version-1.1.0-0b78a0.svg) ![Targets](https://img.shields.io/badge/targets-Claude%20Code%20%C2%B7%20GitHub%20Copilot-0b78a0.svg)
 
 **The living specification and the Context Budget, as agent skills.**
 
@@ -73,17 +73,21 @@ Skill: `partition-shape`. Once a boundary is decided, `partition-reshape` carrie
 
 ## Install
 
-You need the [APM CLI](https://microsoft.github.io/apm), Git and Node.js 22 or later. Python 3 and Bash are used by one skill (`partition-gate`) and by the optional hook.
+You need the [APM CLI](https://microsoft.github.io/apm) 0.38 or later, Git and Node.js 22 or later. Python 3 and Bash are used by one skill (`partition-gate`) and by the optional hook.
 
-From the root of your project, pick one target per project:
+From the root of your project, pick one target per project, then compile:
 
 ```bash
 # Claude Code
-apm install elie29/partition#v1.0.1 --target claude
+apm install elie29/partition#v1.1.0 --target claude
+apm compile
 
 # GitHub Copilot
-apm install elie29/partition#v1.0.1 --target copilot
+apm install elie29/partition#v1.1.0 --target copilot
+apm compile
 ```
+
+On APM 0.37 or earlier, upgrade first: `apm self-update`, or `pipx upgrade apm-cli` for a pipx install.
 
 While the repository is private, give APM a credential first: `apm auth github.com`.
 
@@ -93,9 +97,9 @@ What lands in your project:
 | --- | --- | --- |
 | 12 skills | `.claude/skills/partition-*/` | `.agents/skills/partition-*/` |
 | 1 agent | `.claude/agents/spec-auditor.md` | `.github/agents/spec-auditor.agent.md` |
-| 1 always-on instruction | `.claude/rules/partition.md` | `.github/instructions/partition.instructions.md`, scoped to every file (`**`) |
+| 1 always-on instruction | `AGENTS.md`, which `CLAUDE.md` imports | `.github/instructions/partition.instructions.md`, scoped to every file (`**`) |
 
-Partition writes no `AGENTS.md`, `CLAUDE.md` or `.github/copilot-instructions.md`, and needs no `apm compile`.
+On Claude Code, since APM 0.38, `apm compile` writes the instruction into `AGENTS.md` and a `CLAUDE.md` that imports it with the line `@AGENTS.md`; `apm install` alone leaves the instruction out of every session. If your project already has its own `CLAUDE.md` at its root, APM never changes it, and the instruction stays in `.claude/rules/partition.md`, which Claude Code loads at session start: nothing more to do. To use `AGENTS.md` instead, add the line `@AGENTS.md` to your `CLAUDE.md`, then run `apm install` and `apm compile`; your rules scoped to a folder move with it, into that folder's `AGENTS.md`. On Copilot, `apm compile` writes nothing: Partition writes no `AGENTS.md` and no `.github/copilot-instructions.md` there.
 
 Commit `apm.yml`, `apm.lock.yaml` and the deployed files, so every clone has them. APM ignores `apm_modules/` for you; it is a download folder you can delete, and `apm install` recreates it from the lockfile.
 
@@ -110,11 +114,13 @@ apm outdated                 # what is behind
 apm update                   # shows the plan, then applies it
 ```
 
-or change the tag in `apm.yml` and run `apm install`.
+or change the tag in `apm.yml` and run `apm install`. Then run `apm compile`.
+
+On Claude Code, moving to APM 0.38: `apm install` removes the `.claude/rules/partition.md` APM wrote before, and `apm compile` writes the instruction into `AGENTS.md`, which `CLAUDE.md` imports. Commit both files. A project with its own `CLAUDE.md` keeps `.claude/rules/partition.md`; adding the line `@AGENTS.md` is a choice, as [Install](#install) says.
 
 On Copilot, after updating from 1.0.0, run `apm compile` once: it removes the `.github/copilot-instructions.md` APM generated for 1.0.0, which would load the instruction a second time. Delete that file by hand if it remains.
 
-A project that installed 1.0.0 on both targets keeps one: run `apm install` with `--target claude` or `--target copilot` alone, delete the other target's Partition files listed in [Install](#install), and delete the `AGENTS.md` that `apm compile` generated for 1.0.0, unless you wrote it by hand. Otherwise the instruction loads two or three times.
+A project that installed 1.0.0 on both targets keeps one: run `apm install` with `--target claude` or `--target copilot` alone, delete the other target's Partition files listed in [Install](#install), and, when you keep Copilot, delete the `AGENTS.md` that `apm compile` generated for 1.0.0, unless you wrote it by hand. Otherwise the instruction loads two or three times.
 
 An update replaces the skills, the agent and the instruction. It never touches what your project owns: your specs, your invariants, your plans, your rules, your `docs/partition.yml`, your C4 model. Templates are copied into your project only when the file does not exist yet. The install itself writes nothing under `docs/`: `docs/partition.yml` and the other files appear when a skill first needs them, starting with step 1 below. An update can still make the budget stop on a `docs/partition.yml` it used to accept, when the file carries a key the schema does not list (see [What your project owns](#what-your-project-owns)); the message names each key to fix.
 
@@ -271,7 +277,7 @@ npm run budget
 The budget record gives two figures. The second contains the first, so they do not add up:
 
 ```text
-Every session  = your entry file (CLAUDE.md, AGENTS.md, ...)
+Every session  = your entry file (CLAUDE.md, AGENTS.md, ...) and the files it imports
                + about 1 700   (the Partition instruction and the skill and agent descriptions)
                + every rule file without a scope
                + the invariant register

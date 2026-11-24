@@ -365,6 +365,13 @@ const TARGETS = {
     instruction: '.claude/rules/partition.md',
     rules: ['.claude/rules/**/*.md'],
     scopeKey: 'paths',
+    // Since APM 0.38 a CLAUDE.md imports AGENTS.md (BR-16): the entry brings its imports, a CLAUDE.md
+    // below the root is a rule scoped to its folder, and a project rule scoped to every file is compiled
+    // into the imported AGENTS.md unless APM deployed it to .claude/rules/.
+    imports: true,
+    nested: '**/CLAUDE.md',
+    sources: '.apm/instructions/*.instructions.md',
+    deployedRule: (name) => `.claude/rules/${name}.md`,
     skills: ['.claude/skills/*/SKILL.md'],
     agents: ['.claude/agents/*.md'],
   },
@@ -409,6 +416,9 @@ export function measureProject(root) {
 
   // What every session loads, whatever the bounded context.
   const entry = match(target.entry);
+  const fileSet = new Set(files);
+  const seen = new Set(entry);
+  const imported = target.imports ? entry.flatMap((f) => importsOf(root, f, fileSet, seen)) : [];
   // The instruction of the package is always on by design (BR-6): not a rule file.
   const instruction = match(target.instruction);
   const rules = match(target.rules)
@@ -418,15 +428,41 @@ export function measureProject(root) {
       const globs = asList(meta[target.scopeKey]);
       return { file: f, globs, scoped: !isEverywhere(globs), tokens: tok(chars(root, f)) };
     });
-  const unscoped = rules.filter((r) => !r.scoped);
+  if (target.nested) {
+    // A file every session counts is not counted again in the rule of a folder (BR-16).
+    const everySession = new Set([...entry, ...imported.map((i) => i.file)]);
+    for (const f of match(target.nested)) {
+      if (everySession.has(f) || f.startsWith('.claude/')) continue;
+      const dir = path.posix.dirname(f);
+      const parts = [f, ...importsOf(root, f, fileSet, new Set([...everySession, f])).map((i) => i.file)];
+      rules.push({
+        file: f,
+        globs: [`${dir}/**`],
+        scoped: true,
+        tokens: parts.reduce((a, x) => a + tok(chars(root, x)), 0),
+      });
+    }
+  }
+  const unscoped = rules.filter((r) => !r.scoped).map(({ file, tokens }) => ({ file, tokens }));
+  const compiledInto = imported.find((i) => i.file === 'AGENTS.md');
+  if (target.sources && compiledInto) {
+    for (const f of match(target.sources)) {
+      const name = path.posix.basename(f, '.instructions.md');
+      if (!isEverywhere(asList(frontmatter(root, f).meta.applyTo)) || fileSet.has(target.deployedRule(name))) continue;
+      unscoped.push({ file: f, tokens: tok(chars(root, f)), countedIn: compiledInto.file });
+    }
+  }
   const descriptions = [...match(target.skills), ...match(target.agents)].map((f) => {
     const { meta } = frontmatter(root, f);
     return { file: f, tokens: tok(`${meta.name ?? ''} ${meta.description ?? ''}`.length) };
   });
   const shared = {
-    entry: entry.map((f) => ({ file: f, tokens: tok(chars(root, f)) })),
+    entry: [
+      ...entry.map((f) => ({ file: f, tokens: tok(chars(root, f)) })),
+      ...imported.map((i) => ({ file: i.file, tokens: tok(chars(root, i.file)), importedBy: i.importedBy })),
+    ],
     instruction: instruction.map((f) => ({ file: f, tokens: tok(chars(root, f)) })),
-    unscopedRules: unscoped.map(({ file, tokens }) => ({ file, tokens })),
+    unscopedRules: unscoped,
     descriptions: { count: descriptions.length, tokens: descriptions.reduce((a, d) => a + d.tokens, 0) },
   };
   // The invariant register is read with every bounded context.
@@ -436,7 +472,7 @@ export function measureProject(root) {
   shared.tokens =
     shared.entry.reduce((a, e) => a + e.tokens, 0) +
     shared.instruction.reduce((a, i) => a + i.tokens, 0) +
-    shared.unscopedRules.reduce((a, r) => a + r.tokens, 0) +
+    shared.unscopedRules.reduce((a, r) => a + (r.countedIn ? 0 : r.tokens), 0) +
     shared.descriptions.tokens +
     (shared.register?.tokens ?? 0);
 
@@ -479,6 +515,83 @@ export function measureProject(root) {
   };
 }
 const asList0 = (v) => (Array.isArray(v) ? v : []);
+
+// The files a CLAUDE.md imports (BR-16): each path importRefs reads, relative to the importing file and inside
+// the project, followed depth first up to four hops, each file once.
+const MAX_HOPS = 4;
+function importsOf(root, rel, fileSet, seen, hop = 1) {
+  if (hop > MAX_HOPS) return [];
+  let text;
+  try {
+    text = fs.readFileSync(path.resolve(root, rel), 'utf8');
+  } catch {
+    return [];
+  }
+  const out = [];
+  for (const ref of importRefs(text)) {
+    if (ref.startsWith('/') || ref.startsWith('~')) continue;
+    const file = path.posix.normalize(path.posix.join(path.posix.dirname(rel), ref));
+    if (file.startsWith('../') || !fileSet.has(file) || seen.has(file)) continue;
+    seen.add(file);
+    out.push({ file, importedBy: rel }, ...importsOf(root, file, fileSet, seen, hop + 1));
+  }
+  return out;
+}
+
+// The import paths of a CLAUDE.md, in order, close to how Claude Code reads them (BR-16): an "@path" that starts
+// a line or follows whitespace, outside a code span, a fenced block (in a list or a quote too) and an HTML comment;
+// the path runs to the first space no backslash escapes, without a "#" and what follows. An HTML block, an
+// indented code block and a code span over several lines are read as text, though Claude Code skips them.
+// A fence is three backticks or more, with no backtick after them on the line, or three tildes or more, after any
+// indentation, quote or list marker; it closes on the same character, at least as long, alone on its line.
+const FENCE = /^(?:\s*(?:>|[-*+](?=\s)|\d{1,9}[.)](?=\s)))*\s*(`{3,}(?=[^`]*$)|~{3,})(.*)$/;
+// A code span opens on a run of backticks and closes on the next run of the same length (CommonMark).
+const CODE_SPAN = /(?<!`)(`+)(?!`).*?(?<!`)\1(?!`)/g;
+const IMPORT = /(?:^|\s)@((?:\\ |\S)+)/g;
+function importRefs(text) {
+  const refs = [];
+  const state = { fence: null, comment: false };
+  for (const line of text.split(/\r?\n/)) {
+    const fence = state.comment ? null : line.match(FENCE);
+    if (state.fence) {
+      const [, marker, rest] = fence ?? [];
+      if (marker?.[0] === state.fence[0] && marker.length >= state.fence.length && !rest.trim()) state.fence = null;
+      continue;
+    }
+    if (fence) {
+      state.fence = fence[1];
+      continue;
+    }
+    const prose = withoutComments(
+      line.replace(CODE_SPAN, (s) => ' '.repeat(s.length)),
+      state,
+    );
+    for (const [, raw] of prose.matchAll(IMPORT)) {
+      const ref = raw.replace(/\\ /g, ' ').replace(/#.*/, '');
+      if (ref) refs.push(ref);
+    }
+  }
+  return refs;
+}
+
+// The line without its HTML comments; state.comment carries a comment left open to the next line.
+function withoutComments(line, state) {
+  let kept = '';
+  let i = 0;
+  for (;;) {
+    if (state.comment) {
+      const end = line.indexOf('-->', i);
+      if (end < 0) return kept;
+      state.comment = false;
+      i = end + 3;
+    }
+    const start = line.indexOf('<!--', i);
+    if (start < 0) return kept + line.slice(i);
+    kept += `${line.slice(i, start)} `;
+    state.comment = true;
+    i = start + 4;
+  }
+}
 
 // A plan is resumed from its header, its task index and the task named in "Resume at".
 function measurePlans(root, cfg, tok, limits) {
@@ -624,9 +737,15 @@ function printProject(r) {
     '',
   );
   L.push('## Loaded by every session', '', '| Source | Tokens |', '| --- | ---: |');
-  for (const e of r.shared.entry) L.push(`| ${e.file} | ${n(e.tokens)} |`);
+  for (const e of r.shared.entry)
+    L.push(`| ${e.file}${e.importedBy ? ` (imported by ${e.importedBy})` : ''} | ${n(e.tokens)} |`);
   for (const i of r.shared.instruction) L.push(`| ${i.file} (instruction) | ${n(i.tokens)} |`);
-  for (const u of r.shared.unscopedRules) L.push(`| ${u.file} (rule without a scope) | ${n(u.tokens)} |`);
+  for (const u of r.shared.unscopedRules)
+    L.push(
+      u.countedIn
+        ? `| ${u.file} (rule without a scope, counted in ${u.countedIn}) | — |`
+        : `| ${u.file} (rule without a scope) | ${n(u.tokens)} |`,
+    );
   if (r.shared.register) L.push(`| ${r.shared.register.file} (invariant register) | ${n(r.shared.register.tokens)} |`);
   L.push(
     `| ${r.shared.descriptions.count} skill and agent descriptions | ${n(r.shared.descriptions.tokens)} |`,

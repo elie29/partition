@@ -26,7 +26,7 @@ applyTo: 'src/main/**'
 
 A rule has no `#` or `##` heading: its sections start at `###`, so a tool that gathers the rules into one file (`apm compile --force-instructions` does) gives each its own level-2 heading, and the `description` names it.
 
-`apm install` deploys them to each assistant in its own format, with `applyTo` turned into that assistant's scope. Never edit the deployed copies: edit the source and run `apm install` again.
+`apm install` deploys them to each assistant in its own format, with `applyTo` turned into that assistant's scope, and `apm compile` writes those an assistant reads through a compiled file. Never edit the deployed or compiled copies: edit the source and run `apm install` and `apm compile` again.
 
 - `applyTo` names the files the rule concerns, as one glob or several separated by commas. The rule is then loaded only when such a file is in play.
 - Only the entry file of the project stays unscoped. It is a map: what the project is, the few rules that hold everywhere, where the rest lives. It carries no detail a scoped rule can carry.
@@ -41,7 +41,7 @@ Every line of a rule file, added, changed or removed, by any procedure below or 
 3. Set each `applyTo` to real paths of this repository. Check that it matches files: a scope that matches nothing is a rule that never loads.
 4. Answer the questions of each file from two sources only: the code as it is, and the owner. Quote the file that shows a convention. When the code shows two conventions, ask which is the rule. Never fill a question from what is usual elsewhere: an unanswered question stays a question for the owner.
 5. Write each rule as one imperative line, with the reason when it is not obvious, and say how it is verified. Remove the questions and the comment once answered.
-6. Run `apm install`, then `partition-budget`: the report must list no rule "without a scope". The entry file is listed by its name, and the instruction of the package as `(instruction)`: neither is a rule file.
+6. Run `apm install` and `apm compile`, then `partition-budget`: the report must list no rule "without a scope". The entry file is listed by its name, with each file it imports, and the instruction of the package as `(instruction)` when it has a file of its own: none of them is a rule file.
 
 ## Add or change one rule
 
@@ -58,7 +58,7 @@ For rules already written for one assistant. Nothing moves unless the owner asks
 3. Find what is said twice across the files and across the entry file. Quote both places.
 4. Present the plan: files to create in `.apm/instructions/`, scope of each, what leaves the entry file, what is left as it is. Wait for validation.
 5. Move the text without rewriting it, except its headings: drop the `#` title and start the sections at `###`. Keep the old files until the owner removes them, so nothing is lost; say that while both exist the rules are loaded twice.
-6. Run `apm install` and measure again. Show the every-session total before and after.
+6. Run `apm install` and `apm compile`, and measure again. Show the every-session total before and after.
 
 ## What a rule is not
 

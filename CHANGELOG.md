@@ -4,6 +4,13 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-24
+
+### Changed
+
+- The install asks for APM 0.38 or later and runs `apm compile` after `apm install`, on both targets. Since APM 0.38, Claude Code receives the always-on instruction through `AGENTS.md`, which the `CLAUDE.md` APM generates imports with `@AGENTS.md`; `apm install` alone no longer puts it in context. A project with its own `CLAUDE.md` keeps the instruction in `.claude/rules/partition.md`, loaded at session start; adding the line `@AGENTS.md` to it is a choice. Copilot is unchanged.
+- `partition-budget`, on the Claude target, counts each file the `CLAUDE.md` imports with `@path` in what every session loads, close to how Claude Code reads it (outside code and HTML comments, up to four hops, each file once), and reads a `CLAUDE.md` below the root as a rule scoped to its folder. A project rule scoped to every file, which `apm compile` writes into the imported `AGENTS.md`, is listed as a rule without a scope and counted once.
+
 ### Fixed
 
 - `partition-plan` says a plan opens with its title, then the status block, as its template does. It said the plan opened with the block, which could put the block above the title.
