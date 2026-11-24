@@ -99,7 +99,7 @@ What lands in your project:
 | 1 agent | `.claude/agents/spec-auditor.md` | `.github/agents/spec-auditor.agent.md` |
 | 1 always-on instruction | `AGENTS.md`, which `CLAUDE.md` imports | `.github/instructions/partition.instructions.md`, scoped to every file (`**`) |
 
-On Claude Code, since APM 0.38, `apm compile` writes the instruction into `AGENTS.md` and a `CLAUDE.md` that imports it with the line `@AGENTS.md`; `apm install` alone leaves the instruction out of every session. If your project already has its own `CLAUDE.md` at its root, APM never changes it, and the instruction stays in `.claude/rules/partition.md`, which Claude Code loads at session start: nothing more to do. To use `AGENTS.md` instead, add the line `@AGENTS.md` to your `CLAUDE.md`, then run `apm install` and `apm compile`; your rules scoped to a folder move with it, into that folder's `AGENTS.md`. On Copilot, `apm compile` writes nothing: Partition writes no `AGENTS.md` and no `.github/copilot-instructions.md` there.
+On Claude Code, since APM 0.38, `apm compile` writes the instruction into `AGENTS.md` and a `CLAUDE.md` that imports it with the line `@AGENTS.md`; `apm install` alone leaves the instruction out of every session. If your project already has its own `CLAUDE.md` at its root, APM never changes it, and the instruction stays in `.claude/rules/partition.md`, which Claude Code loads at session start: nothing more to do. To use `AGENTS.md` instead, add the line `@AGENTS.md` to your `CLAUDE.md`, then run `apm install` and `apm compile`; your rules scoped to a folder move with it, into that folder's `AGENTS.md`. APM then leaves your `CLAUDE.md` as it is. A `.claude/CLAUDE.md` is not read as your own: APM generates the root `CLAUDE.md` beside it, at every `apm compile`. To keep one file, move its text to a `CLAUDE.md` at the root that holds the line `@AGENTS.md`, and delete `.claude/CLAUDE.md`. On Copilot, `apm compile` writes nothing: Partition writes no `AGENTS.md` and no `.github/copilot-instructions.md` there.
 
 Commit `apm.yml`, `apm.lock.yaml` and the deployed files, so every clone has them. APM ignores `apm_modules/` for you; it is a download folder you can delete, and `apm install` recreates it from the lockfile.
 
@@ -107,22 +107,28 @@ Commit `apm.yml`, `apm.lock.yaml` and the deployed files, so every clone has the
 
 ## Update
 
-Your project pins a tag. To move to a newer one:
+Your project pins a tag. `apm update` does not move it: it refreshes within the ref you pinned, and a tag is already at its latest. Move to a newer version with these steps, on the one target your project uses, with APM 0.38 or later.
 
-```bash
-apm outdated                 # what is behind
-apm update                   # shows the plan, then applies it
-```
+1. **See what is behind.** `apm --version` is 0.38 or later, and `apm outdated` lists the newer tag. Read its entry in `CHANGELOG.md`: it says what changes for your project.
+2. **On Claude Code, keep one `CLAUDE.md`, before installing**: `apm install` reads it to choose where the instruction goes, and a line `@AGENTS.md` added after it moves nothing. A project with its own `CLAUDE.md` at its root keeps the instruction in `.claude/rules/partition.md`; adding the line `@AGENTS.md` to it is a choice, as [Install](#install) says. A `.claude/CLAUDE.md` does not count: APM generates the root `CLAUDE.md` beside it. To keep one file, move its text to a `CLAUDE.md` at the root that holds the line `@AGENTS.md`, and delete `.claude/CLAUDE.md`. APM leaves that file as it is.
+3. **Pin the new tag** in `apm.yml`: `elie29/partition#vX.Y.Z`.
+4. **Install**: `apm install`. On Claude Code, moving to APM 0.38, it removes the `.claude/rules/partition.md` APM wrote before, unless your own `CLAUDE.md` does not import `@AGENTS.md`.
 
-or change the tag in `apm.yml` and run `apm install`. Then run `apm compile`.
+   When it fails with `Invalid local package path ''` and restores the deployed files, the lockfile was written by an older APM (seen with one written by APM 0.33). Delete it and install once with `--force`: without the lockfile, APM no longer knows the files it deployed and refuses to overwrite them. `--force` overwrites every file the package deploys, a deployed copy you edited by hand included, so read `git status` afterwards. On Claude Code, the `.claude/rules/partition.md` an earlier version deployed is no longer in the new lockfile, so APM does not remove it: delete it by hand, or the instruction stays in that file, at its old version.
 
-On Claude Code, moving to APM 0.38: `apm install` removes the `.claude/rules/partition.md` APM wrote before, and `apm compile` writes the instruction into `AGENTS.md`, which `CLAUDE.md` imports. Commit both files. A project with its own `CLAUDE.md` keeps `.claude/rules/partition.md`; adding the line `@AGENTS.md` is a choice, as [Install](#install) says.
+   ```bash
+   rm apm.lock.yaml
+   apm install --force
+   rm -f .claude/rules/partition.md   # Claude Code only
+   ```
 
-On Copilot, after updating from 1.0.0, run `apm compile` once: it removes the `.github/copilot-instructions.md` APM generated for 1.0.0, which would load the instruction a second time. Delete that file by hand if it remains.
+5. **Compile**: `apm compile`. On Claude Code, it writes the instruction into `AGENTS.md`, which `CLAUDE.md` imports. On Copilot, after updating from 1.0.0, it removes the `.github/copilot-instructions.md` APM generated for 1.0.0, which would load the instruction a second time; delete that file by hand if it remains.
+6. **Check.** Run the budget of your target, `node .claude/skills/partition-budget/scripts/budget.mjs` or `node .agents/skills/partition-budget/scripts/budget.mjs`. On Claude Code, its _Loaded by every session_ lists `AGENTS.md (imported by CLAUDE.md)`, or `.claude/rules/partition.md (instruction)` when your own `CLAUDE.md` does not import it, never both. Then open a fresh session, as [Check the install](#install) says.
+7. **Commit** `apm.yml`, `apm.lock.yaml` and the deployed files, with `AGENTS.md`, `CLAUDE.md` and the files the update removed.
 
 A project that installed 1.0.0 on both targets keeps one: run `apm install` with `--target claude` or `--target copilot` alone, delete the other target's Partition files listed in [Install](#install), and, when you keep Copilot, delete the `AGENTS.md` that `apm compile` generated for 1.0.0, unless you wrote it by hand. Otherwise the instruction loads two or three times.
 
-An update replaces the skills, the agent and the instruction. It never touches what your project owns: your specs, your invariants, your plans, your rules, your `docs/partition.yml`, your C4 model. Templates are copied into your project only when the file does not exist yet. The install itself writes nothing under `docs/`: `docs/partition.yml` and the other files appear when a skill first needs them, starting with step 1 below. An update can still make the budget stop on a `docs/partition.yml` it used to accept, when the file carries a key the schema does not list (see [What your project owns](#what-your-project-owns)); the message names each key to fix.
+An update replaces the skills, the agent and the instruction. It never touches what your project owns: your specs, your invariants, your plans, your rules, your `docs/partition.yml`, your C4 model. Templates are copied into your project only when the file does not exist yet. The install itself writes nothing under `docs/`: `docs/partition.yml` and the other files appear when a skill first needs them, starting with step 1 of [Use](#use). An update can still make the budget stop on a `docs/partition.yml` it used to accept, when the file carries a key the schema does not list (see [What your project owns](#what-your-project-owns)); the message names each key to fix.
 
 To remove it: `apm uninstall elie29/partition`.
 
